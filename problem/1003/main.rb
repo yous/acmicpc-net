@@ -1,1 +1,1 @@
-gets.to_i.times{a=b=0;c=[gets.to_i];until (n=c.pop).nil?;n<1?a+=1:n<2?b+=1:c+=[n-1,n-2];end;puts "#{a} #{b}"}
+gets.to_i.times{a=Hash.new(0);a[n=gets.to_i]=1;n.downto(2){|i|c=a[i];a[i-1]+=c;a[i-2]+=c};puts "#{a[0]} #{a[1]}"}
