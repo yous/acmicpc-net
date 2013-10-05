@@ -6,7 +6,9 @@
 
 ## Testing
 
-	$ rake test:1000 # Judge problem 1000
+To run the test of the problem 1000:
+
+	$ rake test:1000
 
 ## [Help][]
 
