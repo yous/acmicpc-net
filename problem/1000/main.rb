@@ -1,1 +1,1 @@
-a=gets;p a[0]+a[2]-96
+p gets.sum-128
