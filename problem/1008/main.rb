@@ -1,1 +1,1 @@
-a,b=gets.split.map &:to_f;p a/b
+a,b=gets.split;p a.to_f/b.to_f
