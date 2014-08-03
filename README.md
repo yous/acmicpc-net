@@ -13,8 +13,8 @@ Each project directory has some of these files:
 
 - `input`: STDIN input to `.rb` file
 - `output`: STDOUT output `.rb` file should print
-- `main.rb`: Code compatible with Ruby 1.9.3p0
-- `short.rb`: Compressed code compatible with Ruby 1.9.3p0
+- `main.new.rb`: Code compatible with Ruby 1.9.3p0
+- `short.new.rb`: Compressed code compatible with Ruby 1.9.3p0
 - `main.old.rb`: Code compatible with Ruby 1.8.7-p352
 - `short.old.rb`: Compressed code compatible with Ruby 1.8.7-p352
 
