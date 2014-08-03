@@ -5,8 +5,7 @@ AllCops:
     - '**/Gemfile'
     - '**/Rakefile'
   Exclude:
-    - '**/short.rb'
-    - '**/short.old.rb'
+    - '**/short*.rb'
 
 Style/Documentation:
   Enabled: false
