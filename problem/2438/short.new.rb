@@ -1,6 +1,6 @@
 # encoding: utf-8
-gets.to_i.times{|i|puts "*"*(i+1)}
+1.upto(gets.to_i){|i|puts"*"*i}
 
-# gets.to_i.times do |i|
-#   puts "*" * (i + 1)
+# 1.upto(gets.to_i) do |i|
+#   puts "*" * i
 # end
