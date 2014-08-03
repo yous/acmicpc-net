@@ -7,11 +7,16 @@ class TestJudge < Test::Unit::TestCase
                else
                  Dir["problem/*"].map { |v| v.sub(/^problem\//, "") }
                end
+    old_ruby = RUBY_VERSION == "1.8.7"
+    main_file = old_ruby ? "main.old.rb" : "main.rb"
+    short_file = old_ruby ? "short.old.rb" : "short.rb"
     problems.each do |problem|
       file_path = "problem/#{problem}"
-      assert_equal %x[ruby #{file_path}/main.rb < #{file_path}/input], File.read("#{file_path}/output")
-      if File.exist? "#{file_path}/short.rb"
-        assert_equal %x[ruby #{file_path}/short.rb < #{file_path}/input], File.read("#{file_path}/output")
+      if File.exists? "#{file_path}/#{main_file}"
+        assert_equal %x[ruby #{file_path}/#{main_file} < #{file_path}/input], File.read("#{file_path}/output")
+      end
+      if File.exists? "#{file_path}/#{short_file}"
+        assert_equal %x[ruby #{file_path}/#{short_file} < #{file_path}/input], File.read("#{file_path}/output")
       end
     end
   end
