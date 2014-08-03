@@ -8,7 +8,7 @@
 
 To run the test of the problem 1000:
 
-    $ rake test:1000
+    $ rake test[1000]
 
 ## [Help][]
 
