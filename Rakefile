@@ -1,3 +1,4 @@
+# encoding: utf-8
 require "rake/testtask"
 
 task :test, [:number] do |_t, args|
