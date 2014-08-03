@@ -1,4 +1,4 @@
-require 'test/unit'
+require "test/unit"
 
 class TestJudge < Test::Unit::TestCase
   def test_judge
@@ -12,12 +12,13 @@ class TestJudge < Test::Unit::TestCase
     short_file = old_ruby ? "short.old.rb" : "short.rb"
     problems.each do |problem|
       file_path = "problem/#{problem}"
-      if File.exists? "#{file_path}/#{main_file}"
-        assert_equal %x[ruby #{file_path}/#{main_file} < #{file_path}/input], File.read("#{file_path}/output")
+      if File.exist? "#{file_path}/#{main_file}"
+        assert_equal `ruby #{file_path}/#{main_file} < #{file_path}/input`,
+                     File.read("#{file_path}/output")
       end
-      if File.exists? "#{file_path}/#{short_file}"
-        assert_equal %x[ruby #{file_path}/#{short_file} < #{file_path}/input], File.read("#{file_path}/output")
-      end
+      next unless File.exist? "#{file_path}/#{short_file}"
+      assert_equal `ruby #{file_path}/#{short_file} < #{file_path}/input`,
+                   File.read("#{file_path}/output")
     end
   end
 end

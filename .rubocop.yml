@@ -1,0 +1,30 @@
+inherit_from: .rubocop_todo.yml
+
+AllCops:
+  Include:
+    - '**/Gemfile'
+    - '**/Rakefile'
+  Exclude:
+    - '**/short.rb'
+    - '**/short.old.rb'
+
+Style/Documentation:
+  Enabled: false
+
+Style/Encoding:
+  Enabled: true
+
+Style/HashSyntax:
+  Exclude:
+    - '**/Gemfile'
+    - '**/Rakefile'
+    - '**/*.old.rb'
+
+Style/IndentHash:
+  EnforcedStyle: consistent
+
+Style/MethodCalledOnDoEndBlock:
+  Enabled: true
+
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
