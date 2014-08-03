@@ -1,3 +1,4 @@
+# encoding: utf-8
 s=" "*10;puts "     /~\\
     ( oo|
     _\\=/_

@@ -1,3 +1,4 @@
+# encoding: utf-8
 r=0;8.times{|i|r+=(i%2..(l=gets).size-2).step(2).count{|v|l[v]=="F"}};p r
 
 # result = 0
