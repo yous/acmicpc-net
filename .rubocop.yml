@@ -19,9 +19,6 @@ Style/HashSyntax:
     - '**/Rakefile'
     - '**/*.old.rb'
 
-Style/IndentHash:
-  EnforcedStyle: consistent
-
 Style/MethodCalledOnDoEndBlock:
   Enabled: true
 
