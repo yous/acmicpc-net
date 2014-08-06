@@ -19,8 +19,5 @@ Style/HashSyntax:
     - '**/Rakefile'
     - '**/*.old.rb'
 
-Style/MethodCalledOnDoEndBlock:
-  Enabled: true
-
 Style/StringLiterals:
   EnforcedStyle: double_quotes
