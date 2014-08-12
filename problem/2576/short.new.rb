@@ -1,5 +1,5 @@
 # encoding: utf-8
-n=[];7.times{n<<gets.to_i};n.select!(&:odd?);p n.reduce:+;p n.min
+n=$<.map &:to_i;n.select! &:odd?;n[0]?p(n.reduce(:+),n.min):p(-1)
 
 # nums = []
 # 7.times do
