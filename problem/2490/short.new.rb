@@ -1,5 +1,5 @@
 # encoding: utf-8
-3.times{puts (69+gets.split.count("0")%-5).chr}
+$<.map{|g|puts (69+g.split.count(?0)%-5).chr}
 
 # 3.times do
 #   status = gets.split.map(&:to_i)
