@@ -1,5 +1,5 @@
 # encoding: utf-8
-f=[];gets.to_i.times{f<<gets.chomp.chars.to_a};puts f.transpose.map{|c|c.uniq.size==1?c[0]:"?"}.join
+f=[];gets.to_i.times{f<<gets.chomp.chars.to_a};puts f.transpose.map{|c|c.uniq[1]???:c[0]}.join
 
 # files = []
 # gets.to_i.times do
