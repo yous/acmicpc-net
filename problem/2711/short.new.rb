@@ -1,5 +1,5 @@
 # encoding: utf-8
-gets.to_i.times{i,s=gets.split;s[i.to_i-1]="";puts s}
+gets;$<.map{|g|i,s=g.split;s[i.to_i-1]="";puts s}
 
 # gets.to_i.times do
 #   index, str = gets.split
