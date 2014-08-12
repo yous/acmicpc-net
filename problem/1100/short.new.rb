@@ -1,5 +1,5 @@
 # encoding: utf-8
-r=0;8.times{|i|r+=(i%2..(l=gets).size-2).step(2).count{|v|l[v]=="F"}};p r
+r=i=0;$<.map{|g|r+=(i%2..7).step(2).count{|v|g[v]==?F};i+=1};p r
 
 # result = 0
 # 8.times do |line_idx|
