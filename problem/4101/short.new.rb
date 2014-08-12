@@ -1,5 +1,5 @@
 # encoding: utf-8
-g=->(){gets.split.map &:to_i};m,n=g[];while m|n>0;puts m>n ?"Yes":"No";m,n=g[]end
+$<.map{|g|m,n=g.split.map &:to_i;exit if m|n==0;puts m>n ?"Yes":"No"}
 
 # m, n = gets.split.map(&:to_i)
 # until m == 0 && n == 0
