@@ -1,5 +1,5 @@
 # encoding: utf-8
-a=[];9.times{a+=gets.split.map(&:to_i)};p m=a.max;i=a.index m;puts"#{i/9+1} #{i%9+1}"
+a=[];$<.map{|g|a+=g.split.map &:to_i};p m=a.max;i=a.index m;puts [i/9+1,i%9+1]*' '
 
 # matrix = []
 # 9.times do
