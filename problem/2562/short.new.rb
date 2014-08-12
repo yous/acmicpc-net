@@ -1,5 +1,5 @@
 # encoding: utf-8
-n=$<.map{|g|g.to_i};p m=n.max,n.index(m)+1
+n=$<.map &:to_i;p m=n.max,n.index(m)+1
 
 # numbers = []
 # 9.times do
