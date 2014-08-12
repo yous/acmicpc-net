@@ -1,5 +1,5 @@
 # encoding: utf-8
-require"prime";a=(gets.to_i..gets.to_i).select(&:prime?);p a.reduce:+;p a.min
+require"prime";a=(gets.to_i..gets.to_i).select &:prime?;p a.reduce:+;p a.min
 
 # require "prime"
 #
