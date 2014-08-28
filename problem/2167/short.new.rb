@@ -1,5 +1,5 @@
 # encoding: utf-8
-g=->(){gets.split.map(&:to_i)};n=g[][0];m=Array.new(n);n.times{|i|m[i]=g[]};gets.to_i.times{s=0;i,j,x,y=g[];(i-1...x).each{|l|s+=m[l][j-1...y].reduce(:+)};p s}
+g=->{gets.split.map &:to_i};n=g[][0];m=n.times.map{g[]};gets.to_i.times{s=0;i,j,x,y=g[];(i-1...x).each{|l|s+=m[l][j-1...y].reduce:+};p s}
 
 # n, _m = gets.split.map(&:to_i)
 # matrix = Array.new(n)
