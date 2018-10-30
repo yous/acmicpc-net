@@ -11,8 +11,11 @@ class TestJudge < Test::Unit::TestCase
     old_ruby = RUBY_VERSION == "1.8.7"
     problems.each do |problem|
       Dir["problem/#{problem}/*.#{old_ruby ? "old" : "new"}.rb"].each do |file|
-        assert_equal `ruby #{file} < problem/#{problem}/input`,
-                     File.read("problem/#{problem}/output")
+        inputs = Dir["problem/#{problem}/input*"].sort
+        outputs = Dir["problem/#{problem}/output*"].sort
+        inputs.zip(outputs).each do |input, output|
+          assert_equal `ruby #{file} < #{input}`, File.read(output)
+        end
       end
     end
   end
