@@ -6,6 +6,7 @@
 
 - Ruby 1.8.7 (2011-06-30 patchlevel 352) [i686-linux]
 - Ruby 1.9.3p0 (2011-10-30 revision 33570) [i686-linux]
+- Ruby 2.6.5p114 (2019-10-01 revision 67812) [x86_64-linux]
 
 ## About
 
