@@ -3,7 +3,7 @@ AllCops:
     - '**/Gemfile'
     - '**/Rakefile'
   Exclude:
-    - '**/short*.rb'
+    - '**/*.short*.rb'
 
 Style/Documentation:
   Enabled: false
@@ -15,7 +15,7 @@ Style/HashSyntax:
   Exclude:
     - '**/Gemfile'
     - '**/Rakefile'
-    - '**/*.old.rb'
+    - '**/ruby-1.8*.rb'
 
 Style/StringLiterals:
   EnforcedStyle: double_quotes
