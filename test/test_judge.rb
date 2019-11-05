@@ -1,4 +1,6 @@
 # encoding: utf-8
+# frozen_string_literal: true
+
 require "test/unit"
 
 class TestJudge < Test::Unit::TestCase
@@ -6,11 +8,11 @@ class TestJudge < Test::Unit::TestCase
     problems = if ENV["PROBLEM"]
                  ENV["PROBLEM"].split(",")
                else
-                 Dir["problem/*"].map { |v| v.sub(/^problem\//, "") }
+                 Dir["problem/*"].map { |v| v.sub(%r{^problem/}, "") }
                end
     old_ruby = RUBY_VERSION == "1.8.7"
     problems.each do |problem|
-      Dir["problem/#{problem}/*.#{old_ruby ? "old" : "new"}.rb"].each do |file|
+      Dir["problem/#{problem}/*.#{old_ruby ? 'old' : 'new'}.rb"].each do |file|
         inputs = Dir["problem/#{problem}/input*"].sort
         outputs = Dir["problem/#{problem}/output*"].sort
         inputs.zip(outputs).each do |input, output|
