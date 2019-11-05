@@ -3,8 +3,9 @@
 
 require "rake/testtask"
 
-task :test, [:number] do |_t, args|
-  ENV["PROBLEM"] ||= args[:number]
-  ruby "test/test_judge.rb"
+Rake::TestTask.new do |t|
+  t.libs << "test"
+  t.test_files = FileList["test/test*.rb"]
+  t.verbose = true
 end
 task :default => :test

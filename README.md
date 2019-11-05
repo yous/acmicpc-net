@@ -24,13 +24,19 @@ Each project directory has some of these files:
 To run the test of the problem 1000:
 
 ``` sh
-rake test[1000]
+rake test PROBLEM=1000
 ```
 
 You can also run all tests with:
 
 ``` sh
 rake test
+```
+
+If you want to run in verbose mode:
+
+``` sh
+rake test TESTOPTS='-v'
 ```
 
 ## [Help][]
