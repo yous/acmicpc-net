@@ -17,14 +17,26 @@ class TestJudge < Test::Unit::TestCase
               when /^2\.(?:5|6)\.\d+$/
                 "ruby-2.5"
               end
+  DELTAS = {
+    "1008" => 1e-9
+  }.freeze
   PROBLEMS.each do |problem|
     Dir["problem/#{problem}/#{TEST_RUBY}*.rb"].each do |file|
       filename = File.basename(file)
       define_method :"test_#{problem}_#{filename}" do
         inputs = Dir["problem/#{problem}/input*"].sort
         outputs = Dir["problem/#{problem}/output*"].sort
-        inputs.zip(outputs).each do |input, output|
-          assert_equal `ruby #{file} < #{input}`, File.read(output)
+        if DELTAS.key?(problem)
+          inputs.zip(outputs).each do |input, output|
+            result = `ruby #{file} < #{input}`
+            File.readlines(output).zip(result.lines).each do |expected, actual|
+              assert_in_delta expected.to_f, actual.to_f, DELTAS[problem]
+            end
+          end
+        else
+          inputs.zip(outputs).each do |input, output|
+            assert_equal `ruby #{file} < #{input}`, File.read(output)
+          end
         end
       end
     end
