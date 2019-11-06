@@ -18,7 +18,8 @@ class TestJudge < Test::Unit::TestCase
                 "ruby-2.5"
               end
   DELTAS = {
-    "1008" => 1e-9
+    "1008" => 1e-9,
+    "3053" => 0.0001
   }.freeze
   PROBLEMS.each do |problem|
     Dir["problem/#{problem}/#{TEST_RUBY}*.rb"].each do |file|
