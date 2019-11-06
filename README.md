@@ -1,5 +1,7 @@
 # Baekjoon Online Judge
 
+[![Build Status](https://travis-ci.org/yous/acmicpc-net.svg?branch=master)](https://travis-ci.org/yous/acmicpc-net)
+
 [Baekjoon Online Judge][] in Ruby.
 
 ## Requirements
