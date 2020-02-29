@@ -14,7 +14,7 @@ class TestJudge < Test::Unit::TestCase
                 "ruby-1.8"
               when "1.9.3"
                 "ruby-1.9"
-              when /^2\.(?:5|6)\.\d+$/
+              when /^2\.\d+\.\d+$/
                 "ruby-2.5"
               end
   DELTAS = {
