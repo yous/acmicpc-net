@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require'prime';a=(gets.to_i..gets.to_i).select &:prime?;puts a.empty?? [-1]:[a.sum,a[0]]
+require'prime';a=(gets.to_i..gets.to_i).select &:prime?;puts a[0]?[a.sum,a[0]]:-1
 
 # require 'prime'
 #
