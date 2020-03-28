@@ -5,6 +5,12 @@ AllCops:
   Exclude:
     - '**/*.short*.rb'
 
+Naming/FileName:
+  Exclude:
+    - '**/ruby-1.8*.rb'
+    - '**/ruby-1.9*.rb'
+    - '**/ruby-2.5*.rb'
+
 Style/Documentation:
   Enabled: false
 
