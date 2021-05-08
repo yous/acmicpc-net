@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/yous/acmicpc-net.svg?branch=master)](https://travis-ci.org/yous/acmicpc-net)
 
-[Baekjoon Online Judge][] in Ruby.
+Solutions of [Baekjoon Online Judge][].
 
 ## Requirements
 
@@ -20,6 +20,7 @@ Each project directory has some of these files:
 - `ruby-1.9*.rb`: Code compatible with Ruby 1.9.3p0
 - `ruby-2.5*.rb`: Code compatible with Ruby 2.6.5p114
 - `*.short*.rb`: Compressed code
+- `main.cpp`: Code compatible with C++11
 
 ## Testing
 

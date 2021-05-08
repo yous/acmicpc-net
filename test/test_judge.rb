@@ -2,6 +2,7 @@
 # frozen_string_literal: true
 
 require "test/unit"
+require "tmpdir"
 
 class TestJudge < Test::Unit::TestCase
   PROBLEMS = if ENV["PROBLEM"]
@@ -15,6 +16,8 @@ class TestJudge < Test::Unit::TestCase
               when "1.9.3"
                 "ruby-1.9"
               when /^2\.\d+\.\d+$/
+                "ruby-2.5"
+              else
                 "ruby-2.5"
               end
   DELTAS = {
@@ -37,6 +40,28 @@ class TestJudge < Test::Unit::TestCase
         else
           inputs.zip(outputs).each do |input, output|
             assert_equal `ruby #{file} < #{input}`, File.read(output)
+          end
+        end
+      end
+    end
+    Dir["problem/#{problem}/main.cpp"].each do |file|
+      filename = File.basename(file)
+      define_method :"test_#{problem}_#{filename}" do
+        inputs = Dir["problem/#{problem}/input*"].sort
+        outputs = Dir["problem/#{problem}/output*"].sort
+        Dir.mktmpdir do |dir|
+          system "g++ #{file} -o #{dir}/#{filename} -O2 -Wall -lm -std=c++11"
+          if DELTAS.key?(problem)
+            inputs.zip(outputs).each do |input, output|
+              result = `#{dir}/#{filename} < #{input}`
+              File.readlines(output).zip(result.lines).each do |expected, actual|
+                assert_in_delta expected.to_f, actual.to_f, DELTAS[problem]
+              end
+            end
+          else
+            inputs.zip(outputs).each do |input, output|
+              assert_equal `#{dir}/#{filename} < #{input}`, File.read(output)
+            end
           end
         end
       end
