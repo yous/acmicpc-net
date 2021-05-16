@@ -1,27 +1,31 @@
-#include <cstdio>
+#include <algorithm>
 #include <iostream>
 #include <vector>
-#include <algorithm>
 
 using namespace std;
 
 int N;
 int M;
-int nums[20000001];
+vector<int> cards;
 
 int main() {
-    scanf("%d", &N);
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cin >> N;
     int num;
-    for (int i = 0; i < N; i++) {
-        scanf("%d", &num);
-        nums[num + 10000000] += 1;
+    while (N-- > 0) {
+        cin >> num;
+        cards.push_back(num);
     }
-    scanf("%d", &M);
-    for (int i = 0; i < M - 1; i++) {
-        scanf("%d", &num);
-        printf("%d ", nums[num + 10000000]);
+    sort(cards.begin(), cards.end());
+    cin >> M;
+    while (M-- > 0) {
+        cin >> num;
+        cout << upper_bound(cards.begin(), cards.end(), num) - lower_bound(cards.begin(), cards.end(), num);
+        if (M > 0) {
+            cout << " ";
+        }
     }
-    scanf("%d", &num);
-    printf("%d\n", nums[num + 10000000]);
+    cout << "\n";
     return 0;
 }
