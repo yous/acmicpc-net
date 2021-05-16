@@ -22,6 +22,7 @@ class TestJudge < Test::Unit::TestCase
               end
   DELTAS = {
     "1008" => 1e-9,
+    "1546" => 1e-2,
     "3053" => 0.0001
   }.freeze
   PROBLEMS.each do |problem|
