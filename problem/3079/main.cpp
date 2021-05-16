@@ -1,7 +1,6 @@
-#include <cstdio>
+#include <algorithm>
 #include <iostream>
 #include <vector>
-#include <algorithm>
 
 using namespace std;
 
@@ -18,21 +17,23 @@ bool check(long long time) {
 }
 
 int main() {
-    scanf("%d %d", &N, &M);
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cin >> N >> M;
     for (int i = 0; i < N; i++) {
-        scanf("%lld", &times[i]);
+        cin >> times[i];
     }
     long long l, r;
     l = 1;
     r = times[0] * M;
-    while (l < r) {
-        long long k = (l + r) / 2;
-        if (!check(k)) {
-            l = k + 1;
+    while (l <= r) {
+        long long mid = (l + r) / 2;
+        if (!check(mid)) {
+            l = mid + 1;
         } else {
-            r = k;
+            r = mid - 1;
         }
     }
-    printf("%lld\n", l);
+    cout << l << "\n";
     return 0;
 }
