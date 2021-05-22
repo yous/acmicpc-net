@@ -10,16 +10,10 @@ int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
     cin >> A >> B >> V;
-    int day = 1;
-    int top = A;
-    if (top >= V) {
-        cout << day << "\n";
+    if (A >= V) {
+        cout << "1\n";
     } else {
-        while (top < V) {
-            day++;
-            top += A - B;
-        }
-        cout << day << "\n";
+        cout << 1 + (V - B - 1) / (A - B) << "\n";
     }
     return 0;
 }
