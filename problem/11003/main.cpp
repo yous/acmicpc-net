@@ -1,13 +1,12 @@
 #include <algorithm>
+#include <deque>
 #include <iostream>
-#include <queue>
 #include <vector>
 
 using namespace std;
 
 int N, L;
-vector<int> nums;
-priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+deque<pair<int, int>> dq;
 
 int main() {
     ios_base::sync_with_stdio(false);
@@ -17,12 +16,14 @@ int main() {
     int num;
     for (i = 0; i < N; i++) {
         cin >> num;
-        nums.push_back(num);
-        pq.push({num, i});
-        while (pq.top().second <= i - L) {
-            pq.pop();
+        if (!dq.empty() && dq.front().second <= i - L) {
+            dq.pop_front();
         }
-        cout << pq.top().first;
+        while (!dq.empty() && dq.back().first >= num) {
+            dq.pop_back();
+        }
+        dq.push_back({num, i});
+        cout << dq.front().first;
         if (i < N - 1) {
             cout << " ";
         }
