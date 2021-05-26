@@ -5,6 +5,10 @@ AllCops:
   Exclude:
     - '**/*.short*.rb'
 
+Metrics/BlockLength:
+  Exclude:
+    - '**/Rakefile'
+
 Naming/FileName:
   Exclude:
     - '**/ruby-1.8*.rb'
