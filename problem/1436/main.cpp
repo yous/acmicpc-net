@@ -13,9 +13,7 @@ void gen(int digit, int num, int order) {
         return;
     }
     for (int i = 0; i < 10; i++) {
-        if (i != 0) {
-            gen(digit - 1, i * order + num, order * 10);
-        }
+        gen(digit - 1, i * order + num, order * 10);
         gen(digit - 1, num * 10 + i, order * 10);
     }
 }
