@@ -1,16 +1,11 @@
 # encoding: utf-8
 # frozen_string_literal: true
 
-require "rake/testtask"
+require "rspec/core/rake_task"
+RSpec::Core::RakeTask.new(:spec)
+task :default => :spec
+
 require "tty-prompt"
-
-Rake::TestTask.new do |t|
-  t.libs << "test"
-  t.test_files = FileList["test/test*.rb"]
-  t.verbose = true
-end
-task :default => :test
-
 desc "Initialize a new problem"
 task :new do
   prompt = TTY::Prompt.new

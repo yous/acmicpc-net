@@ -4,5 +4,5 @@
 source "https://rubygems.org"
 
 gem "rake"
-gem "test-unit", :group => :test
+gem "rspec", :group => :test
 gem "tty-prompt"
