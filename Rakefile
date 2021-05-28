@@ -2,6 +2,7 @@
 # frozen_string_literal: true
 
 require "rake/testtask"
+require "tty-prompt"
 
 Rake::TestTask.new do |t|
   t.libs << "test"
@@ -12,8 +13,8 @@ task :default => :test
 
 desc "Initialize a new problem"
 task :new do
-  print "Enter the ID of the problem: "
-  id = $stdin.gets.to_i
+  prompt = TTY::Prompt.new
+  id = prompt.ask("Enter the ID of the problem:", convert: :int)
 
   dir = "problem/#{id}"
   mkdir_p dir
@@ -35,16 +36,11 @@ task :new do
       MAIN
     end
 
-    print "Enter the number of examples: "
-    count = $stdin.gets.to_i
+    count = prompt.ask("Enter the number of examples:", convert: :int)
 
     (1..count).each do |i|
-      puts "Enter the input (#{i}/#{count}):"
-      input = $stdin.read
-      puts
-      puts "Enter the output (#{i}/#{count}):"
-      output = $stdin.read
-      puts
+      input = prompt.multiline("Enter the input (#{i}/#{count}):").join
+      output = prompt.multiline("Enter the output (#{i}/#{count}):").join
 
       File.open("input#{i if count > 1}", "w") { |f| f.write(input) }
       File.open("output#{i if count > 1}", "w") { |f| f.write(output) }

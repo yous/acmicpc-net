@@ -3,5 +3,6 @@
 
 source "https://rubygems.org"
 
-gem "rake", :group => :test
+gem "rake"
 gem "test-unit", :group => :test
+gem "tty-prompt"
