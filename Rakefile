@@ -9,7 +9,7 @@ require "tty-prompt"
 desc "Initialize a new problem"
 task :new do
   prompt = TTY::Prompt.new
-  id = prompt.ask("Enter the ID of the problem:", convert: :int)
+  id = prompt.ask("Enter the ID of the problem:")
 
   dir = "problem/#{id}"
   mkdir_p dir
