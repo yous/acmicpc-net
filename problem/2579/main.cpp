@@ -9,22 +9,17 @@ vector<int> stairs;
 int dp[300][2];
 
 int solve(int index, int streak) {
-    if (index >= N) {
-        return 0;
+    if (index >= N || streak >= 2) {
+        return -987654321;
     }
-    if (dp[index][streak] != 0) {
+    if (index == N - 1) {
+        return stairs[N - 1];
+    }
+    if (streak >= 0 && dp[index][streak] != 0) {
         return dp[index][streak];
     }
-    int ans = 0;
-    if (streak == 0) {
-        if (index >= 2) {
-            ans = stairs[index] + max(solve(index - 2, 0), solve(index - 2, 1));
-        } else {
-            ans = stairs[index];
-        }
-    } else {
-        ans = stairs[index] + solve(index - 1, streak - 1);
-    }
+    int ans = max(stairs[index] + solve(index + 2, 0),
+                  stairs[index] + solve(index + 1, streak + 1));
     dp[index][streak] = ans;
     return ans;
 }
@@ -39,6 +34,6 @@ int main() {
         cin >> stair;
         stairs.push_back(stair);
     }
-    cout << max(solve(N - 1, 0), solve(N - 1, 1)) << "\n";
+    cout << max(solve(0, 0), solve(1, 0)) << "\n";
     return 0;
 }
