@@ -28,7 +28,7 @@ Each project directory has some of these files:
 To run the test of the problem 1000:
 
 ``` sh
-rake spec SPEC_OPTS='-e 1000'
+rake spec SPEC_OPTS="-E '^1000 '"
 ```
 
 You can also run all tests with:
