@@ -2,6 +2,7 @@
 #include <cstring>
 #include <iostream>
 #include <queue>
+#include <tuple>
 #include <vector>
 
 using namespace std;
