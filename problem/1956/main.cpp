@@ -10,7 +10,7 @@ using namespace std;
 const int INF = 987654321;
 int V, E;
 vector<vector<pair<int, int>>> adj(401);
-int cost[401][401];
+int dist[401][401];
 
 int main() {
     ios_base::sync_with_stdio(false);
@@ -22,35 +22,36 @@ int main() {
         adj[a].push_back({b, c});
     }
     for (int i = 1; i <= V; i++) {
-        fill(cost[i] + 1, cost[i] + V + 1, INF);
-        queue<int> qu;
-        vector<bool> in_qu(V + 1, false);
+        fill(dist[i] + 1, dist[i] + V + 1, INF);
+        priority_queue<pair<int, int>> pq;
         for (auto& e : adj[i]) {
             int v, w;
             tie(v, w) = e;
-            cost[i][v] = w;
-            qu.push(v);
-            in_qu[v] = true;
+            dist[i][v] = w;
+            pq.push({-w, v});
         }
-        while (!qu.empty()) {
-            int u = qu.front();
-            qu.pop();
-            in_qu[u] = false;
-            for (auto& e : adj[u]) {
+        while (!pq.empty()) {
+            int cost, here;
+            tie(cost, here) = pq.top();
+            cost = -cost;
+            pq.pop();
+            if (dist[i][here] < cost) {
+                continue;
+            }
+            for (auto& e : adj[here]) {
                 int v, w;
                 tie(v, w) = e;
-                if (cost[i][u] + w < cost[i][v]) {
-                    cost[i][v] = cost[i][u] + w;
-                    qu.push(v);
-                    in_qu[v] = true;
+                if (dist[i][here] + w < dist[i][v]) {
+                    dist[i][v] = dist[i][here] + w;
+                    pq.push({-dist[i][v], v});
                 }
             }
         }
     }
     int _min = INF;
     for (int i = 1; i <= V; i++) {
-        if (cost[i][i] < _min) {
-            _min = cost[i][i];
+        if (dist[i][i] < _min) {
+            _min = dist[i][i];
         }
     }
     if (_min == INF) {
