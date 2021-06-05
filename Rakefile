@@ -8,7 +8,7 @@ task :default => :spec
 require "tty-prompt"
 desc "Initialize a new problem"
 task :new do
-  prompt = TTY::Prompt.new
+  prompt = TTY::Prompt.new(help_color: :cyan)
   id = prompt.ask("Enter the ID of the problem:")
 
   dir = "problem/#{id}"
@@ -31,7 +31,8 @@ task :new do
       MAIN
     end
 
-    count = prompt.ask("Enter the number of examples:", convert: :int)
+    count = prompt.ask("Enter the number of examples:",
+                       default: 1, convert: :int)
 
     (1..count).each do |i|
       input = prompt.multiline("Enter the input (#{i}/#{count}):").join
