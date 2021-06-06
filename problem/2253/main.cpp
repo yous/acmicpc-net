@@ -1,39 +1,15 @@
 #include <algorithm>
 #include <iostream>
+#include <queue>
 #include <set>
+#include <tuple>
 #include <vector>
 
 using namespace std;
 
-const int INF = 987654321;
 int N, M;
 set<int> smalls;
-int dp[10001][150];
-
-int solve(int stone, int velo) {
-    if (stone > N) {
-        return INF;
-    }
-    if (stone == N) {
-        return 0;
-    }
-    int& ans = dp[stone][velo];
-    if (ans) {
-        return ans;
-    }
-    int _min = INF;
-    for (int dv = -1; dv <= 1; dv++) {
-        int new_velo = velo + dv;
-        if (new_velo >= 1) {
-            int new_stone = stone + new_velo;
-            if (smalls.find(new_stone) == smalls.end()) {
-                _min = min(_min, 1 + solve(stone + new_velo, new_velo));
-            }
-        }
-    }
-    ans = _min;
-    return ans;
-}
+bool visited[10001][150];
 
 int main() {
     ios_base::sync_with_stdio(false);
@@ -44,11 +20,38 @@ int main() {
         cin >> num;
         smalls.insert(num);
     }
-    int _min = solve(2, 1);
-    if (_min == INF) {
+    queue<pair<int, int>> bfs;
+    bfs.push({2, 1});
+    int step = 1;
+    bool found = false;
+    while (!bfs.empty()) {
+        int sz = bfs.size();
+        while (sz-- > 0) {
+            int stone, velo;
+            tie(stone, velo) = bfs.front();
+            bfs.pop();
+            if (stone == N) {
+                found = true;
+                cout << step << "\n";
+                break;
+            }
+            for (int dv = -1; dv <= 1; dv++) {
+                int new_velo = velo + dv;
+                int new_stone = stone + new_velo;
+                if (new_stone > N || new_velo < 1 || smalls.find(new_stone) != smalls.end() || visited[new_stone][new_velo]) {
+                    continue;
+                }
+                bfs.push({new_stone, new_velo});
+                visited[new_stone][new_velo] = true;
+            }
+        }
+        if (found) {
+            break;
+        }
+        step++;
+    }
+    if (!found) {
         cout << "-1\n";
-    } else {
-        cout << 1 + _min << "\n";
     }
     return 0;
 }
