@@ -39,12 +39,12 @@ int main() {
             }
             bldg.push_back(row);
         }
-        queue<pair<int, int>> dfs;
-        dfs.push(start);
+        queue<pair<int, int>> bfs;
+        bfs.push(start);
         visited[start.first][start.second] = true;
         int step = 1;
         bool found = false;
-        while (!dfs.empty()) {
+        while (!bfs.empty()) {
             int sz = fire.size();
             while (sz-- > 0) {
                 int y, x;
@@ -60,11 +60,11 @@ int main() {
                     fire.push({ny, nx});
                 }
             }
-            sz = dfs.size();
+            sz = bfs.size();
             while (sz-- > 0) {
                 int y, x;
-                tie(y, x) = dfs.front();
-                dfs.pop();
+                tie(y, x) = bfs.front();
+                bfs.pop();
                 for (int i = 0; i < 4; i++) {
                     int ny = y + dy[i];
                     int nx = x + dx[i];
@@ -77,7 +77,7 @@ int main() {
                         continue;
                     }
                     visited[ny][nx] = true;
-                    dfs.push({ny, nx});
+                    bfs.push({ny, nx});
                 }
                 if (found) {
                     break;
