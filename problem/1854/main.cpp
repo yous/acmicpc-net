@@ -31,15 +31,13 @@ int main() {
             cost = -cost;
             pq.pop();
             if (nth[here] < K) {
-                dist[here] = cost;
-            }
-            if (nth[here] <= K) {
                 nth[here]++;
+                dist[here] = cost;
                 reduced = true;
                 for (auto& p : adj[here]) {
                     int there, w;
                     tie(there, w) = p;
-                    if (nth[there] <= K) {
+                    if (nth[there] < K) {
                         pq.push({-(cost + w), there});
                     }
                 }
