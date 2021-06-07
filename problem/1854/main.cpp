@@ -39,7 +39,9 @@ int main() {
                 for (auto& p : adj[here]) {
                     int there, w;
                     tie(there, w) = p;
-                    pq.push({-(cost + w), there});
+                    if (nth[there] <= K) {
+                        pq.push({-(cost + w), there});
+                    }
                 }
             }
         }
