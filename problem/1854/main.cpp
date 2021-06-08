@@ -23,28 +23,20 @@ int main() {
     priority_queue<pair<int, int>> pq;
     pq.push({0, 1});
     while (!pq.empty()) {
-        bool reduced = false;
-        int sz = pq.size();
-        while (sz-- > 0) {
-            int cost, here;
-            tie(cost, here) = pq.top();
-            cost = -cost;
-            pq.pop();
-            if (nth[here] < K) {
-                nth[here]++;
-                dist[here] = cost;
-                reduced = true;
-                for (auto& p : adj[here]) {
-                    int there, w;
-                    tie(there, w) = p;
-                    if (nth[there] < K) {
-                        pq.push({-(cost + w), there});
-                    }
+        int cost, here;
+        tie(cost, here) = pq.top();
+        cost = -cost;
+        pq.pop();
+        if (nth[here] < K) {
+            nth[here]++;
+            dist[here] = cost;
+            for (auto& p : adj[here]) {
+                int there, w;
+                tie(there, w) = p;
+                if (nth[there] < K) {
+                    pq.push({-(cost + w), there});
                 }
             }
-        }
-        if (!reduced) {
-            break;
         }
     }
     for (int i = 1; i <= N; i++) {
