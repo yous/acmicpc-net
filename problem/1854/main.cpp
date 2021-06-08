@@ -27,6 +27,9 @@ int main() {
         tie(cost, here) = pq.top();
         cost = -cost;
         pq.pop();
+        if (dist[here].size() == K && dist[here].top() < cost) {
+            continue;
+        }
         for (auto& p : adj[here]) {
             int there, w;
             tie(there, w) = p;
