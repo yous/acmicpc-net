@@ -1,6 +1,5 @@
 #include <algorithm>
 #include <iostream>
-#include <map>
 #include <queue>
 #include <tuple>
 #include <vector>
@@ -11,7 +10,7 @@ const int INF = 1e9;
 int T;
 int N, M, K;
 vector<tuple<int, int, int>> adj[100];
-map<int, int> dist[100];
+int dist[100][10001];
 
 struct DisjointSet {
     vector<int> group;
@@ -46,7 +45,7 @@ int main() {
         cin >> N >> M >> K;
         for (int i = 0; i < N; i++) {
             adj[i].clear();
-            dist[i].clear();
+            fill(dist[i], dist[i] + M + 1, INF);
         }
         DisjointSet ds = DisjointSet(N);
         for (int i = 0; i < K; i++) {
@@ -68,8 +67,8 @@ int main() {
             d = -d;
             c = -c;
             pq.pop();
-            auto it = dist[u].find(c);
-            if (it == dist[u].end() || it->second < d) {
+            int& udist = dist[u][c];
+            if (udist == INF || udist < d) {
                 continue;
             }
             for (auto& e : adj[u]) {
@@ -78,28 +77,27 @@ int main() {
                 if (c + oc > M) {
                     continue;
                 }
-                auto it = dist[v].lower_bound(c + oc);
-                if (it != dist[v].begin() && prev(it)->second <= d + od) {
-                    if (it != dist[v].end() && it->first == c + oc && it->second >= d + od) {
-                        dist[v].erase(it);
+                int cidx = c + oc;
+                int prv = cidx - 1;
+                while (prv >= 0 && dist[v][prv] == INF) {
+                    prv--;
+                }
+                if (prv >= 0 && dist[v][prv] <= d + od) {
+                    if (dist[v][cidx] >= d + od) {
+                        dist[v][cidx] = INF;
                     }
                     continue;
                 }
-                if (it != dist[v].end() && it->first == c + oc) {
-                    if (d + od < it->second) {
-                        it->second = d + od;
-                        pq.emplace(-(d + od), -(c + oc), v);
-                    }
-                } else {
-                    dist[v].emplace_hint(it, c + oc, d + od);
+                if (d + od < dist[v][cidx]) {
+                    dist[v][cidx] = d + od;
                     pq.emplace(-(d + od), -(c + oc), v);
                 }
             }
         }
         int ans = INF;
-        for (auto& kv : dist[N - 1]) {
-            if (kv.second < ans) {
-                ans = kv.second;
+        for (int i = 0; i <= M; i++) {
+            if (dist[N - 1][i] < ans) {
+                ans = dist[N - 1][i];
             }
         }
         if (ans == INF) {
