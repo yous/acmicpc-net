@@ -74,30 +74,23 @@ int main() {
                 break;
             }
             int& udist = dist[u][c];
-            if (udist == INF || udist < d) {
+            if (udist < d) {
                 continue;
             }
             for (auto& e : adj[u]) {
                 int v, oc, od;
                 tie(v, oc, od) = e;
-                if (c + oc > M) {
+                if (c + oc > M || dist[v][c + oc] <= d + od) {
                     continue;
                 }
-                int cidx = c + oc;
-                int prv = cidx - 1;
-                while (prv >= 0 && dist[v][prv] == INF) {
-                    prv--;
-                }
-                if (prv >= 0 && dist[v][prv] <= d + od) {
-                    if (dist[v][cidx] >= d + od) {
-                        dist[v][cidx] = INF;
+                for (int i = c + oc; i <= M; i++) {
+                    if (dist[v][i] > d + od) {
+                        dist[v][i] = d + od;
+                    } else {
+                        break;
                     }
-                    continue;
                 }
-                if (d + od < dist[v][cidx]) {
-                    dist[v][cidx] = d + od;
-                    pq.emplace(-(d + od), -(c + oc), v);
-                }
+                pq.emplace(-(d + od), -(c + oc), v);
             }
         }
         if (ans == INF) {
