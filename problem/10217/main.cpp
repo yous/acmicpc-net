@@ -61,12 +61,18 @@ int main() {
         dist[0][0] = 0;
         priority_queue<tuple<int, int, int>> pq;
         pq.emplace(0, 0, 0);
+        int ans = INF;
         while (!pq.empty()) {
             int d, c, u;
             tie(d, c, u) = pq.top();
             d = -d;
             c = -c;
             pq.pop();
+            if (u == N - 1) {
+                ans = d;
+                cout << ans << "\n";
+                break;
+            }
             int& udist = dist[u][c];
             if (udist == INF || udist < d) {
                 continue;
@@ -94,16 +100,8 @@ int main() {
                 }
             }
         }
-        int ans = INF;
-        for (int i = 0; i <= M; i++) {
-            if (dist[N - 1][i] < ans) {
-                ans = dist[N - 1][i];
-            }
-        }
         if (ans == INF) {
             cout << "Poor KCM\n";
-        } else {
-            cout << ans << "\n";
         }
     }
     return 0;
