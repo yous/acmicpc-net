@@ -5,43 +5,51 @@
 using namespace std;
 
 int N;
-vector<int> cur_seq;
-vector<vector<pair<int, int>>> num_list;
+vector<int> nums;
+vector<pair<int, int>> cur_seq;
+vector<int> seq_indices;
 
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
     cin >> N;
+    int max_idx = -1;
     for (int i = 0; i < N; i++) {
         int num;
         cin >> num;
-        if (cur_seq.empty() || cur_seq.back() < num) {
-            cur_seq.push_back(num);
-            num_list.emplace_back();
-            num_list.back().emplace_back(num, i);
+        nums.push_back(num);
+        if (cur_seq.empty() || cur_seq.back().first < num) {
+            if (cur_seq.empty()) {
+                seq_indices.push_back(-1);
+            } else {
+                seq_indices.push_back(cur_seq.back().second);
+            }
+            cur_seq.emplace_back(num, i);
+            max_idx = i;
         } else {
-            auto it = lower_bound(cur_seq.begin(), cur_seq.end(), num);
-            *it = num;
-            num_list[it - cur_seq.begin()].emplace_back(num, i);
+            auto it = lower_bound(cur_seq.begin(), cur_seq.end(), make_pair(num, 0));
+            if (it == cur_seq.begin()) {
+                seq_indices.push_back(-1);
+            } else {
+                seq_indices.push_back(prev(it)->second);
+            }
+            it->first = num;
+            it->second = i;
         }
     }
     int sz = cur_seq.size();
     cout << sz << "\n";
-    auto p = num_list[sz - 1].back();
-    cur_seq[sz - 1] = p.first;
-    int num_idx = p.second;
-    for (int i = sz - 2; i >= 0; i--) {
-        auto& nums = num_list[i];
-        for (auto it = nums.rbegin(); it != nums.rend(); ++it) {
-            if (it->second < num_idx) {
-                num_idx = it->second;
-                cur_seq[i] = it->first;
-                break;
-            }
-        }
+    int idx = max_idx;
+    int num = nums[idx];
+    int seq_idx = sz - 1;
+    while (idx != -1) {
+        cur_seq[seq_idx].first = num;
+        idx = seq_indices[idx];
+        num = nums[idx];
+        seq_idx--;
     }
     for (int i = 0; i < sz; i++) {
-        cout << cur_seq[i];
+        cout << cur_seq[i].first;
         if (i < sz - 1) {
             cout << " ";
         } else {
