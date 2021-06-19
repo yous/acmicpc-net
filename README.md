@@ -31,6 +31,19 @@ To run the test of the problem 1000:
 rake spec SPEC_OPTS="-E '^1000 '"
 ```
 
+``` sh
+rake spec SPEC_OPTS='-e 1000'
+```
+
+``` sh
+rspec -e 1000
+```
+
+``` sh
+cd problem/1000
+g++ main.cpp -O2 -Wall -lm -std=c++11 && diff -y --suppress-common-lines output <(./a.out input)
+```
+
 You can also run all tests with:
 
 ``` sh
