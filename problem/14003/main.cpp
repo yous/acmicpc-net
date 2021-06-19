@@ -7,7 +7,6 @@ using namespace std;
 int N;
 vector<int> cur_seq;
 vector<vector<pair<int, int>>> num_list;
-vector<int> ans;
 
 int main() {
     ios_base::sync_with_stdio(false);
@@ -29,21 +28,21 @@ int main() {
     int sz = cur_seq.size();
     cout << sz << "\n";
     auto p = num_list[sz - 1].back();
-    ans.push_back(p.first);
+    cur_seq[sz - 1] = p.first;
     int num_idx = p.second;
     for (int i = sz - 2; i >= 0; i--) {
         auto& nums = num_list[i];
         for (auto it = nums.rbegin(); it != nums.rend(); ++it) {
             if (it->second < num_idx) {
                 num_idx = it->second;
-                ans.push_back(it->first);
+                cur_seq[i] = it->first;
                 break;
             }
         }
     }
-    for (int i = sz - 1; i >= 0; i--) {
-        cout << ans[i];
-        if (i > 0) {
+    for (int i = 0; i < sz; i++) {
+        cout << cur_seq[i];
+        if (i < sz - 1) {
             cout << " ";
         } else {
             cout << "\n";
