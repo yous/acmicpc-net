@@ -6,7 +6,7 @@
 using namespace std;
 
 int N, M;
-vector<tuple<int, int, int>> E;
+vector<tuple<short, int, int>> E;
 
 struct DisjointSet {
     vector<int> group;
@@ -42,7 +42,8 @@ int main() {
     cin >> N >> M;
     DisjointSet ds = DisjointSet(N);
     for (int i = 0; i < M; i++) {
-        int a, b, c;
+        int a, b;
+        short c;
         cin >> a >> b >> c;
         E.emplace_back(c, a - 1, b - 1);
     }
@@ -50,7 +51,8 @@ int main() {
     int sum = 0;
     int cnt = 0;
     for (auto& e : E) {
-        int c, a, b;
+        short c;
+        int a, b;
         tie(c, a, b) = e;
         if (ds.merge(a, b)) {
             sum += c;
