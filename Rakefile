@@ -38,8 +38,8 @@ task :new do
       input = prompt.multiline("Enter the input (#{i}/#{count}):").join
       output = prompt.multiline("Enter the output (#{i}/#{count}):").join
 
-      File.open("input#{i if count > 1}", "w") { |f| f.write(input) }
-      File.open("output#{i if count > 1}", "w") { |f| f.write(output) }
+      File.open("input#{i if i > 1}", "w") { |f| f.write(input) }
+      File.open("output#{i if i > 1}", "w") { |f| f.write(output) }
     end
   end
 end
