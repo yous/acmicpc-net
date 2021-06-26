@@ -23,17 +23,17 @@ int main() {
     int A, B;
     cin >> A >> B;
     dist.resize(N);
-    queue<pair<int, int>> qu;
+    priority_queue<pair<int, int>> qu;
     for (auto& p : adj[A - 1]) {
         int v = p.first,
             c = p.second;
-        qu.emplace(v, c);
+        qu.emplace(c, v);
         dist[v] = c;
     }
     while (!qu.empty()) {
-        auto& p = qu.front();
-        int u = p.first,
-            c = p.second;
+        auto& p = qu.top();
+        int c = p.first,
+            u = p.second;
         qu.pop();
         if (dist[u] > c) {
             continue;
@@ -45,7 +45,7 @@ int main() {
             int v = p.first,
                 nc = min(c, p.second);
             if (nc > dist[v]) {
-                qu.emplace(v, nc);
+                qu.emplace(nc, v);
                 dist[v] = nc;
             }
         }
