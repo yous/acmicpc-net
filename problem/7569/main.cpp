@@ -10,22 +10,20 @@ const int dz[] = {-1, 1, 0, 0, 0, 0};
 const int dy[] = {0, 0, -1, 1, 0, 0};
 const int dx[] = {0, 0, 0, 0, -1, 1};
 int M, N, H;
-vector<vector<vector<short>>> box;
+short box[100][100][100];
 
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
     cin >> M >> N >> H;
-    box.resize(H);
     queue<tuple<int, int, int>> qu;
     int incomp_cnt = 0;
     for (int i = 0; i < H; i++) {
-        box[i].resize(N);
         for (int j = 0; j < N; j++) {
             for (int k = 0; k < M; k++) {
                 short num;
                 cin >> num;
-                box[i][j].push_back(num);
+                box[i][j][k] = num;
                 if (num == 1) {
                     qu.emplace(i, j, k);
                 } else if (num == 0) {
