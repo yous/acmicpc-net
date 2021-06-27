@@ -1,11 +1,12 @@
 #include <algorithm>
+#include <bitset>
 #include <iostream>
 #include <vector>
 
 using namespace std;
 
 int N;
-bool graph[100][100];
+bitset<100> graph[100];
 
 int main() {
     ios_base::sync_with_stdio(false);
@@ -13,7 +14,9 @@ int main() {
     cin >> N;
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
-            cin >> graph[i][j];
+            bool num;
+            cin >> num;
+            graph[i].set(j, num);
         }
     }
     for (int k = 0; k < N; k++) {
