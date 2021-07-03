@@ -5,28 +5,22 @@
 using namespace std;
 
 int N, M, Q;
-vector<int> inv_P[32];
+vector<int> inv_P[30];
 
 int solve(int loc) {
     int start = min(loc, N - M);
     int ans = loc - start;
-    while (start >= 0) {
-        for (int idx = 31; idx >= 0; idx--) {
-            if (start & (1 << idx)) {
-                int n = inv_P[idx][ans];
-                if (n == M) {
-                    continue;
-                }
-                ans = n;
-                start -= (1 << idx);
+    for (int idx = 29; idx >= 0; idx--) {
+        if (start >= (1 << idx)) {
+            int n = inv_P[idx][ans];
+            if (n == M) {
+                continue;
             }
+            ans = n;
+            start -= (1 << idx);
         }
-        ans = inv_P[0][ans];
-        if (ans == M || start == 0) {
-            break;
-        }
-        start--;
     }
+    ans = inv_P[0][ans];
     return start + ans;
 }
 
@@ -40,7 +34,7 @@ int main() {
         cin >> num;
         inv_P[0][num - 1] = i + 1;
     }
-    for (int p = 1; p < 32; p++) {
+    for (int p = 1; p < 30; p++) {
         for (int i = 0; i < M; i++) {
             int n = inv_P[p - 1][i];
             if (n == M) {
