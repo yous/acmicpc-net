@@ -7,7 +7,7 @@ using namespace std;
 
 short N;
 vector<pair<short, short>> cows;
-queue<short> deadlines[10001];
+priority_queue<short> deadlines;
 
 int main() {
     ios_base::sync_with_stdio(false);
@@ -16,29 +16,24 @@ int main() {
     for (int i = 0; i < N; i++) {
         short g, d;
         cin >> g >> d;
-        cows.emplace_back(d, -g);
+        cows.emplace_back(d, g);
     }
     sort(cows.begin(), cows.end());
-    for (auto& p : cows) {
-        deadlines[p.first].push(-p.second);
-    }
     int sum = 0;
+    int idx = N - 1;
     for (int t = 9999; t >= 0; t--) {
-        int _max = 0;
-        int max_idx = -1;
-        for (int i = t + 1; i <= 10000; i++) {
-            if (deadlines[i].empty()) {
-                continue;
+        while (idx >= 0) {
+            int d = cows[idx].first,
+                g = cows[idx].second;
+            if (d < t + 1) {
+                break;
             }
-            short front = deadlines[i].front();
-            if (front > _max) {
-                _max = front;
-                max_idx = i;
-            }
+            deadlines.push(g);
+            idx--;
         }
-        if (max_idx >= 0) {
-            deadlines[max_idx].pop();
-            sum += _max;
+        if (!deadlines.empty()) {
+            sum += deadlines.top();
+            deadlines.pop();
         }
     }
     cout << sum << "\n";
