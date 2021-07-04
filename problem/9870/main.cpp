@@ -6,7 +6,6 @@ using namespace std;
 
 const int INF = 1e9;
 int N, M, K, Q;
-int graph[201][201];
 int dist[201][201];
 
 int main() {
@@ -15,38 +14,23 @@ int main() {
     cin >> N >> M >> K >> Q;
     for (int i = 1; i <= N; i++) {
         for (int j = 1; j <= N; j++) {
-            graph[i][j] = INF;
             dist[i][j] = INF;
         }
-        graph[i][i] = 0;
         dist[i][i] = 0;
     }
     for (int i = 0; i < M; i++) {
         short u, v;
         int d;
         cin >> u >> v >> d;
-        graph[u][v] = min(graph[u][v], d);
-        if (u <= K || v <= K) {
-            dist[u][v] = min(dist[u][v], d);
-        }
+        dist[u][v] = min(dist[u][v], d);
     }
     for (int k = 1; k <= N; k++) {
         for (int i = 1; i <= N; i++) {
-            if (graph[i][k] == INF) {
+            if (dist[i][k] == INF) {
                 continue;
             }
             for (int j = 1; j <= N; j++) {
-                graph[i][j] = min(graph[i][j], graph[i][k] + graph[k][j]);
-            }
-        }
-    }
-    for (int k = 1; k <= K; k++) {
-        for (int i = 1; i <= N; i++) {
-            if (graph[i][k] == INF) {
-                continue;
-            }
-            for (int j = 1; j <= N; j++) {
-                dist[i][j] = min(dist[i][j], graph[i][k] + graph[k][j]);
+                dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j]);
             }
         }
     }
@@ -55,9 +39,16 @@ int main() {
     for (int i = 0; i < Q; i++) {
         short a, b;
         cin >> a >> b;
-        if (dist[a][b] != INF) {
+        int _min = INF;
+        for (int k = 1; k <= K; k++) {
+            if (dist[a][k] == INF || dist[k][b] == INF) {
+                continue;
+            }
+            _min = min(_min, dist[a][k] + dist[k][b]);
+        }
+        if (_min != INF) {
             valid_num++;
-            sum += dist[a][b];
+            sum += _min;
         }
     }
     cout << valid_num << "\n";
