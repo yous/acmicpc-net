@@ -13,26 +13,28 @@ vector<short> hubs;
 int dist[200][20001];
 int dist_rev[200][20001];
 
-void dijkstra(int s, int dist[], vector<vector<pair<short, short>>>& adj) {
-    priority_queue<pair<int, short>> pq;
+void spfa(int s, int dist[], vector<vector<pair<short, short>>>& adj) {
+    queue<short> qu;
+    vector<bool> in_q(N + 1);
     dist[s] = 0;
-    pq.emplace(0, s);
-    while (!pq.empty()) {
-        auto& p = pq.top();
-        int d = -p.first;
-        short u = p.second;
-        pq.pop();
-        if (dist[u] < d) {
-            continue;
-        }
+    qu.emplace(s);
+    in_q[s] = true;
+    while (!qu.empty()) {
+        short u = qu.front();
+        qu.pop();
+        in_q[u] = false;
         for (auto& e : adj[u]) {
             short v = e.first,
-                  nd = e.second;
-            if (dist[v] <= d + nd) {
+                  d = e.second;
+            int nd = dist[u] + d;
+            if (dist[v] <= nd) {
                 continue;
             }
-            dist[v] = d + nd;
-            pq.emplace(-(d + nd), v);
+            dist[v] = nd;
+            if (!in_q[v]) {
+                qu.emplace(v);
+                in_q[v] = true;
+            }
         }
     }
 }
@@ -57,12 +59,10 @@ int main() {
         short num;
         cin >> num;
         hubs.push_back(num);
-        dist[i][hubs[i]] = 0;
-        dist_rev[i][hubs[i]] = 0;
     }
     for (int i = 0; i < K; i++) {
-        dijkstra(hubs[i], dist[i], ADJ);
-        dijkstra(hubs[i], dist_rev[i], ADJ_REV);
+        spfa(hubs[i], dist[i], ADJ);
+        spfa(hubs[i], dist_rev[i], ADJ_REV);
     }
     int valid_num = 0;
     long long sum = 0;
