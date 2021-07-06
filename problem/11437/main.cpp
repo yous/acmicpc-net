@@ -7,37 +7,46 @@ using namespace std;
 
 int N, M;
 vector<vector<int>> ADJ;
-vector<vector<int>> sparse_table;
-vector<int> depths;
+vector<int> rev_idx;
 
-int query(int u, int v) {
-    int u_depth = depths[u];
-    int v_depth = depths[v];
-    if (u_depth != v_depth) {
-        if (u_depth > v_depth) {
-            swap(u, v);
-            swap(u_depth, v_depth);
-        }
-        int diff = v_depth - u_depth;
-        while (diff > 0) {
-            int power = 31 - __builtin_clz(diff);
-            v = sparse_table[power][v];
-            diff -= (1 << power);
+struct SegTree {
+    int N;
+    vector<pair<int, int>> t;
+
+    SegTree(int n) : N(n), t(n * 2) {}
+
+    void build(void) {
+        for (int i = N - 1; i >= 0; i--) {
+            t[i] = min(t[i * 2], t[i * 2 + 1]);
         }
     }
-    if (u == v) {
-        return u;
-    }
-    for (int p = 15; p >= 0; p--) {
-        int u_parent = sparse_table[p][u];
-        int v_parent = sparse_table[p][v];
-        if (u_parent == 0 || u_parent == v_parent) {
-            continue;
+
+    int query(int l, int r) {
+        pair<int, int> ans = t[l + N];
+        for (l += N, r += N; l < r; l /= 2, r /= 2) {
+            if (l & 1) {
+                ans = min(ans, t[l++]);
+            }
+            if (r & 1) {
+                ans = min(ans, t[--r]);
+            }
         }
-        u = u_parent;
-        v = v_parent;
+        return ans.second;
     }
-    return sparse_table[0][u];
+};
+
+int dfs(int s, int e, int idx, int depth, vector<pair<int, int>>& t) {
+    t[idx] = {depth, s};
+    rev_idx[s] = idx - (N * 2 - 1);
+    idx++;
+    for (int v : ADJ[s]) {
+        if (v != e) {
+            idx = dfs(v, s, idx, depth + 1, t);
+            t[idx] = {depth, s};
+            idx++;
+        }
+    }
+    return idx;
 }
 
 int main() {
@@ -45,48 +54,26 @@ int main() {
     cin.tie(nullptr);
     cin >> N;
     ADJ.resize(N + 1);
+    rev_idx.resize(N + 1);
     for (int i = 0; i < N - 1; i++) {
         int u, v;
         cin >> u >> v;
         ADJ[u].push_back(v);
         ADJ[v].push_back(u);
     }
-    sparse_table.resize(16);
-    depths.resize(N + 1);
-    sparse_table[0].resize(N + 1);
-    queue<pair<int, int>> qu;
-    sparse_table[0][1] = 0;
-    qu.emplace(1, 0);
-    depths[1] = 0;
-    while (!qu.empty()) {
-        auto& p = qu.front();
-        int u = p.first,
-            e = p.second;
-        qu.pop();
-        for (int v : ADJ[u]) {
-            if (v != e) {
-                sparse_table[0][v] = u;
-                qu.emplace(v, u);
-                depths[v] = depths[u] + 1;
-            }
-        }
-    }
-    for (int p = 1; p <= 15; p++) {
-        sparse_table[p].resize(N + 1);
-        for (int i = 1; i <= N; i++) {
-            int parent = sparse_table[p - 1][i];
-            if (parent == 0) {
-                sparse_table[p][i] = 0;
-            } else {
-                sparse_table[p][i] = sparse_table[p - 1][parent];
-            }
-        }
-    }
+    SegTree st(N * 2 - 1);
+    dfs(1, 0, N * 2 - 1, 0, st.t);
+    st.build();
     cin >> M;
     for (int i = 0; i < M; i++) {
         int u, v;
         cin >> u >> v;
-        cout << query(u, v) << "\n";
+        int u_idx = rev_idx[u];
+        int v_idx = rev_idx[v];
+        if (u_idx > v_idx) {
+            swap(u_idx, v_idx);
+        }
+        cout << st.query(u_idx, v_idx) << "\n";
     }
     return 0;
 }
