@@ -4,29 +4,50 @@
 
 using namespace std;
 
-const int dy[] = {0, 0, -1, 1};
-const int dx[] = {-1, 1, 0, 0};
 int N, M;
 vector<vector<short>> paper;
 
-int tetromino(int sy, int sx, vector<pair<int, int>>& points) {
-    if (points.size() == 4) {
-        return 0;
-    }
+struct Tetromino {
+    short height;
+    short width;
+    vector<pair<short, short>> points;
+
+    Tetromino(short h, short w, vector<pair<short, short>> p) : height(h), width(w), points(p) {}
+};
+
+Tetromino tetros[] = {
+    Tetromino(1, 4, {{0, 0}, {0, 1}, {0, 2}, {0, 3}}),
+    Tetromino(2, 2, {{0, 0}, {0, 1}, {1, 0}, {1, 1}}),
+    Tetromino(2, 3, {{0, 0}, {0, 1}, {0, 2}, {1, 0}}),
+    Tetromino(2, 3, {{0, 0}, {0, 1}, {0, 2}, {1, 1}}),
+    Tetromino(2, 3, {{0, 0}, {0, 1}, {0, 2}, {1, 2}}),
+    Tetromino(2, 3, {{0, 0}, {0, 1}, {1, 1}, {1, 2}}),
+    Tetromino(2, 3, {{0, 0}, {1, 0}, {1, 1}, {1, 2}}),
+    Tetromino(2, 3, {{0, 1}, {0, 2}, {1, 0}, {1, 1}}),
+    Tetromino(2, 3, {{0, 1}, {1, 0}, {1, 1}, {1, 2}}),
+    Tetromino(2, 3, {{0, 2}, {1, 0}, {1, 1}, {1, 2}}),
+    Tetromino(3, 2, {{0, 0}, {0, 1}, {1, 0}, {2, 0}}),
+    Tetromino(3, 2, {{0, 0}, {0, 1}, {1, 1}, {2, 1}}),
+    Tetromino(3, 2, {{0, 0}, {1, 0}, {1, 1}, {2, 0}}),
+    Tetromino(3, 2, {{0, 0}, {1, 0}, {1, 1}, {2, 1}}),
+    Tetromino(3, 2, {{0, 0}, {1, 0}, {2, 0}, {2, 1}}),
+    Tetromino(3, 2, {{0, 1}, {1, 0}, {1, 1}, {2, 0}}),
+    Tetromino(3, 2, {{0, 1}, {1, 0}, {1, 1}, {2, 1}}),
+    Tetromino(3, 2, {{0, 1}, {1, 1}, {2, 0}, {2, 1}}),
+    Tetromino(4, 1, {{0, 0}, {1, 0}, {2, 0}, {3, 0}})
+};
+
+int max_tetro(Tetromino& tetro) {
     int ans = 0;
-    int sz = points.size();
-    for (int p = 0; p < sz; p++) {
-        int y = points[p].first,
-            x = points[p].second;
-        for (int i = 0; i < 4; i++) {
-            int ny = y + dy[i];
-            int nx = x + dx[i];
-            if (ny < 0 || ny >= N || nx < 0 || nx >= M || find(points.begin(), points.end(), make_pair(ny, nx)) != points.end()) {
-                continue;
+    for (int i = 0; i < N - tetro.height + 1; i++) {
+        for (int j = 0; j < M - tetro.width + 1; j++) {
+            int sum = 0;
+            for (auto& p : tetro.points) {
+                int y = p.first,
+                    x = p.second;
+                sum += paper[i + y][j + x];
             }
-            points.emplace_back(ny, nx);
-            ans = max(ans, paper[ny][nx] + tetromino(ny, nx, points));
-            points.pop_back();
+            ans = max(ans, sum);
         }
     }
     return ans;
@@ -45,13 +66,8 @@ int main() {
         }
     }
     int ans = 0;
-    vector<pair<int, int>> points;
-    for (int y = 0; y < N; y++) {
-        for (int x = 0; x < M; x++) {
-            points.emplace_back(y, x);
-            ans = max(ans, paper[y][x] + tetromino(y, x, points));
-            points.pop_back();
-        }
+    for (auto& tetro : tetros) {
+        ans = max(ans, max_tetro(tetro));
     }
     cout << ans << "\n";
     return 0;
