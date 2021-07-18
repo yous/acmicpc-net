@@ -4,75 +4,57 @@
 
 using namespace std;
 
-struct SegTree {
+struct FenwickTree {
     int N;
-    vector<int> t;
+    vector<vector<int>> t;
 
-    SegTree(int n) : N(n), t(n * 2) {}
+    FenwickTree(int n) : N(n), t(n + 1, vector<int>(n + 1)) {}
 
-    void build(void) {
-        for (int i = N - 1; i >= 0; i--) {
-            t[i] = t[i * 2] + t[i * 2 + 1];
-        }
-    }
-
-    int query(int l, int r) {
+    int sum(int pos_y, int pos_x) {
         int ans = 0;
-        for (l += N, r += N; l < r; l /= 2, r /= 2) {
-            if (l & 1) {
-                ans += t[l++];
+        while (pos_y >= 1) {
+            int pos = pos_x;
+            while (pos >= 1) {
+                ans += t[pos_y][pos];
+                pos -= pos & -pos;
             }
-            if (r & 1) {
-                ans += t[--r];
-            }
+            pos_y -= pos_y & -pos_y;
         }
         return ans;
+    }
+
+    void update(int pos_y, int pos_x, int diff) {
+        while (pos_y <= N) {
+            int pos = pos_x;
+            while (pos <= N) {
+                t[pos_y][pos] += diff;
+                pos += pos & -pos;
+            }
+            pos_y += pos_y & -pos_y;
+        }
     }
 };
 
 int N, M;
-vector<SegTree> matrix;
-
-void build(void) {
-    for (int idx = N - 1; idx >= 0; idx--) {
-        SegTree& st = matrix[idx];
-        SegTree& child1 = matrix[idx * 2];
-        SegTree& child2 = matrix[idx * 2 + 1];
-        for (int i = 0; i < N * 2; i++) {
-            st.t[i] = child1.t[i] + child2.t[i];
-        }
-    }
-}
-
-int query(int lo, int hi, int l, int r) {
-    int ans = 0;
-    for (lo += N, hi += N; lo < hi; lo /= 2, hi /= 2) {
-        if (lo & 1) {
-            ans += matrix[lo++].query(l, r);
-        }
-        if (hi & 1) {
-            ans += matrix[--hi].query(l, r);
-        }
-    }
-    return ans;
-}
+FenwickTree* matrix;
 
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
     cin >> N >> M;
-    matrix.resize(N * 2, SegTree(N));
-    for (int i = N; i < N * 2; i++) {
-        for (int j = 0; j < N; j++) {
-            cin >> matrix[i].t[j + N];
+    matrix = new FenwickTree(N);
+    for (int y = 0; y < N; y++) {
+        for (int x = 0; x < N; x++) {
+            int num;
+            cin >> num;
+            matrix->update(y + 1, x + 1, num);
         }
-        matrix[i].build();
     }
-    build();
     for (int i = 0; i < M; i++) {
         int y1, x1, y2, x2;
         cin >> y1 >> x1 >> y2 >> x2;
-        cout << query(y1 - 1, y2, x1 - 1, x2) << "\n";
+        cout << matrix->sum(y2, x2) - matrix->sum(y2, x1 - 1) - matrix->sum(y1 - 1, x2) + matrix->sum(y1 - 1, x1 - 1) << "\n";
     }
+    delete matrix;
     return 0;
 }
