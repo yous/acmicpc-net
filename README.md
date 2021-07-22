@@ -1,6 +1,6 @@
 # Baekjoon Online Judge
 
-[![Build Status](https://travis-ci.com/yous/acmicpc-net.svg?branch=master)](https://travis-ci.com/yous/acmicpc-net)
+[![CI](https://github.com/yous/acmicpc-net/actions/workflows/main.yml/badge.svg?branch=master)](https://github.com/yous/acmicpc-net/actions/workflows/main.yml)
 
 Solutions of [Baekjoon Online Judge][].
 
