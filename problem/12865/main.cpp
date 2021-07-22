@@ -29,14 +29,20 @@ int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
     cin >> N >> K;
-    cache.resize(N, vector<int>(K, -1));
+    int pass = 0;
     for (int i = 0; i < N; i++) {
         int w;
         short v;
         cin >> w >> v;
+        if (v == 0) {
+            pass++;
+            continue;
+        }
         weights.push_back(w);
         values.push_back(v);
     }
+    N -= pass;
+    cache.resize(N, vector<int>(K, -1));
     cout << solve(0, K) << "\n";
     return 0;
 }
