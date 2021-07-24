@@ -55,7 +55,7 @@ Dir["problem/*"].each do |problem|
       context filename do
         before(:context) do
           @dir = Dir.mktmpdir
-          system "g++ #{file} -o #{@dir}/#{basename} -O2 -Wall -lm -std=c++11"
+          system "g++ #{file} -o #{@dir}/#{basename} -O2 -Wall -lm -std=c++17"
         end
         after(:context) do
           FileUtils.rm_r @dir
