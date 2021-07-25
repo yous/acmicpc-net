@@ -11,7 +11,7 @@ vector<pair<short, short>> houses;
 vector<short> dist;
 vector<pair<short, short>> chickens;
 
-int solve(int idx, int total, int cnt, vector<bool>& selected, vector<short>& dist) {
+int solve(int idx, int total, int cnt, vector<short>& dist) {
     if (cnt == M) {
         return accumulate(dist.begin(), dist.end(), 0);
     }
@@ -19,21 +19,21 @@ int solve(int idx, int total, int cnt, vector<bool>& selected, vector<short>& di
         return INF;
     }
     int ans = INF;
-    selected[idx] = true;
     auto& chicken = chickens[idx];
-    vector<short> prev_dist(dist.size());
-    copy(dist.begin(), dist.end(), prev_dist.begin());
+    vector<pair<short, short>> prev_dist;
     for (int i = 0, sz = houses.size(); i < sz; i++) {
         auto& p = houses[i];
         short d = abs(chicken.first - p.first) + abs(chicken.second - p.second);
         if (d < dist[i]) {
+            prev_dist.emplace_back(i, dist[i]);
             dist[i] = d;
         }
     }
-    ans = min(ans, solve(idx + 1, total, cnt + 1, selected, dist));
-    dist = prev_dist;
-    selected[idx] = false;
-    return min(ans, solve(idx + 1, total, cnt, selected, dist));
+    ans = min(ans, solve(idx + 1, total, cnt + 1, dist));
+    for (auto& p : prev_dist) {
+        dist[p.first] = p.second;
+    }
+    return min(ans, solve(idx + 1, total, cnt, dist));
 }
 
 int main() {
@@ -53,7 +53,6 @@ int main() {
     }
     dist.resize(houses.size(), INF);
     int total = chickens.size();
-    vector<bool> selected(total);
-    cout << solve(0, total, 0, selected, dist) << "\n";
+    cout << solve(0, total, 0, dist) << "\n";
     return 0;
 }
