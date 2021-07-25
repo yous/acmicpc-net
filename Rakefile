@@ -43,3 +43,19 @@ task :new do
     end
   end
 end
+
+require "pathname"
+desc "Run a program"
+task :run do
+  if ARGV.size < 2
+    puts "usage: rake run [PROBLEM]"
+    exit 1
+  end
+  problem = Pathname.new(File.join(__dir__, "problem", ARGV[1]))
+  relpath = problem.relative_path_from(__dir__)
+  cd relpath do
+    system("g++ main.cpp -O2 -Wall -lm -std=c++17") &&
+      system("bash -c '{ ./a.out < input; } 2>&1'")
+  end
+  exit 0
+end

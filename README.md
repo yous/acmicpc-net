@@ -41,7 +41,13 @@ rspec -e 1000
 
 ``` sh
 cd problem/1000
-g++ main.cpp -O2 -Wall -lm -std=c++17 && diff -y --suppress-common-lines output <(./a.out < input)
+g++ main.cpp -O2 -Wall -lm -std=c++17 && diff -y --suppress-common-lines output <(bash -c '{ ./a.out < input; } 2>&1')
+```
+
+To run the binary of the problem 1000 with its `input`:
+
+``` sh
+rake run 1000
 ```
 
 You can also run all tests with:
