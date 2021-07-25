@@ -23,7 +23,7 @@ RSpec.shared_examples "a problem" do |problem|
     delta = DELTAS[problem]
     inputs.zip(outputs).each do |input, output|
       it "prints #{output} for #{input} within #{delta}" do
-        result = `#{command} < #{input}`
+        result = `{ #{command} < #{input}; } 2>&1`
         File.readlines(output).zip(result.lines).each do |expected, actual|
           expect(actual.to_f).to be_within(delta).of(expected.to_f)
         end
@@ -32,7 +32,7 @@ RSpec.shared_examples "a problem" do |problem|
   else
     inputs.zip(outputs).each do |input, output|
       it "prints #{output} for #{input}" do
-        expect(`#{command} < #{input}`).to eq(File.read(output))
+        expect(`{ #{command} < #{input}; } 2>&1`).to eq(File.read(output))
       end
     end
   end
