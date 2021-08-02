@@ -44,7 +44,7 @@ cd problem/1000
 g++ main.cpp -O2 -Wall -lm -std=c++17 && diff -y --suppress-common-lines output <(bash -c '{ ./a.out < input; } 2>&1')
 ```
 
-To run the binary of the problem 1000 with its `input`:
+To run the binary of the problem 1000:
 
 ``` sh
 rake run 1000
