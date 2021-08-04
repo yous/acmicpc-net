@@ -5,6 +5,7 @@ require "rspec/core/rake_task"
 RSpec::Core::RakeTask.new(:spec)
 task :default => :spec
 
+require "mechanize"
 require "tty-prompt"
 desc "Initialize a new problem"
 task :new do
@@ -15,6 +16,7 @@ task :new do
   mkdir_p dir
 
   cd dir do
+    puts "touch main.cpp"
     File.open("main.cpp", "w") do |f|
       f.write(<<~MAIN)
         #include <algorithm>
@@ -31,15 +33,25 @@ task :new do
       MAIN
     end
 
-    count = prompt.ask("Enter the number of examples:",
-                       default: 1, convert: :int)
+    if id.to_i >= 1000
+      a = Mechanize.new
+      page = a.get("https://www.acmicpc.net/problem/#{id}")
 
-    (1..count).each do |i|
-      input = prompt.multiline("Enter the input (#{i}/#{count}):").join
-      output = prompt.multiline("Enter the output (#{i}/#{count}):").join
+      i = 1
+      loop do
+        input = page.at("pre#sample-input-#{i}")
+        output = page.at("pre#sample-output-#{i}")
+        break unless input && output
 
-      File.open("input#{i if i > 1}", "w") { |f| f.write(input) }
-      File.open("output#{i if i > 1}", "w") { |f| f.write(output) }
+        File.open("input#{i if i > 1}", "w") { |f| f.puts(input.text) }
+        File.open("output#{i if i > 1}", "w") { |f| f.puts(output.text) }
+        i += 1
+      end
+      if i > 1
+        puts "touch input output ... input#{i} output#{i}"
+      else
+        puts "touch input output"
+      end
     end
   end
 end

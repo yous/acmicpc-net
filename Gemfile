@@ -3,6 +3,7 @@
 
 source "https://rubygems.org"
 
+gem "mechanize"
 gem "rake"
 gem "rspec", :group => :test
 gem "tty-prompt"
