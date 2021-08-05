@@ -28,6 +28,10 @@ Each project directory has some of these files:
 To run the test of the problem 1000:
 
 ``` sh
+rake test 1000
+```
+
+``` sh
 rake spec SPEC_OPTS="-E '^1000 '"
 ```
 

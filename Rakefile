@@ -5,6 +5,16 @@ require "rspec/core/rake_task"
 RSpec::Core::RakeTask.new(:spec)
 task :default => :spec
 
+RSpec::Core::RakeTask.new(:test) do |t|
+  if ARGV.size < 2
+    puts "usage: rake test [PROBLEM]"
+    exit 1
+  end
+  ARGV.each { |a| task(a.to_sym) {} }
+  problem = ARGV[1]
+  t.rspec_opts = "-E '^#{problem} '"
+end
+
 require "mechanize"
 desc "Initialize a new problem"
 task :new do
@@ -12,6 +22,7 @@ task :new do
     puts "usage: rake new [PROBLEM]"
     exit 1
   end
+  ARGV.each { |a| task(a.to_sym) {} }
   id = ARGV[1]
   dir = "problem/#{id}"
   mkdir_p dir
@@ -55,7 +66,6 @@ task :new do
       end
     end
   end
-  exit 0
 end
 
 require "pathname"
@@ -65,10 +75,10 @@ task :run do
     puts "usage: rake run [PROBLEM]"
     exit 1
   end
+  ARGV.each { |a| task(a.to_sym) {} }
   problem = Pathname.new(File.join(__dir__, "problem", ARGV[1]))
   relpath = problem.relative_path_from(__dir__)
   cd relpath do
     system("g++ main.cpp -O2 -Wall -lm -std=c++17") && system("./a.out")
   end
-  exit 0
 end
