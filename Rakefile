@@ -79,6 +79,8 @@ task :run do
   problem = Pathname.new(File.join(__dir__, "problem", ARGV[1]))
   relpath = problem.relative_path_from(__dir__)
   cd relpath do
-    system("g++ main.cpp -O2 -Wall -lm -std=c++17") && system("./a.out")
+    (uptodate?("a.out", ["main.cpp"]) ||
+     system("g++ main.cpp -O2 -Wall -lm -std=c++17")
+    ) && system("./a.out")
   end
 end
