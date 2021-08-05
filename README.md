@@ -35,6 +35,8 @@ rake test 1000
 rake spec SPEC_OPTS="-E '^1000 '"
 ```
 
+This runs the tests of the problems start with 1000:
+
 ``` sh
 rake spec SPEC_OPTS='-e 1000'
 ```
@@ -43,15 +45,15 @@ rake spec SPEC_OPTS='-e 1000'
 rspec -e 1000
 ```
 
-``` sh
-cd problem/1000
-g++ main.cpp -O2 -Wall -lm -std=c++17 && diff -y --suppress-common-lines output <(bash -c '{ ./a.out < input; } 2>&1')
-```
-
-To run the binary of the problem 1000:
+To compile and run the binary of the problem 1000:
 
 ``` sh
 rake run 1000
+```
+
+``` sh
+cd problem/1000
+g++ main.cpp -O2 -Wall -lm -std=c++17 && diff -y --suppress-common-lines output <(bash -c '{ ./a.out < input; } 2>&1')
 ```
 
 You can also run all tests with:
