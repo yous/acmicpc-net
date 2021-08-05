@@ -30,8 +30,6 @@ GEM
     nokogiri (1.12.2)
       mini_portile2 (~> 2.6.1)
       racc (~> 1.4)
-    pastel (0.8.0)
-      tty-color (~> 0.5)
     public_suffix (4.0.6)
     racc (1.5.2)
     rake (13.0.6)
@@ -49,22 +47,11 @@ GEM
       rspec-support (~> 3.10.0)
     rspec-support (3.10.2)
     rubyntlm (0.6.3)
-    tty-color (0.6.0)
-    tty-cursor (0.7.1)
-    tty-prompt (0.23.1)
-      pastel (~> 0.8)
-      tty-reader (~> 0.8)
-    tty-reader (0.9.0)
-      tty-cursor (~> 0.7)
-      tty-screen (~> 0.8)
-      wisper (~> 2.0)
-    tty-screen (0.8.1)
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.7)
     webrick (1.7.0)
     webrobots (0.1.2)
-    wisper (2.0.1)
 
 PLATFORMS
   ruby
@@ -73,7 +60,6 @@ DEPENDENCIES
   mechanize
   rake
   rspec
-  tty-prompt
 
 BUNDLED WITH
    2.2.22

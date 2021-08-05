@@ -6,12 +6,13 @@ RSpec::Core::RakeTask.new(:spec)
 task :default => :spec
 
 require "mechanize"
-require "tty-prompt"
 desc "Initialize a new problem"
 task :new do
-  prompt = TTY::Prompt.new(help_color: :cyan)
-  id = prompt.ask("Enter the ID of the problem:")
-
+  if ARGV.size < 2
+    puts "usage: rake new [PROBLEM]"
+    exit 1
+  end
+  id = ARGV[1]
   dir = "problem/#{id}"
   mkdir_p dir
 
@@ -54,6 +55,7 @@ task :new do
       end
     end
   end
+  exit 0
 end
 
 require "pathname"
