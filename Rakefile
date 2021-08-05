@@ -55,8 +55,8 @@ task :new do
         output = page.at("pre#sample-output-#{i}")
         break unless input && output
 
-        File.open("input#{i if i > 1}", "w") { |f| f.puts(input.text) }
-        File.open("output#{i if i > 1}", "w") { |f| f.puts(output.text) }
+        File.open("input#{i if i > 1}", "w") { |f| f.puts(input.text.gsub("\r", "")) }
+        File.open("output#{i if i > 1}", "w") { |f| f.puts(output.text.gsub("\r", "")) }
         i += 1
       end
       if i > 1
