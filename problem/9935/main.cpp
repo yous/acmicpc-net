@@ -1,6 +1,6 @@
 #include <algorithm>
+#include <deque>
 #include <iostream>
-#include <stack>
 #include <vector>
 
 using namespace std;
@@ -16,12 +16,12 @@ int main() {
     cin >> S >> pat;
     S_sz = S.size();
     pat_sz = pat.size();
-    stack<char> ans;
+    deque<char> ans;
     for (int i = 0; i < S_sz; i++) {
         if (i >= pat_sz - 1 && S[i] == pat[pat_sz - 1]) {
             int search = pat_sz - 2;
-            while (!ans.empty() && search >= 0 && ans.top() == pat[search]) {
-                ans.pop();
+            while (!ans.empty() && search >= 0 && ans.back() == pat[search]) {
+                ans.pop_back();
                 search--;
             }
             if (search == -1) {
@@ -29,25 +29,20 @@ int main() {
             }
             search++;
             while (search < pat_sz - 1) {
-                ans.push(pat[search]);
+                ans.push_back(pat[search]);
                 search++;
             }
-            ans.push(S[i]);
+            ans.push_back(S[i]);
         } else {
-            ans.push(S[i]);
+            ans.push_back(S[i]);
         }
     }
     if (ans.empty()) {
         cout << "FRULA\n";
     } else {
-        stack<char> st;
         while (!ans.empty()) {
-            st.push(ans.top());
-            ans.pop();
-        }
-        while (!st.empty()) {
-            cout << st.top();
-            st.pop();
+            cout << ans.front();
+            ans.pop_front();
         }
         cout << "\n";
     }
