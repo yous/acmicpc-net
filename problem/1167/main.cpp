@@ -6,14 +6,16 @@ using namespace std;
 
 int V;
 vector<vector<pair<int, int>>> ADJ;
+vector<int> dist;
 
 void dfs(int u, int s, vector<int>& dist) {
     for (auto [v, w] : ADJ[u]) {
+        if (dist[v] != -1) {
+            continue;
+        }
         if (s == -1 || v != s) {
-            if (dist[v] == -1) {
-                dist[v] = dist[u] + w;
-                dfs(v, u, dist);
-            }
+            dist[v] = dist[u] + w;
+            dfs(v, u, dist);
         }
     }
 }
@@ -23,6 +25,7 @@ int main() {
     cin.tie(nullptr);
     cin >> V;
     ADJ.resize(V);
+    dist.resize(V, -1);
     for (int i = 0; i < V; i++) {
         int u, v;
         cin >> u;
@@ -35,7 +38,6 @@ int main() {
             ADJ[u - 1].emplace_back(v - 1, w);
         }
     }
-    vector<int> dist(V, -1);
     dist[0] = 0;
     dfs(0, -1, dist);
     int far = 0;
