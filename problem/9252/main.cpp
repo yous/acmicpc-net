@@ -46,7 +46,6 @@ int main() {
     int len = solve(0, 0);
     cout << len << "\n";
     if (len > 0) {
-        string lcs;
         int idx1 = 0;
         int idx2 = 0;
         while (idx1 < sz1 && idx2 < sz2) {
@@ -58,13 +57,13 @@ int main() {
                     idx2++;
                     break;
                 case 3:
-                    lcs += S1[idx1];
+                    cout << S1[idx1];
                     idx1++;
                     idx2++;
                     break;
             }
         }
-        cout << lcs << "\n";
+        cout << "\n";
     }
     return 0;
 }
