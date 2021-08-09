@@ -15,32 +15,24 @@ int main() {
     cin >> S1 >> S2;
     sz1 = S1.size();
     sz2 = S2.size();
-    cache.resize(sz1, vector<short>(sz2));
+    cache.resize(sz1 + 1, vector<short>(sz2 + 1));
     next_idx.resize(sz1, vector<char>(sz2));
-    for (int i = sz1 + sz2 - 2; i >= 0; i--) {
-        for (int idx1 = min(sz1 - 1, i); idx1 >= max(0, i - sz2 + 1); idx1--) {
-            int idx2 = i - idx1;
-            if (S1[idx1] == S2[idx2]) {
-                cache[idx1][idx2] = 1;
-                if (idx1 < sz1 - 1 && idx2 < sz2 - 1) {
-                    cache[idx1][idx2] += cache[idx1 + 1][idx2 + 1];
-                }
-                next_idx[idx1][idx2] = 3;
+    for (int i = sz1; i >= 0; i--) {
+        for (int j = sz2; j >= 0; j--) {
+            if (i == sz1 || j == sz2) {
+                cache[i][j] = 0;
+            } else if (S1[i] == S2[j]) {
+                cache[i][j] = 1 + cache[i + 1][j + 1];
+                next_idx[i][j] = 3;
             } else {
-                short nxt1 = 0;
-                if (idx1 < sz1 - 1) {
-                    nxt1 = cache[idx1 + 1][idx2];
-                }
-                short nxt2 = 0;
-                if (idx2 < sz2 - 1) {
-                    nxt2 = cache[idx1][idx2 + 1];
-                }
+                short nxt1 = cache[i + 1][j];
+                short nxt2 = cache[i][j + 1];
                 if (nxt1 >= nxt2) {
-                    cache[idx1][idx2] = nxt1;
-                    next_idx[idx1][idx2] = 1;
+                    cache[i][j] = nxt1;
+                    next_idx[i][j] = 1;
                 } else {
-                    cache[idx1][idx2] = nxt2;
-                    next_idx[idx1][idx2] = 2;
+                    cache[i][j] = nxt2;
+                    next_idx[i][j] = 2;
                 }
             }
         }
