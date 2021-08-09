@@ -28,18 +28,11 @@ int main() {
     }
     pair<int, int> ans;
     int min_d = 2e9;
-    if (liquid[le_zero] == 0) {
-        if (le_zero >= 1) {
-            ans = {liquid[le_zero - 1], 0};
-            min_d = -ans.first;
-        }
-    } else {
-        if (le_zero >= 2) {
-            int new_d = -(liquid[le_zero - 2] + liquid[le_zero - 1]);
-            if (new_d < min_d) {
-                min_d = new_d;
-                ans = {liquid[le_zero - 2], liquid[le_zero - 1]};
-            }
+    if (le_zero >= 2) {
+        int new_d = -(liquid[le_zero - 2] + liquid[le_zero - 1]);
+        if (new_d < min_d) {
+            min_d = new_d;
+            ans = {liquid[le_zero - 2], liquid[le_zero - 1]};
         }
     }
     if (le_zero < N - 1) {
@@ -49,32 +42,23 @@ int main() {
             ans = {liquid[le_zero], liquid[le_zero + 1]};
         }
     }
-    int lo = 0;
-    while (lo < le_zero) {
-        int hi = upper_bound(liquid.begin() + le_zero, liquid.end(), -liquid[lo]) - liquid.begin();
-        if (hi < N) {
-            int new_d = abs(liquid[lo] + liquid[hi]);
-            if (new_d < min_d) {
-                min_d = new_d;
-                ans = {liquid[lo], liquid[hi]};
-                if (min_d == 0) {
-                    cout << ans.first << " " << ans.second << "\n";
-                    return 0;
-                }
-            }
+    int lo = le_zero - 1;
+    int hi = le_zero;
+    while (lo >= 0 && hi < N) {
+        int new_d = liquid[lo] + liquid[hi];
+        if (new_d == 0) {
+            cout << liquid[lo] << " " << liquid[hi] << "\n";
+            return 0;
         }
-        if (lo < hi - 1) {
-            int new_d = abs(liquid[lo] + liquid[hi - 1]);
-            if (new_d < min_d) {
-                min_d = new_d;
-                ans = {liquid[lo], liquid[hi - 1]};
-                if (min_d == 0) {
-                    cout << ans.first << " " << ans.second << "\n";
-                    return 0;
-                }
-            }
+        if (abs(new_d) < min_d) {
+            ans = {liquid[lo], liquid[hi]};
+            min_d = abs(new_d);
         }
-        lo++;
+        if (new_d < 0) {
+            hi++;
+        } else {
+            lo--;
+        }
     }
     cout << ans.first << " " << ans.second << "\n";
     return 0;
