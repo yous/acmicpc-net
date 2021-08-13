@@ -8,13 +8,10 @@ int N, M;
 
 struct DisjointSet {
     vector<int> group;
-    vector<int> edges;
-    vector<int> vertices;
 
-    DisjointSet(int n) : group(n), edges(n), vertices(n) {
+    DisjointSet(int n) : group(n) {
         for (int i = 0; i < n; i++) {
             group[i] = i;
-            vertices[i] = 1;
         }
     }
 
@@ -31,12 +28,10 @@ struct DisjointSet {
         int gq = find(q);
         if (gp != gq) {
             group[gp] = gq;
-            edges[gp] += edges[gq] + 1;
-            vertices[gp] += vertices[gq];
+            return false;
         } else {
-            edges[gp]++;
+            return true;
         }
-        return edges[gp] == vertices[gp];
     }
 };
 
