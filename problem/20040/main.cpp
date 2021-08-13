@@ -40,14 +40,14 @@ int main() {
     cin.tie(nullptr);
     cin >> N >> M;
     DisjointSet ds(N);
-    int ans = 0;
     for (int i = 0; i < M; i++) {
         int a, b;
         cin >> a >> b;
-        if (ans == 0 && ds.merge(a, b)) {
-            ans = i + 1;
+        if (ds.merge(a, b)) {
+            cout << i + 1 << "\n";
+            return 0;
         }
     }
-    cout << ans << "\n";
+    cout << "0\n";
     return 0;
 }
