@@ -7,62 +7,61 @@ using namespace std;
 const int MOD = 1000;
 int N;
 long long B;
-vector<vector<short>> A;
-vector<vector<vector<short>>> table;
 
-void mul(vector<vector<short>>& A, vector<vector<short>>& B, vector<vector<short>>& res) {
-    for (int i = 0; i < N; i++) {
-        for (int j = 0; j < N; j++) {
-            short& elem = res[i][j];
-            elem = 0;
-            for (int k = 0; k < N; k++) {
-                elem += A[i][k] * B[k][j] % MOD;
-                elem %= MOD;
-            }
+struct Matrix {
+    int N;
+    vector<vector<short>> mat;
+
+    Matrix(int N) : N(N), mat(N, vector<short>(N)) {
+        for (int i = 0; i < N; i++) {
+            mat[i][i] = 1;
         }
     }
-}
+
+    Matrix operator*(const Matrix& other) const {
+        Matrix res(N);
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                res.mat[i][j] = 0;
+                for (int k = 0; k < N; k++) {
+                    res.mat[i][j] += mat[i][k] * other.mat[k][j] % MOD;
+                    res.mat[i][j] %= MOD;
+                }
+            }
+        }
+        return res;
+    }
+
+    Matrix pow(long long n) {
+        Matrix res(N);
+        Matrix mul = *this;
+        while (n > 0) {
+            if (n % 2 == 1) {
+                res = res * mul;
+            }
+            mul = mul * mul;
+            n /= 2;
+        }
+        return res;
+    }
+};
 
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
     cin >> N >> B;
-    A.resize(N, vector<short>(N));
+    Matrix A(N);
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
-            cin >> A[i][j];
-            A[i][j] %= MOD;
+            cin >> A.mat[i][j];
+            A.mat[i][j] %= MOD;
         }
     }
-    vector<vector<short>> ans;
-    if (B > 1) {
-        int power = 63 - __builtin_clzl(B);
-        table.resize(power, vector<vector<short>>(N, vector<short>(N)));
-        mul(A, A, table[0]);
-        for (int i = 1; i < power; i++) {
-            mul(table[i - 1], table[i - 1], table[i]);
-        }
-        ans = table[power - 1];
-        B -= (1LL << power);
-    } else {
-        ans = A;
-        B -= 1;
-    }
-    while (B > 0) {
-        vector<vector<short>> tmp(N, vector<short>(N));
-        int power = 63 - __builtin_clzl(B);
-        if (power == 0) {
-            mul(ans, A, tmp);
-        } else {
-            mul(ans, table[power - 1], tmp);
-        }
-        ans = tmp;
-        B -= (1LL << power);
-    }
+    Matrix ans = A.pow(B);
     for (int i = 0; i < N; i++) {
-        cout << ans[i][0];
+        cout << ans.mat[i][0];
         for (int j = 1; j < N; j++) {
-            cout << " " << ans[i][j];
+            cout << " " << ans.mat[i][j];
         }
         cout << "\n";
     }
