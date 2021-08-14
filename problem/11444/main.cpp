@@ -8,20 +8,41 @@ const int MOD = static_cast<int>(1e9) + 7;
 long long N;
 
 struct Matrix {
-    int a11, a12;
-    int a21, a22;
+    int mat[2][2] = {{1, 0}, {0, 1}};
 
-    Matrix(int a11, int a12, int a21, int a22) : a11(a11), a12(a12), a21(a21), a22(a22) {}
+    Matrix() {}
 
-    Matrix operator*(const struct Matrix& mat) const {
-        return {static_cast<int>((1LL * a11 * mat.a11 % MOD + 1LL * a12 * mat.a21 % MOD) % MOD),
-                static_cast<int>((1LL * a11 * mat.a12 % MOD + 1LL * a12 * mat.a22 % MOD) % MOD),
-                static_cast<int>((1LL * a21 * mat.a11 % MOD + 1LL * a22 * mat.a21 % MOD) % MOD),
-                static_cast<int>((1LL * a21 * mat.a12 % MOD + 1LL * a22 * mat.a22 % MOD) % MOD)};
+    Matrix(int a11, int a12, int a21, int a22) : mat{{a11, a12}, {a21, a22}} {}
+
+    Matrix operator*(const struct Matrix& o) const {
+        Matrix res;
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < 2; j++) {
+                res.mat[i][j] = 0;
+                for (int k = 0; k < 2; k++) {
+                    res.mat[i][j] += 1LL * mat[i][k] * o.mat[k][j] % MOD;
+                    res.mat[i][j] %= MOD;
+                }
+            }
+        }
+        return res;
+    }
+
+    Matrix pow(long long n) {
+        Matrix res;
+        Matrix mul = *this;
+        while (n > 0) {
+            if (n % 2 == 1) {
+                res = res * mul;
+            }
+            mul = mul * mul;
+            n /= 2;
+        }
+        return res;
     }
 };
 
-vector<Matrix> table;
+Matrix fibo(1, 1, 1, 0);
 
 int main() {
     ios_base::sync_with_stdio(false);
@@ -32,20 +53,6 @@ int main() {
         return 0;
     }
     N--;
-    int power = 63 - __builtin_clzl(N);
-    table.resize(power + 1, {0, 0, 0, 0});
-    table[0] = {1, 1, 1, 0};
-    for (int i = 1; i <= power; i++) {
-        table[i] = table[i - 1] * table[i - 1];
-    }
-    Matrix ans = table[power];
-    N -= (1LL << power);
-    while (N > 0) {
-        power = 63 - __builtin_clzl(N);
-        Matrix tmp = ans * table[power];
-        ans = tmp;
-        N -= (1LL << power);
-    }
-    cout << ans.a11 << "\n";
+    cout << fibo.pow(N).mat[0][0] << "\n";
     return 0;
 }
