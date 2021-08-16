@@ -84,3 +84,6 @@ task :run do
     ) && system("./a.out")
   end
 end
+
+require "rake/clean"
+CLOBBER.include "**/*.out"
