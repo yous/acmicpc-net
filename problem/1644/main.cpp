@@ -6,7 +6,6 @@ using namespace std;
 
 int N;
 vector<bool> sieve(4000001, true);
-vector<int> primes;
 
 void gen_primes(int limit) {
     for (int i = 2; i * i <= limit; i++) {
@@ -16,11 +15,6 @@ void gen_primes(int limit) {
             }
         }
     }
-    for (int i = 2; i <= limit; i++) {
-        if (sieve[i]) {
-            primes.push_back(i);
-        }
-    }
 }
 
 int main() {
@@ -28,46 +22,43 @@ int main() {
     cin.tie(nullptr);
     cin >> N;
     gen_primes(N);
-    int sz = primes.size();
-    if (sz == 0) {
-        cout << "0\n";
-        return 0;
-    }
-    int lo = 0;
-    int hi = 0;
-    int sum = primes[lo];
+    int lo = 2;
+    int hi = 2;
+    int sum = lo;
     int cnt = 0;
-    while (lo <= hi) {
-        while (sum < N) {
-            hi++;
-            if (hi >= sz) {
-                break;
+    while (lo <= hi && hi <= N) {
+        if (sum < N) {
+            while (sum < N) {
+                hi++;
+                while (hi <= N && !sieve[hi]) {
+                    hi++;
+                }
+                if (hi > N) {
+                    break;
+                }
+                sum += hi;
             }
-            sum += primes[hi];
-        }
-        if (hi >= sz) {
-            break;
-        }
-        while (sum > N) {
-            sum -= primes[lo];
-            lo++;
-            if (lo > hi) {
-                break;
+        } else if (sum > N) {
+            while (sum > N) {
+                sum -= lo;
+                lo++;
+                while (lo <= hi && !sieve[lo]) {
+                    lo++;
+                }
+                if (lo > hi) {
+                    break;
+                }
             }
-        }
-        if (lo > hi) {
-            break;
-        }
-        if (sum == N) {
+        } else {
             cnt++;
             hi++;
-            if (hi >= sz) {
+            while (hi <= N && !sieve[hi]) {
+                hi++;
+            }
+            if (hi > N) {
                 break;
             }
-            sum += primes[hi];
-        }
-        if (hi >= sz) {
-            break;
+            sum += hi;
         }
     }
     cout << cnt << "\n";
