@@ -6,6 +6,7 @@ using namespace std;
 
 int N;
 vector<bool> sieve(4000001, true);
+vector<int> primes;
 
 void gen_primes(int limit) {
     for (int i = 2; i * i <= limit; i++) {
@@ -15,6 +16,11 @@ void gen_primes(int limit) {
             }
         }
     }
+    for (int i = 2; i <= limit; i++) {
+        if (sieve[i]) {
+            primes.push_back(i);
+        }
+    }
 }
 
 int main() {
@@ -22,30 +28,29 @@ int main() {
     cin.tie(nullptr);
     cin >> N;
     gen_primes(N);
-    int lo = 2;
-    int hi = 2;
-    int sum = lo;
+    int sz = primes.size();
+    if (sz == 0) {
+        cout << "0\n";
+        return 0;
+    }
+    int lo = 0;
+    int hi = 0;
+    int sum = primes[lo];
     int cnt = 0;
     while (lo <= hi) {
         while (sum < N) {
             hi++;
-            while (hi <= N && !sieve[hi]) {
-                hi++;
-            }
-            if (hi > N) {
+            if (hi >= sz) {
                 break;
             }
-            sum += hi;
+            sum += primes[hi];
         }
-        if (hi > N) {
+        if (hi >= sz) {
             break;
         }
         while (sum > N) {
-            sum -= lo;
+            sum -= primes[lo];
             lo++;
-            while (lo <= hi && !sieve[lo]) {
-                lo++;
-            }
             if (lo > hi) {
                 break;
             }
@@ -56,15 +61,12 @@ int main() {
         if (sum == N) {
             cnt++;
             hi++;
-            while (hi <= N && !sieve[hi]) {
-                hi++;
-            }
-            if (hi > N) {
+            if (hi >= sz) {
                 break;
             }
-            sum += hi;
+            sum += primes[hi];
         }
-        if (hi > N) {
+        if (hi >= sz) {
             break;
         }
     }
