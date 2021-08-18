@@ -6,8 +6,8 @@ using namespace std;
 
 int T, N, M;
 vector<int> A_prefix;
-vector<int> B_prefix;
 vector<int> A_possible;
+vector<int> B;
 
 int main() {
     ios_base::sync_with_stdio(false);
@@ -28,18 +28,17 @@ int main() {
     }
     sort(A_possible.begin(), A_possible.end());
     cin >> M;
-    sum = 0;
-    B_prefix.push_back(sum);
     for (int i = 0; i < M; i++) {
         int num;
         cin >> num;
-        sum += num;
-        B_prefix.push_back(sum);
+        B.push_back(num);
     }
     long long cnt = 0;
-    for (int lo = 0; lo <= M - 1; lo++) {
-        for (int hi = lo + 1; hi <= M; hi++) {
-            int to_find = T - (B_prefix[hi] - B_prefix[lo]);
+    for (int lo = 0; lo < M; lo++) {
+        sum = 0;
+        for (int hi = lo; hi < M; hi++) {
+            sum += B[hi];
+            int to_find = T - sum;
             cnt += upper_bound(A_possible.begin(), A_possible.end(), to_find) -
                 lower_bound(A_possible.begin(), A_possible.end(), to_find);
         }
