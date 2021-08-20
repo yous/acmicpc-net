@@ -9,6 +9,7 @@ int N;
 vector<int> students;
 vector<bool> in_cycle;
 vector<bool> not_cycle;
+vector<bool> visited;
 
 void dfs(int idx) {
     int next_student = students[idx];
@@ -20,7 +21,7 @@ void dfs(int idx) {
         not_cycle[idx] = true;
         return;
     }
-    vector<bool> visited(N);
+    fill(visited.begin(), visited.end(), false);
     int start = idx;
     visited[start] = true;
     int tmp = students[start];
@@ -54,6 +55,8 @@ int main() {
         in_cycle.resize(N);
         not_cycle.clear();
         not_cycle.resize(N);
+        visited.clear();
+        visited.resize(N);
         for (int i = 0; i < N; i++) {
             int num;
             cin >> num;
