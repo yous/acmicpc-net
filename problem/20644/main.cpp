@@ -10,31 +10,31 @@ const int dx[] = {0, 0, -1, 1};
 int N, D;
 vector<string> farm;
 vector<pair<int, int>> starts;
-vector<vector<int>> max_sizes;
-vector<vector<int>> visited_diff;
-vector<vector<int>> y_plus_x;
-vector<vector<int>> y_minus_x;
+vector<vector<short>> max_sizes;
+vector<vector<short>> visited_diff;
+vector<vector<short>> y_plus_x;
+vector<vector<short>> y_minus_x;
 
-bool check(int y, int x, int sz, int dir) {
+bool check(int y, int x, short sz, int dir) {
     switch (dir) {
         case 0:
-            return y_plus_x[y - sz + x][y - sz] >= sz + 1 &&
-                y_minus_x[y - sz + N - 1 - x][y - sz] >= sz + 1;
+            return y_plus_x[y + x - sz][y] >= sz + 1 &&
+                y_minus_x[y + N - 1 - (x + sz)][y] >= sz + 1;
         case 1:
-            return y_plus_x[y + x + sz][y] >= sz + 1 &&
-                y_minus_x[y + N - 1 - (x - sz)][y] >= sz + 1;
+            return y_plus_x[y + sz + x][y + sz] >= sz + 1 &&
+                y_minus_x[y + sz + N - 1 - x][y + sz] >= sz + 1;
         case 2:
-            return y_plus_x[y - sz + x][y - sz] >= sz + 1 &&
-                y_minus_x[y + N - 1 - (x - sz)][y] >= sz + 1;
+            return y_plus_x[y + x - sz][y] >= sz + 1 &&
+                y_minus_x[y + sz + N - 1 - x][y + sz] >= sz + 1;
         case 3:
-            return y_plus_x[y + x + sz][y] >= sz + 1 &&
-                y_minus_x[y - sz + N - 1 - x][y - sz] >= sz + 1;
+            return y_plus_x[y + sz + x][y + sz] >= sz + 1 &&
+                y_minus_x[y + N - 1 - (x + sz)][y] >= sz + 1;
     }
     return false;
 }
 
 void bfs() {
-    queue<tuple<int, int, int>> qu;
+    queue<tuple<int, int, short>> qu;
     int time = 1;
     for (auto [sy, sx] : starts) {
         max_sizes[sy][sx] = 0;
@@ -76,10 +76,10 @@ int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
     cin >> N >> D;
-    max_sizes.resize(N, vector<int>(N, -1));
-    visited_diff.resize(N, vector<int>(N));
-    y_plus_x.resize(N * 2 - 1);
-    y_minus_x.resize(N * 2 - 1);
+    max_sizes.resize(N, vector<short>(N, -1));
+    visited_diff.resize(N, vector<short>(N));
+    y_plus_x.resize(N * 2 - 1, vector<short>(N));
+    y_minus_x.resize(N * 2 - 1, vector<short>(N));
     for (int i = 0; i < N; i++) {
         string row;
         cin >> row;
@@ -90,60 +90,21 @@ int main() {
             }
         }
     }
-    for (int yx = 0; yx <= N * 2 - 2; yx++) {
-        int sharp = -1;
-        int sy = max(0, yx - (N - 1));
-        for (int i = 0; i < sy; i++) {
-            y_plus_x[yx].push_back(0);
-        }
-        for (int y = sy; y <= min(N - 1, yx); y++) {
-            int x = yx - y;
-            if (sharp >= 0) {
-                y_plus_x[yx].push_back(sharp);
-                sharp--;
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+            if (farm[i][j] == '#') {
                 continue;
             }
-            sharp = 0;
-            int cy = y,
-                cx = x;
-            while (cy <= min(N - 1, yx) && farm[cy][cx] != '#') {
-                sharp++;
-                cy++;
-                cx--;
-            }
-            y_plus_x[yx].push_back(sharp);
-            sharp--;
-        }
-    }
-    for (int yx = 0; yx <= N * 2 - 2; yx++) {
-        int sharp = -1;
-        int sy = max(0, yx - (N - 1));
-        for (int i = 0; i < sy; i++) {
-            y_minus_x[yx].push_back(0);
-        }
-        for (int y = sy; y <= min(N - 1, yx); y++) {
-            int x = y + N - 1 - yx;
-            if (sharp >= 0) {
-                y_minus_x[yx].push_back(sharp);
-                sharp--;
-                continue;
-            }
-            sharp = 0;
-            int cy = y,
-                cx = x;
-            while (cy <= min(N - 1, yx) && farm[cy][cx] != '#') {
-                sharp++;
-                cy++;
-                cx++;
-            }
-            y_minus_x[yx].push_back(sharp);
-            sharp--;
+            int line = i + j;
+            y_plus_x[line][i] = y_plus_x[line][i - 1] + 1;
+            line = i + N - 1 - j;
+            y_minus_x[line][i] = y_minus_x[line][i - 1] + 1;
         }
     }
     bfs();
     for (int y = 0; y < N; y++) {
         for (int x = 0; x < N; x++) {
-            int sz = max_sizes[y][x];
+            short sz = max_sizes[y][x];
             for (int i = -sz; i <= sz; i++) {
                 visited_diff[y + i][x + abs(i) - sz]++;
                 visited_diff[y + i][x + sz - abs(i) + 1]--;
