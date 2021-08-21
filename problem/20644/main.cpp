@@ -14,35 +14,28 @@ vector<vector<bool>> visited[500];
 vector<vector<bool>> failed[500];
 vector<vector<int>> max_sizes;
 vector<vector<int>> visited_diff;
+vector<vector<int>> y_plus_x;
+vector<vector<int>> y_minus_x;
 
 bool check(int y, int x, int sz, int dir) {
     if (failed[sz][y][x]) {
         return false;
     }
-    if (dir <= 1) {
-        for (int i = 0; i <= sz; i++) {
-            if (farm[y + (sz - i) * dy[dir]][x + i] == '#') {
-                return false;
-            }
-        }
-        for (int i = -sz; i < 0; i++) {
-            if (farm[y + (sz + i) * dy[dir]][x + i] == '#') {
-                return false;
-            }
-        }
-    } else {
-        for (int i = 0; i <= sz; i++) {
-            if (farm[y + i][x + (sz - i) * dx[dir]] == '#') {
-                return false;
-            }
-        }
-        for (int i = -sz; i < 0; i++) {
-            if (farm[y + i][x + (sz + i) * dx[dir]] == '#') {
-                return false;
-            }
-        }
+    switch (dir) {
+        case 0:
+            return y_plus_x[y - sz + x][y - sz] >= sz + 1 &&
+                y_minus_x[y - sz + N - 1 - x][y - sz] >= sz + 1;
+        case 1:
+            return y_plus_x[y + x + sz][y] >= sz + 1 &&
+                y_minus_x[y + N - 1 - (x - sz)][y] >= sz + 1;
+        case 2:
+            return y_plus_x[y - sz + x][y - sz] >= sz + 1 &&
+                y_minus_x[y + N - 1 - (x - sz)][y] >= sz + 1;
+        case 3:
+            return y_plus_x[y + x + sz][y] >= sz + 1 &&
+                y_minus_x[y - sz + N - 1 - x][y - sz] >= sz + 1;
     }
-    return true;
+    return false;
 }
 
 void bfs() {
@@ -100,6 +93,8 @@ int main() {
     }
     max_sizes.resize(N, vector<int>(N, -1));
     visited_diff.resize(N, vector<int>(N));
+    y_plus_x.resize(N * 2 - 1);
+    y_minus_x.resize(N * 2 - 1);
     for (int i = 0; i < N; i++) {
         string row;
         cin >> row;
@@ -108,6 +103,56 @@ int main() {
             if (row[j] == 'S') {
                 starts.emplace_back(i, j);
             }
+        }
+    }
+    for (int yx = 0; yx <= N * 2 - 2; yx++) {
+        int sharp = -1;
+        int sy = max(0, yx - (N - 1));
+        for (int i = 0; i < sy; i++) {
+            y_plus_x[yx].push_back(0);
+        }
+        for (int y = sy; y <= min(N - 1, yx); y++) {
+            int x = yx - y;
+            if (sharp >= 0) {
+                y_plus_x[yx].push_back(sharp);
+                sharp--;
+                continue;
+            }
+            sharp = 0;
+            int cy = y,
+                cx = x;
+            while (cy <= min(N - 1, yx) && farm[cy][cx] != '#') {
+                sharp++;
+                cy++;
+                cx--;
+            }
+            y_plus_x[yx].push_back(sharp);
+            sharp--;
+        }
+    }
+    for (int yx = 0; yx <= N * 2 - 2; yx++) {
+        int sharp = -1;
+        int sy = max(0, yx - (N - 1));
+        for (int i = 0; i < sy; i++) {
+            y_minus_x[yx].push_back(0);
+        }
+        for (int y = sy; y <= min(N - 1, yx); y++) {
+            int x = y + N - 1 - yx;
+            if (sharp >= 0) {
+                y_minus_x[yx].push_back(sharp);
+                sharp--;
+                continue;
+            }
+            sharp = 0;
+            int cy = y,
+                cx = x;
+            while (cy <= min(N - 1, yx) && farm[cy][cx] != '#') {
+                sharp++;
+                cy++;
+                cx++;
+            }
+            y_minus_x[yx].push_back(sharp);
+            sharp--;
         }
     }
     bfs();
