@@ -11,6 +11,7 @@ TEST_RUBY = case RUBY_VERSION
               "ruby-2.5"
             end
 DELTAS = {
+  "1007" => 1e-6,
   "1008" => 1e-9,
   "1546" => 1e-2,
   "3053" => 0.0001
