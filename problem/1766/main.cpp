@@ -7,7 +7,7 @@ using namespace std;
 
 int N, M;
 vector<vector<short>> ADJ;
-vector<int> order;
+vector<short> order;
 
 int main() {
     ios_base::sync_with_stdio(false);
