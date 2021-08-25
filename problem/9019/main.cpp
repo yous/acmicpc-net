@@ -5,11 +5,10 @@
 
 using namespace std;
 
-const short INF = 30000;
 const short MOD = 10000;
 int T;
 int A, B;
-pair<short, char> cache[10000];
+char cache[10000];
 
 int get_l(int n) {
     return n / 1000 + n % 1000 * 10;
@@ -25,59 +24,53 @@ int main() {
     cin >> T;
     while (T-- > 0) {
         cin >> A >> B;
-        fill(cache, cache + 10000, make_pair(INF, 'X'));
-        cache[A].first = 0;
-        short step = 0;
-        queue<pair<short, char>> qu;
-        qu.emplace(A, 'X');
+        fill(cache, cache + 10000, 'X');
+        cache[A] = 'A';
+        queue<short> qu;
+        qu.emplace(A);
         bool found = false;
         while (!qu.empty()) {
             int sz = qu.size();
             while (sz-- > 0) {
-                auto& p = qu.front();
-                short n = p.first;
+                short n = qu.front();
                 qu.pop();
                 if (n == B) {
                     found = true;
                     break;
                 }
-                if (cache[n].first < step) {
-                    continue;
-                }
                 int d = n * 2 % MOD;
                 int s = (n - 1 + MOD) % MOD;
                 int l = get_l(n);
                 int r = get_r(n);
-                if (step + 1 < cache[d].first) {
+                if (cache[d] == 'X') {
                     if (n * 2 == d) {
-                        cache[d] = {step + 1, 'D'};
+                        cache[d] = 'D';
                     } else {
-                        cache[d] = {step + 1, 'E'};
+                        cache[d] = 'E';
                     }
-                    qu.emplace(d, 'D');
+                    qu.emplace(d);
                 }
-                if (step + 1 < cache[s].first) {
-                    cache[s] = {step + 1, 'S'};
-                    qu.emplace(s, 'S');
+                if (cache[s] == 'X') {
+                    cache[s] = 'S';
+                    qu.emplace(s);
                 }
-                if (step + 1 < cache[l].first) {
-                    cache[l] = {step + 1, 'L'};
-                    qu.emplace(l, 'L');
+                if (cache[l] == 'X') {
+                    cache[l] = 'L';
+                    qu.emplace(l);
                 }
-                if (step + 1 < cache[r].first) {
-                    cache[r] = {step + 1, 'R'};
-                    qu.emplace(r, 'R');
+                if (cache[r] == 'X') {
+                    cache[r] = 'R';
+                    qu.emplace(r);
                 }
             }
             if (found) {
                 break;
             }
-            step++;
         }
         int cur = B;
         vector<char> ans;
         while (cur != A) {
-            char cmd = cache[cur].second;
+            char cmd = cache[cur];
             switch (cmd) {
                 case 'D':
                     cur /= 2;
