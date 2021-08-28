@@ -1,7 +1,6 @@
 #include <algorithm>
 #include <cmath>
 #include <iostream>
-#include <queue>
 #include <vector>
 
 using namespace std;
@@ -53,19 +52,17 @@ int main() {
         cin >> x >> y;
         stars.emplace_back(x, y);
     }
-    priority_queue<tuple<double, int, int>> pq;
+    vector<tuple<double, int, int>> edges;
     for (int i = 0; i < N; i++) {
         for (int j = i + 1; j < N; j++) {
-            pq.emplace(-dist(i, j), i, j);
+            edges.emplace_back(dist(i, j), i, j);
         }
     }
+    sort(edges.begin(), edges.end());
     DisjointSet ds(N);
     double ans = 0;
-    while (!pq.empty()) {
-        auto [d, i, j] = pq.top();
-        d = -d;
-        pq.pop();
-        if (ds.merge(i, j)) {
+    for (auto [d, u, v] : edges) {
+        if (ds.merge(u, v)) {
             ans += d;
         }
     }
