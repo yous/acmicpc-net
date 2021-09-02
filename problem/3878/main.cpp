@@ -56,6 +56,8 @@ void make_convex(vector<Point>& points, int cnt, vector<int>& convex) {
         return ret > 0 || (ret == 0 && lhs < rhs);
     });
     if (cnt == 1) {
+        convex.push_back(0);
+        convex.push_back(0);
         return;
     }
     convex.push_back(0);
@@ -88,6 +90,18 @@ bool intersect(Point a, Point b, Point c, Point d) {
     return ab <= 0 && cd <= 0;
 }
 
+bool inside(bool is_black, Point& point) {
+    vector<Point>& points = (is_black ? blacks : whites);
+    vector<int>& convex = (is_black ? black_convex : white_convex);
+    int sz = convex.size();
+    for (int i = 0; i < sz; i++) {
+        if (ccw(points[convex[i]], points[convex[(i + 1) % sz]], point) < 0) {
+            return false;
+        }
+    }
+    return true;
+}
+
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
@@ -100,82 +114,30 @@ int main() {
         cin >> N >> M;
         make_convex(blacks, N, black_convex);
         make_convex(whites, M, white_convex);
-        if (N > M) {
-            swap(N, M);
-            swap(blacks, whites);
-            swap(black_convex, white_convex);
-        }
-        if (N == 1 && M == 1) {
-            cout << "YES\n";
-            continue;
-        } else if (N == 1) {
-            if (M == 2) {
-                auto [x_min, x_max] = minmax(whites[0].x, whites[1].x);
-                auto [y_min, y_max] = minmax(whites[0].y, whites[1].y);
-                if (ccw(blacks[0], whites[0], whites[1]) == 0 &&
-                        x_min <= blacks[0].x && blacks[0].x <= x_max &&
-                        y_min <= blacks[0].y && blacks[0].y <= y_max) {
-                    cout << "NO\n";
-                } else {
-                    cout << "YES\n";
-                }
-                continue;
-            }
-            int sz = white_convex.size();
-            bool is_inside = true;
-            for (int i = 0; i < sz; i++) {
-                int a = white_convex[i];
-                int b = white_convex[(i + 1) % sz];
-                if (ccw(whites[a], whites[b], blacks[0]) < 0) {
-                    is_inside = false;
-                    break;
-                }
-            }
-            if (is_inside) {
-                cout << "NO\n";
-            } else {
-                cout << "YES\n";
-            }
-            continue;
-        } else if (N == 2 && M == 2) {
-            if (intersect(blacks[0], blacks[1], whites[0], whites[1])) {
-                cout << "NO\n";
-            } else {
-                cout << "YES\n";
-            }
-            continue;
-        }
         int black_sz = black_convex.size();
         int white_sz = white_convex.size();
-        if (black_sz >= 3 && white_sz >= 3) {
-            bool found = false;
-            for (int i = 0; i < black_sz; i++) {
-                for (int j = 0; j < white_sz; j++) {
-                    if (intersect(blacks[black_convex[i]], blacks[black_convex[(i + 1) % black_sz]],
-                                whites[white_convex[j]], whites[white_convex[(j + 1) % white_sz]])) {
-                        found = true;
-                        break;
-                    }
-                }
-                if (found) {
+        bool found = false;
+        for (int i = 0; i < black_sz; i++) {
+            for (int j = 0; j < white_sz; j++) {
+                if (intersect(blacks[black_convex[i]], blacks[black_convex[(i + 1) % black_sz]],
+                              whites[white_convex[j]], whites[white_convex[(j + 1) % white_sz]])) {
+                    found = true;
                     break;
                 }
             }
             if (found) {
-                cout << "NO\n";
-                continue;
+                break;
             }
+        }
+        if (found) {
+            cout << "NO\n";
+            continue;
         }
         if (black_sz >= 3) {
             bool is_inside = true;
-            for (int i = 0; i < black_sz; i++) {
-                for (int j = 0; j < M; j++) {
-                    if (ccw(blacks[black_convex[i]], blacks[black_convex[(i + 1) % black_sz]], whites[j]) < 0) {
-                        is_inside = false;
-                        break;
-                    }
-                }
-                if (!is_inside) {
+            for (int i = 0; i < M; i++) {
+                if (!inside(true, whites[i])) {
+                    is_inside = false;
                     break;
                 }
             }
@@ -186,14 +148,9 @@ int main() {
         }
         if (white_sz >= 3) {
             bool is_inside = true;
-            for (int i = 0; i < white_sz; i++) {
-                for (int j = 0; j < N; j++) {
-                    if (ccw(whites[white_convex[i]], whites[white_convex[(i + 1) % white_sz]], blacks[j]) < 0) {
-                        is_inside = false;
-                        break;
-                    }
-                }
-                if (!is_inside) {
+            for (int i = 0; i < N; i++) {
+                if (!inside(false, blacks[i])) {
+                    is_inside = false;
                     break;
                 }
             }
