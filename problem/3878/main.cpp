@@ -90,13 +90,17 @@ bool intersect(Point a, Point b, Point c, Point d) {
     return ab <= 0 && cd <= 0;
 }
 
-bool inside(bool is_black, Point& point) {
-    vector<Point>& points = (is_black ? blacks : whites);
-    vector<int>& convex = (is_black ? black_convex : white_convex);
+bool inside(bool from_black) {
+    vector<Point>& points = (from_black ? blacks : whites);
+    vector<Point>& other = (from_black ? whites : blacks);
+    vector<int>& convex = (from_black ? black_convex : white_convex);
     int sz = convex.size();
+    int cnt = (from_black ? M : N);
     for (int i = 0; i < sz; i++) {
-        if (ccw(points[convex[i]], points[convex[(i + 1) % sz]], point) < 0) {
-            return false;
+        for (int j = 0; j < cnt; j++) {
+            if (ccw(points[convex[i]], points[convex[(i + 1) % sz]], other[j]) < 0) {
+                return false;
+            }
         }
     }
     return true;
@@ -134,27 +138,13 @@ int main() {
             continue;
         }
         if (black_sz >= 3) {
-            bool is_inside = true;
-            for (int i = 0; i < M; i++) {
-                if (!inside(true, whites[i])) {
-                    is_inside = false;
-                    break;
-                }
-            }
-            if (is_inside) {
+            if (inside(true)) {
                 cout << "NO\n";
                 continue;
             }
         }
         if (white_sz >= 3) {
-            bool is_inside = true;
-            for (int i = 0; i < N; i++) {
-                if (!inside(false, blacks[i])) {
-                    is_inside = false;
-                    break;
-                }
-            }
-            if (is_inside) {
+            if (inside(false)) {
                 cout << "NO\n";
                 continue;
             }
