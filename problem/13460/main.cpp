@@ -23,12 +23,15 @@ bool tilt(pair<int, int>& ball, int dir) {
     }
 }
 
-int solve(int cnt, pair<int, int>& red, pair<int, int>& blue) {
+int solve(int cnt, int dir, pair<int, int>& red, pair<int, int>& blue) {
     if (cnt == 11) {
         return cnt;
     }
     int ans = 11;
     for (int i = 0; i < 4; i++) {
+        if (i == dir) {
+            continue;
+        }
         bool red_first;
         if (dy[i] != 0) {
             red_first = (red.first * dy[i] > blue.first * dy[i]);
@@ -53,9 +56,9 @@ int solve(int cnt, pair<int, int>& red, pair<int, int>& blue) {
             continue;
         }
         if (red_fall) {
-            ans = min(ans, cnt + 1);
+            return cnt + 1;
         } else {
-            ans = min(ans, solve(cnt + 1, (red_first ? dist1 : dist2), (red_first ? dist2 : dist1)));
+            ans = min(ans, solve(cnt + 1, i, (red_first ? dist1 : dist2), (red_first ? dist2 : dist1)));
         }
     }
     return ans;
@@ -82,7 +85,7 @@ int main() {
             board[i].emplace_back(ch);
         }
     }
-    int ans = solve(0, red, blue);
+    int ans = solve(0, -1, red, blue);
     if (ans == 11) {
         cout << "-1\n";
     } else {
