@@ -1,22 +1,21 @@
 #include <algorithm>
 #include <iostream>
 #include <queue>
-#include <tuple>
 #include <vector>
 
 using namespace std;
 
-const int dy[] = {-100, 100, 0, 0};
+const int dy[] = {-10, 10, 0, 0};
 const int dx[] = {0, 0, -1, 1};
 int N, M;
 vector<vector<char>> board;
 
 bool tilt(int& ball, int dir) {
-    while (board[ball / 100][ball % 100] == '.') {
+    while (board[ball / 10][ball % 10] == '.') {
         ball += dy[dir];
         ball += dx[dir];
     }
-    if (board[ball / 100][ball % 100] == 'O') {
+    if (board[ball / 10][ball % 10] == 'O') {
         return true;
     } else {
         ball -= dy[dir];
@@ -25,36 +24,37 @@ bool tilt(int& ball, int dir) {
     }
 }
 
-int solve(int start_red, int start_blue) {
-    queue<tuple<int, int, int>> qu;
-    qu.emplace(start_red, start_blue, -1);
+int solve(int start) {
+    queue<int> qu;
+    vector<bool> visited(10000);
+    visited[start] = true;
+    qu.emplace(start);
     int step = 1;
     while (!qu.empty()) {
         int sz = qu.size();
         while (sz-- > 0) {
-            auto [red, blue, dir] = qu.front();
+            int redblue = qu.front();
             qu.pop();
+            int red = redblue / 100;
+            int blue = redblue % 100;
             for (int i = 0; i < 4; i++) {
-                if (i == dir) {
-                    continue;
-                }
                 bool red_first;
                 if (dy[i] != 0) {
-                    red_first = (red / 100 * dy[i] > blue / 100 * dy[i]);
+                    red_first = (red / 10 * dy[i] > blue / 10 * dy[i]);
                 } else {
-                    red_first = (red % 100 * dx[i] > blue % 100 * dx[i]);
+                    red_first = (red % 10 * dx[i] > blue % 10 * dx[i]);
                 }
                 bool first_fall = false,
                      second_fall = false;
                 int dist1 = (red_first ? red : blue);
                 first_fall = tilt(dist1, i);
                 if (!first_fall) {
-                    board[dist1 / 100][dist1 % 100] = '#';
+                    board[dist1 / 10][dist1 % 10] = '#';
                 }
                 int dist2 = (red_first ? blue : red);
                 second_fall = tilt(dist2, i);
                 if (!first_fall) {
-                    board[dist1 / 100][dist1 % 100] = '.';
+                    board[dist1 / 10][dist1 % 10] = '.';
                 }
                 bool red_fall = (red_first ? first_fall : second_fall),
                      blue_fall = (red_first ? second_fall : first_fall);
@@ -64,16 +64,20 @@ int solve(int start_red, int start_blue) {
                 if (red_fall) {
                     return step;
                 } else {
-                    qu.emplace((red_first ? dist1 : dist2), (red_first ? dist2 : dist1), i);
+                    int num = (red_first ? dist1 * 100 + dist2 : dist2 * 100 + dist1);
+                    if (!visited[num]) {
+                        visited[num] = true;
+                        qu.emplace(num);
+                    }
                 }
             }
         }
-        step++;
-        if (step > 10) {
+        if (step == 10) {
             break;
         }
+        step++;
     }
-    return step;
+    return 11;
 }
 
 int main() {
@@ -88,16 +92,16 @@ int main() {
             char ch;
             cin >> ch;
             if (ch == 'R') {
-                red = i * 100 + j;
+                red = i * 10 + j;
                 ch = '.';
             } else if (ch == 'B') {
-                blue = i * 100 + j;
+                blue = i * 10 + j;
                 ch = '.';
             }
             board[i].emplace_back(ch);
         }
     }
-    int ans = solve(red, blue);
+    int ans = solve(red * 100 + blue);
     if (ans == 11) {
         cout << "-1\n";
     } else {
