@@ -1,5 +1,7 @@
 #include <algorithm>
 #include <iostream>
+#include <queue>
+#include <tuple>
 #include <vector>
 
 using namespace std;
@@ -23,45 +25,55 @@ bool tilt(pair<int, int>& ball, int dir) {
     }
 }
 
-int solve(int cnt, int dir, pair<int, int>& red, pair<int, int>& blue) {
-    if (cnt == 11) {
-        return cnt;
+int solve(pair<int, int>& start_red, pair<int, int>& start_blue) {
+    queue<tuple<pair<int, int>, pair<int, int>, int>> qu;
+    qu.emplace(start_red, start_blue, -1);
+    int step = 1;
+    while (!qu.empty()) {
+        int sz = qu.size();
+        while (sz-- > 0) {
+            auto [red, blue, dir] = qu.front();
+            qu.pop();
+            for (int i = 0; i < 4; i++) {
+                if (i == dir) {
+                    continue;
+                }
+                bool red_first;
+                if (dy[i] != 0) {
+                    red_first = (red.first * dy[i] > blue.first * dy[i]);
+                } else {
+                    red_first = (red.second * dx[i] > blue.second * dx[i]);
+                }
+                bool first_fall = false,
+                     second_fall = false;
+                pair<int, int> dist1 = (red_first ? red : blue);
+                first_fall = tilt(dist1, i);
+                if (!first_fall) {
+                    board[dist1.first][dist1.second] = '#';
+                }
+                pair<int, int> dist2 = (red_first ? blue : red);
+                second_fall = tilt(dist2, i);
+                if (!first_fall) {
+                    board[dist1.first][dist1.second] = '.';
+                }
+                bool red_fall = (red_first ? first_fall : second_fall),
+                     blue_fall = (red_first ? second_fall : first_fall);
+                if (blue_fall) {
+                    continue;
+                }
+                if (red_fall) {
+                    return step;
+                } else {
+                    qu.emplace((red_first ? dist1 : dist2), (red_first ? dist2 : dist1), i);
+                }
+            }
+        }
+        step++;
+        if (step > 10) {
+            break;
+        }
     }
-    int ans = 11;
-    for (int i = 0; i < 4; i++) {
-        if (i == dir) {
-            continue;
-        }
-        bool red_first;
-        if (dy[i] != 0) {
-            red_first = (red.first * dy[i] > blue.first * dy[i]);
-        } else {
-            red_first = (red.second * dx[i] > blue.second * dx[i]);
-        }
-        bool first_fall = false,
-             second_fall = false;
-        pair<int, int> dist1 = (red_first ? red : blue);
-        first_fall = tilt(dist1, i);
-        if (!first_fall) {
-            board[dist1.first][dist1.second] = '#';
-        }
-        pair<int, int> dist2 = (red_first ? blue : red);
-        second_fall = tilt(dist2, i);
-        if (!first_fall) {
-            board[dist1.first][dist1.second] = '.';
-        }
-        bool red_fall = (red_first ? first_fall : second_fall),
-             blue_fall = (red_first ? second_fall : first_fall);
-        if (blue_fall) {
-            continue;
-        }
-        if (red_fall) {
-            return cnt + 1;
-        } else {
-            ans = min(ans, solve(cnt + 1, i, (red_first ? dist1 : dist2), (red_first ? dist2 : dist1)));
-        }
-    }
-    return ans;
+    return step;
 }
 
 int main() {
@@ -85,7 +97,7 @@ int main() {
             board[i].emplace_back(ch);
         }
     }
-    int ans = solve(0, -1, red, blue);
+    int ans = solve(red, blue);
     if (ans == 11) {
         cout << "-1\n";
     } else {
