@@ -5,7 +5,6 @@
 using namespace std;
 
 const int MOD = static_cast<int>(1e9) + 7;
-int N, M;
 
 struct SegTree {
     int N;
@@ -98,6 +97,7 @@ struct SegTree {
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
+    int N, M;
     cin >> N;
     SegTree st(N);
     auto it = st.begin();
