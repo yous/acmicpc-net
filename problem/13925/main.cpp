@@ -113,14 +113,19 @@ int main() {
         if (cmd != 4) {
             cin >> v;
         }
-        if (cmd == 1) {
-            st.update(x - 1, y - 1, 1, v);
-        } else if (cmd == 2) {
-            st.update(x - 1, y - 1, v, 0);
-        } else if (cmd == 3) {
-            st.update(x - 1, y - 1, 0, v);
-        } else {
-            cout << st.query(x - 1, y - 1) << "\n";
+        switch (cmd) {
+            case 1:
+                st.update(x - 1, y - 1, 1, v);
+                break;
+            case 2:
+                st.update(x - 1, y - 1, v, 0);
+                break;
+            case 3:
+                st.update(x - 1, y - 1, 0, v);
+                break;
+            case 4:
+                cout << st.query(x - 1, y - 1) << "\n";
+                break;
         }
     }
     return 0;
