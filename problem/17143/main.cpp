@@ -7,8 +7,8 @@ using namespace std;
 const int dy[] = {-1, 1, 0, 0};
 const int dx[] = {0, 0, 1, -1};
 short R, C, M;
-vector<vector<int>> sea;
-vector<vector<int>> next_sea;
+vector<vector<short>> sea;
+vector<vector<short>> next_sea;
 vector<tuple<short, short, short, short, short>> sharks;
 vector<bool> dead;
 
@@ -16,12 +16,17 @@ int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
     cin >> R >> C >> M;
-    sea.resize(R, vector<int>(C));
+    sea.resize(R, vector<short>(C));
     dead.resize(M);
     for (int i = 0; i < M; i++) {
         short r, c, s, d, z;
         cin >> r >> c >> s >> d >> z;
         sea[r - 1][c - 1] = i + 1;
+        if (d <= 2) {
+            s %= (R - 1) * 2;
+        } else {
+            s %= (C - 1) * 2;
+        }
         sharks.emplace_back(r - 1, c - 1, s, d - 1, z);
     }
     int ans = 0;
@@ -39,7 +44,7 @@ int main() {
             break;
         }
         next_sea.clear();
-        next_sea.resize(R, vector<int>(C));
+        next_sea.resize(R, vector<short>(C));
         for (int i = 0; i < M; i++) {
             if (dead[i]) {
                 continue;
