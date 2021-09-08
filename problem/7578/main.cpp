@@ -5,7 +5,7 @@
 using namespace std;
 
 int N;
-vector<pair<int, int>> machines;
+int machines[1000001];
 
 struct SegTree {
     int N;
@@ -42,14 +42,13 @@ int main() {
     for (int i = 0; i < N; i++) {
         int num;
         cin >> num;
-        machines.emplace_back(num, i);
+        machines[num] = i;
     }
-    sort(machines.begin(), machines.end());
     long long ans = 0;
     for (int i = 0; i < N; i++) {
         int num;
         cin >> num;
-        int idx = lower_bound(machines.begin(), machines.end(), make_pair(num, 0))->second;
+        int idx = machines[num];
         ans += st.query(idx + 1, N);
         st.update(idx, 1);
     }
