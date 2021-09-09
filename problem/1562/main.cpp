@@ -6,15 +6,14 @@ using namespace std;
 
 const int MOD = 1e9;
 short N;
-int cache[100][10][1 << 10];
+int cache[99][10][1 << 10];
 
 int solve(int idx, int num, int mask) {
+    if (idx == N - 1) {
+        return (mask == (1 << 10) - 1);
+    }
     int& ans = cache[idx][num][mask];
     if (ans > 0) {
-        return ans - 1;
-    }
-    if (idx == N - 1) {
-        ans = (mask == (1 << 10) - 1) ? 2 : 1;
         return ans - 1;
     }
     if (num > 0) {
