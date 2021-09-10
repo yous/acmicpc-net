@@ -39,25 +39,24 @@ struct SegTree {
         if (!sw[idx]) {
             return;
         }
-        if (lo != hi) {
-            for (int i = 0; i < 2; i++) {
-                sw[idx * 2 + i] = !sw[idx * 2 + i];
-            }
-        }
-        t[idx] = hi - lo + 1 - t[idx];
+        int mid = (lo + hi) / 2;
+        t[idx * 2] = mid - lo + 1 - t[idx * 2];
+        t[idx * 2 + 1] = hi - (mid + 1) + 1 - t[idx * 2 + 1];
+        sw[idx * 2] = !sw[idx * 2];
+        sw[idx * 2 + 1] = !sw[idx * 2 + 1];
         sw[idx] = false;
     }
 
     void update(int idx, int lo, int hi) {
-        apply(idx, lo, hi);
         if (r < lo || hi < l) {
             return;
         }
         if (l <= lo && hi <= r) {
-            sw[idx] = true;
-            apply(idx, lo, hi);
+            t[idx] = hi - lo + 1 - t[idx];
+            sw[idx] = !sw[idx];
             return;
         }
+        apply(idx, lo, hi);
         int mid = (lo + hi) / 2;
         update(idx * 2, lo, mid);
         update(idx * 2 + 1, mid + 1, hi);
@@ -65,13 +64,13 @@ struct SegTree {
     }
 
     int query(int idx, int lo, int hi) {
-        apply(idx, lo, hi);
         if (r < lo || hi < l) {
             return 0;
         }
         if (l <= lo && hi <= r) {
             return t[idx];
         }
+        apply(idx, lo, hi);
         int mid = (lo + hi) / 2;
         return query(idx * 2, lo, mid) + query(idx * 2 + 1, mid + 1, hi);
     }
