@@ -22,18 +22,6 @@ struct SegTree {
         sw.resize(power);
     }
 
-    vector<int>::iterator begin() {
-        return next(t.begin(), N);
-    }
-
-    int build(int idx, int lo, int hi) {
-        if (lo == hi) {
-            return t[idx];
-        }
-        int mid = (lo + hi) / 2;
-        return t[idx] = build(idx * 2, lo, mid) + build(idx * 2 + 1, mid + 1, hi);
-    }
-
     void update(int l, int r) {
         this->l = l;
         this->r = r;
@@ -56,7 +44,7 @@ struct SegTree {
                 sw[idx * 2 + i] = !sw[idx * 2 + i];
             }
         }
-        t[idx] *= -1;
+        t[idx] = hi - lo + 1 - t[idx];
         sw[idx] = false;
     }
 
@@ -94,19 +82,13 @@ int main() {
     cin.tie(nullptr);
     cin >> N >> M;
     SegTree st(N);
-    auto it = st.begin();
-    for (int i = 0; i < N; i++) {
-        *it = -1;
-        ++it;
-    }
-    st.build(1, 0, st.N - 1);
     for (int i = 0; i < M; i++) {
         int o, s, t;
         cin >> o >> s >> t;
         if (o == 0) {
             st.update(s - 1, t - 1);
         } else {
-            cout << (st.query(s - 1, t - 1) + (t - s + 1)) / 2 << "\n";
+            cout << st.query(s - 1, t - 1) << "\n";
         }
     }
     return 0;
