@@ -11,15 +11,7 @@ int main() {
     cin.tie(nullptr);
     cin >> A;
     for (int n = 1; n <= A; n++) {
-        vector<bool> grundy(32);
-        for (int i = 30; i >= 1; i--) {
-            bool can_win = grundy[i];
-            for (int j = 1; j <= n && i + j <= 31; j++) {
-                can_win |= !grundy[i + j];
-            }
-            grundy[i] = can_win;
-        }
-        if (!grundy[1]) {
+        if (30 % (n + 1) == 0) {
             cout << n << "\n";
         }
     }
