@@ -6,15 +6,16 @@ using namespace std;
 
 const int INF = 1e9;
 int N;
-vector<vector<int>> ADJ;
+int ADJ[16][16];
 int cache[16][1 << 16];
 
 int solve(int idx, int cnt, int mask) {
-    if (cnt == N - 1) {
-        return (ADJ[idx][0] > 0 ? ADJ[idx][0] : INF);
-    }
     int& ans = cache[idx][mask];
     if (ans > 0) {
+        return ans;
+    }
+    if (cnt == N - 1) {
+        ans = (ADJ[idx][0] > 0 ? ADJ[idx][0] : INF);
         return ans;
     }
     ans = INF;
@@ -30,7 +31,6 @@ int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
     cin >> N;
-    ADJ.resize(N, vector<int>(N));
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             cin >> ADJ[i][j];
