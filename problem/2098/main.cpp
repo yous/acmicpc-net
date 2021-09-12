@@ -7,14 +7,13 @@ using namespace std;
 const int INF = 1e9;
 int N;
 vector<vector<int>> ADJ;
-int start;
-int cache[16][16][1 << 16];
+int cache[16][1 << 16];
 
 int solve(int idx, int cnt, int mask) {
     if (cnt == N - 1) {
-        return (ADJ[idx][start] > 0 ? ADJ[idx][start] : INF);
+        return (ADJ[idx][0] > 0 ? ADJ[idx][0] : INF);
     }
-    int& ans = cache[start][idx][mask];
+    int& ans = cache[idx][mask];
     if (ans > 0) {
         return ans;
     }
@@ -37,11 +36,6 @@ int main() {
             cin >> ADJ[i][j];
         }
     }
-    int ans = INF;
-    for (int i = 0; i < N; i++) {
-        start = i;
-        ans = min(ans, solve(i, 0, (1 << i)));
-    }
-    cout << ans << "\n";
+    cout << solve(0, 0, (1 << 0)) << "\n";
     return 0;
 }
