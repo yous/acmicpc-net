@@ -12,7 +12,6 @@ int fib[] = {
     2178309
 };
 vector<int> stones;
-vector<bool> nums(3000001);
 vector<int> grundy;
 vector<int> actions;
 
@@ -24,19 +23,14 @@ int main() {
     stones.resize(N);
     for (int i = 0; i < N; i++) {
         cin >> stones[i];
-        nums[stones[i]] = !nums[stones[i]];
         if (max_num < stones[i]) {
             max_num = stones[i];
         }
     }
     grundy.resize(max_num + 1);
     actions.resize(max_num + 1);
-    int ans = 0;
     for (int n = 0; n <= max_num; n++) {
         grundy[n] = __builtin_ctz(~actions[n]);
-        if (nums[n]) {
-            ans ^= grundy[n];
-        }
         int bit = (1 << grundy[n]);
         for (int f : fib) {
             if (n + f > max_num) {
@@ -44,6 +38,10 @@ int main() {
             }
             actions[n + f] |= bit;
         }
+    }
+    int ans = 0;
+    for (int i = 0; i < N; i++) {
+        ans ^= grundy[stones[i]];
     }
     cout << (ans == 0 ? "cubelover\n" : "koosaga\n");
     return 0;
