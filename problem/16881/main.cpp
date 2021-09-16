@@ -10,9 +10,9 @@ int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
     cin >> N >> M;
+    vector<short> row(M);
     short ans = 0;
     for (int i = 0; i < N; i++) {
-        vector<short> row(M);
         for (int j = 0; j < M; j++) {
             cin >> row[j];
         }
