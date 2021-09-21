@@ -68,16 +68,10 @@ int ccw(const Point& a, const Point& b, const Point& c) {
     return (res == 0 ? 0 : res / abs(res));
 }
 
-bool intersect(Point a, Point b, Point c, Point d) {
+bool intersect(const Point& a, const Point& b, const Point& c, const Point& d) {
     int ab = ccw(a, b, c) * ccw(a, b, d);
     int cd = ccw(c, d, a) * ccw(c, d, b);
     if (ab == 0 && cd == 0) {
-        if (b < a) {
-            swap(a, b);
-        }
-        if (d < c) {
-            swap(c, d);
-        }
         return !(d < a || b < c);
     }
     return ab <= 0 && cd <= 0;
@@ -91,8 +85,15 @@ int main() {
     for (int i = 0; i < N; i++) {
         short x1, y1, x2, y2;
         cin >> x1 >> y1 >> x2 >> y2;
-        points.emplace_back(x1, y1);
-        points.emplace_back(x2, y2);
+        Point p1(x1, y1);
+        Point p2(x2, y2);
+        if (p1 < p2) {
+            points.emplace_back(p1);
+            points.emplace_back(p2);
+        } else {
+            points.emplace_back(p2);
+            points.emplace_back(p1);
+        }
     }
     int ans = N;
     for (int i = 0; i < N; i++) {
