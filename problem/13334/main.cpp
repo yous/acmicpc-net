@@ -5,30 +5,32 @@
 using namespace std;
 
 int N;
-vector<pair<int, int>> lines;
-int D;
 vector<pair<int, int>> locs;
+int D;
 
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
     cin >> N;
-    lines.resize(N);
+    locs.resize(N * 2);
     for (int i = 0; i < N; i++) {
         int h, o;
         cin >> h >> o;
         if (h > o) {
             swap(h, o);
         }
-        lines[i] = {h, o};
+        locs[i] = {h, o};
     }
     cin >> D;
-    for (auto [x1, x2] : lines) {
+    for (int i = 0; i < N; i++) {
+        auto [x1, x2] = locs[i];
         if (x2 - x1 > D) {
-            continue;
+            locs[i] = {x1, 1};
+            locs[i + N] = {x1, -1};
+        } else {
+            locs[i] = {x2 - D, 1};
+            locs[i + N] = {x1 + 1, -1};
         }
-        locs.emplace_back(x2 - D, 1);
-        locs.emplace_back(x1 + 1, -1);
     }
     sort(locs.begin(), locs.end());
     int cur = 0;
