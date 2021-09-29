@@ -1,16 +1,18 @@
 #include <algorithm>
+#include <cmath>
 #include <iostream>
 #include <vector>
 
 using namespace std;
 
 long long N;
-vector<bool> sieve(1'000'001, true);
+vector<bool> sieve;
 vector<long long> primes;
 int sz;
 long long ans;
 
 void run_sieve(long long limit) {
+    sieve.resize(limit + 1, true);
     for (int i = 2; 1LL * i * i <= limit; i++) {
         if (sieve[i]) {
             for (int j = i * i; j <= limit; j += i) {
@@ -36,7 +38,7 @@ int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
     cin >> N;
-    run_sieve(1'000'000);
+    run_sieve(sqrt(N));
     ans = N;
     long long tmp = N;
     for (int p = 2; 1LL * p * p <= tmp; p++) {
