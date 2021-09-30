@@ -7,14 +7,12 @@ using namespace std;
 const int MOD = static_cast<int>(1e9) + 7;
 int M, N, K;
 vector<int> fact(4'000'001);
-vector<int> fact_rev(4'000'001);
 
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
     cin >> M;
     fact[0] = 1;
-    fact_rev[0] = 1;
     for (int i = 1; i <= 4'000'000; i++) {
         fact[i] = 1LL * fact[i - 1] * i % MOD;
     }
