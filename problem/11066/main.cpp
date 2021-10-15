@@ -11,22 +11,6 @@ vector<int> files;
 vector<int> prefix_sum;
 int cache[500][500];
 
-int solve(int lo, int hi) {
-    int& ans = cache[lo][hi];
-    if (ans >= 0) {
-        return ans;
-    }
-    if (lo == hi) {
-        return ans = 0;
-    }
-    ans = INF;
-    for (int i = lo; i < hi; i++) {
-        ans = min(ans, solve(lo, i) + solve(i + 1, hi));
-    }
-    ans += prefix_sum[hi + 1] - prefix_sum[lo];
-    return ans;
-}
-
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
@@ -43,9 +27,19 @@ int main() {
             prefix_sum[i + 1] = cur_sum;
         }
         for (int i = 0; i < K; i++) {
-            fill(cache[i], cache[i] + K, -1);
+            fill(cache[i], cache[i] + K, 0);
         }
-        cout << solve(0, K - 1) << "\n";
+        for (int len = 1; len < K; len++) {
+            for (int lo = 0; lo < K - len; lo++) {
+                int hi = lo + len;
+                int cur_min = INF;
+                for (int i = lo; i < hi; i++) {
+                    cur_min = min(cur_min, cache[lo][i] + cache[i + 1][hi]);
+                }
+                cache[lo][hi] = cur_min + prefix_sum[hi + 1] - prefix_sum[lo];
+            }
+        }
+        cout << cache[0][K - 1] << "\n";
     }
     return 0;
 }
