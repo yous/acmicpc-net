@@ -10,6 +10,7 @@ vector<vector<int>> ADJ;
 vector<bool> visited;
 queue<int> qu;
 vector<bool> ans;
+int step;
 
 int main() {
     ios_base::sync_with_stdio(false);
@@ -25,7 +26,7 @@ int main() {
     }
     visited[X - 1] = true;
     qu.emplace(X - 1);
-    int step = 1;
+    step = 1;
     bool found = false;
     while (!qu.empty()) {
         int sz = qu.size();
