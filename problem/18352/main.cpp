@@ -5,28 +5,23 @@
 
 using namespace std;
 
-int N, M, K, X;
-vector<vector<int>> ADJ;
-vector<bool> visited;
-queue<int> qu;
-vector<bool> ans;
-int step;
-
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
+    int N, M, K, X;
     cin >> N >> M >> K >> X;
-    ADJ.resize(N);
-    visited.resize(N);
-    ans.resize(N);
+    vector<vector<int>> ADJ(N);
     for (int i = 0; i < M; i++) {
         int a, b;
         cin >> a >> b;
         ADJ[a - 1].emplace_back(b - 1);
     }
+    vector<bool> visited(N);
+    vector<bool> ans(N);
+    queue<int> qu;
     visited[X - 1] = true;
     qu.emplace(X - 1);
-    step = 1;
+    int step = 1;
     bool found = false;
     while (!qu.empty()) {
         int sz = qu.size();
