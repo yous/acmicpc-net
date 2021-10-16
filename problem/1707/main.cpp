@@ -7,30 +7,18 @@ using namespace std;
 int K;
 int V, E;
 vector<vector<int>> ADJ;
-vector<bool> red;
-vector<bool> blue;
+vector<int> color;
 
-bool dfs(int u, bool is_red) {
+bool dfs(int u, int c) {
+    int nc = (c == 1 ? 2 : 1);
     for (int v : ADJ[u]) {
-        if (is_red) {
-            if (red[v]) {
+        if (color[v] == c) {
+            return false;
+        }
+        if (color[v] == 0) {
+            color[v] = nc;
+            if (!dfs(v, color[v])) {
                 return false;
-            }
-            if (!blue[v]) {
-                blue[v] = true;
-                if (!dfs(v, false)) {
-                    return false;
-                }
-            }
-        } else {
-            if (blue[v]) {
-                return false;
-            }
-            if (!red[v]) {
-                red[v] = true;
-                if (!dfs(v, true)) {
-                    return false;
-                }
             }
         }
     }
@@ -45,10 +33,8 @@ int main() {
         cin >> V >> E;
         ADJ.clear();
         ADJ.resize(V);
-        red.resize(V);
-        blue.resize(V);
-        fill(red.begin(), red.end(), false);
-        fill(blue.begin(), blue.end(), false);
+        color.clear();
+        color.resize(V);
         for (int i = 0; i < E; i++) {
             int u, v;
             cin >> u >> v;
@@ -57,11 +43,11 @@ int main() {
         }
         bool can_make = true;
         for (int i = 0; i < V; i++) {
-            if (red[i] || blue[i]) {
+            if (color[i]) {
                 continue;
             }
-            red[i] = true;
-            if (!dfs(i, true)) {
+            color[i] = 1;
+            if (!dfs(i, 1)) {
                 can_make = false;
                 cout << "NO\n";
                 break;
