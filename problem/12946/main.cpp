@@ -10,7 +10,8 @@ int N;
 vector<string> board;
 vector<vector<short>> color;
 
-bool dfs(int y, int x, int c) {
+int dfs(int y, int x, int c) {
+    int ret = 1;
     int nc = (c == 1 ? 2 : 1);
     for (int i = 0; i < 6; i++) {
         int ny = y + dy[i];
@@ -19,16 +20,17 @@ bool dfs(int y, int x, int c) {
             continue;
         }
         if (color[ny][nx] == c) {
-            return false;
+            return 3;
         }
         if (color[ny][nx] == 0) {
             color[ny][nx] = nc;
-            if (!dfs(ny, nx, nc)) {
-                return false;
+            if (dfs(ny, nx, nc) == 3) {
+                return 3;
             }
+            ret = 2;
         }
     }
-    return true;
+    return ret;
 }
 
 int main() {
@@ -40,45 +42,25 @@ int main() {
     for (string& row : board) {
         cin >> row;
     }
-    bool paint = false;
-    bool match = true;
+    int ans = 0;
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             if (board[i][j] != 'X') {
                 continue;
             }
-            paint = true;
             if (color[i][j]) {
                 continue;
             }
             color[i][j] = 1;
-            if (!dfs(i, j, 1)) {
-                match = false;
+            ans = max(ans, dfs(i, j, 1));
+            if (ans == 3) {
                 break;
             }
         }
-        if (!match) {
+        if (ans == 3) {
             break;
         }
     }
-    if (!paint) {
-        cout << "0\n";
-    } else if (match) {
-        bool bipart = false;
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                if (color[i][j] == 2) {
-                    bipart = true;
-                    break;
-                }
-            }
-            if (bipart) {
-                break;
-            }
-        }
-        cout << (bipart ? "2\n" : "1\n");
-    } else {
-        cout << "3\n";
-    }
+    cout << ans << "\n";
     return 0;
 }
