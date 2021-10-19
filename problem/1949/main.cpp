@@ -5,8 +5,8 @@
 using namespace std;
 
 int N;
-vector<int> people;
-vector<vector<int>> ADJ;
+vector<short> people;
+vector<vector<short>> ADJ;
 int cache[10000][2];
 
 int solve(int u, int s, bool include) {
@@ -37,11 +37,11 @@ int main() {
     cin >> N;
     people.resize(N);
     ADJ.resize(N);
-    for (int& num : people) {
+    for (short& num : people) {
         cin >> num;
     }
     for (int i = 0; i < N - 1; i++) {
-        int a, b;
+        short a, b;
         cin >> a >> b;
         ADJ[a - 1].emplace_back(b - 1);
         ADJ[b - 1].emplace_back(a - 1);
