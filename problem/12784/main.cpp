@@ -8,10 +8,10 @@ const int INF = 1e9;
 int T;
 int N, M;
 vector<vector<pair<int, int>>> ADJ;
-int cache[1000][1000];
+int cache[1000];
 
 int solve(int u, int s, int root) {
-    int& ans = cache[u][s];
+    int& ans = cache[u];
     if (ans < INF) {
         return ans;
     }
@@ -37,9 +37,7 @@ int main() {
         cin >> N >> M;
         ADJ.clear();
         ADJ.resize(N);
-        for (int i = 0; i < N; i++) {
-            fill(cache[i], cache[i] + N, INF);
-        }
+        fill(cache, cache + N, INF);
         for (int i = 0; i < M; i++) {
             int a, b, d;
             cin >> a >> b >> d;
