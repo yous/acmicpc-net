@@ -29,7 +29,7 @@ int solve(int num) {
     }
     ans = 20;
     for (int i = 2; i * i <= num; i++) {
-        if (num % i != 0 || !check(i)) {
+        if (num % i != 0 || solve(i) != 0) {
             continue;
         }
         int tmp = solve(num / i);
