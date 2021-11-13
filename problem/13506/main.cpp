@@ -53,10 +53,7 @@ int main() {
         }
     }
     if (ans > 0) {
-        for (int i = 0; i < ans; i++) {
-            cout << S[i];
-        }
-        cout << "\n";
+        cout << S.substr(0, ans) << "\n";
     } else {
         cout << "-1\n";
     }
