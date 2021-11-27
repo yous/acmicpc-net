@@ -6,7 +6,7 @@
 
 using namespace std;
 
-int marker_sz, lo, hi;
+int dna_sz, marker_sz, lo, hi;
 
 int acgt_idx(char c) {
     switch (c) {
@@ -59,9 +59,9 @@ struct Trie {
         return child->insert(s, next_idx);
     }
 
-    int find(string::const_iterator it, const string::const_iterator send) {
+    int find(const string& s, int sidx) {
         int ans = 0;
-        if (it == send) {
+        if (sidx == dna_sz) {
             if (end) {
                 ans++;
             }
@@ -70,12 +70,12 @@ struct Trie {
         if (end) {
             ans++;
         }
-        int idx = acgt_idx(*it);
+        int idx = acgt_idx(s[sidx]);
         Trie*& child = nodes[idx];
         if (child == nullptr) {
-            return ans + find_fail_node(idx)->find(next(it), send);
+            return ans + find_fail_node(idx)->find(s, sidx + 1);
         }
-        return ans + child->find(next(it), send);
+        return ans + child->find(s, sidx + 1);
     }
 
     Trie* find_fail_node(int idx) {
@@ -125,6 +125,7 @@ int main() {
         Trie trie;
         string dna, marker;
         cin >> dna >> marker;
+        dna_sz = dna.size();
         marker_sz = marker.size();
         lo = hi = marker_sz + 1;
         trie.insert(marker, 0);
@@ -134,7 +135,7 @@ int main() {
             }
         }
         Trie::build_failure_func(&trie);
-        cout << trie.find(dna.begin(), dna.end()) << "\n";
+        cout << trie.find(dna, 0) << "\n";
     }
     return 0;
 }
