@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <array>
 #include <iostream>
 #include <queue>
 #include <vector>
@@ -22,7 +23,7 @@ int acgt_idx(char c) {
 }
 
 struct Trie {
-    vector<Trie*> nodes = vector<Trie*>(4);
+    array<Trie*, 4> nodes = {};
     Trie* fail_node = nullptr;
     bool end = false;
 
