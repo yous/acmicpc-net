@@ -21,8 +21,8 @@ int main() {
         smalls.insert(num);
     }
     queue<pair<int, int>> bfs;
-    bfs.push({2, 1});
-    int step = 1;
+    bfs.push({1, 0});
+    int step = 0;
     bool found = false;
     while (!bfs.empty()) {
         int sz = bfs.size();
