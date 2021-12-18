@@ -49,14 +49,7 @@ int main() {
             used[far] = false;
             used[S[i]] = true;
             last_occur[S[i]] = i;
-            int prev_len = len;
             len = i - last_occur[far];
-            for (int j = i - prev_len + 1; j <= i - len; j++) {
-                if (last_occur[S[j]] <= i - len && used[S[j]]) {
-                    used[S[j]] = false;
-                    use_cnt--;
-                }
-            }
         }
         ans = max(ans, len);
         cout << ans << "\n";
