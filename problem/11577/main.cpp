@@ -9,30 +9,29 @@ int main() {
     cin.tie(nullptr);
     int N, K;
     cin >> N >> K;
-    vector<short> bulbs(N);
-    for (short& on : bulbs) {
+    vector<bool> xors(N + 1);
+    bool prev_on = false;
+    bool on;
+    for (int i = 0; i < N; i++) {
         cin >> on;
-    }
-    vector<short> xors(N + 1);
-    xors[0] = bulbs[0];
-    for (int i = 1; i < N; i++) {
-        xors[i] = bulbs[i] ^ bulbs[i - 1];
+        xors[i] = prev_on ^ on;
+        prev_on = on;
     }
     int ans = 0;
-    short cur = 0;
+    bool cur = false;
     for (int i = 0; i <= N - K; i++) {
         cur ^= xors[i];
         if (cur == 1) {
             ans++;
-            xors[i] ^= 1;
-            xors[i + K] ^= 1;
-            cur = 0;
+            xors[i] = !xors[i];
+            xors[i + K] = !xors[i + K];
+            cur = false;
         }
     }
     bool off = true;
     for (int i = N - K + 1; i < N; i++) {
         cur ^= xors[i];
-        if (cur == 1) {
+        if (cur) {
             off = false;
             break;
         }
