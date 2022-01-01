@@ -5,28 +5,18 @@
 using namespace std;
 
 const int MOD = 10007;
-int N;
-int dp[1001];
-
-int solve(int n) {
-    if (n == 1) {
-        return 1;
-    }
-    if (n == 2) {
-        return 3;
-    }
-    int& ans = dp[n];
-    if (ans) {
-        return ans;
-    }
-    ans = (solve(n - 1) + solve(n - 2) * 2 % MOD) % MOD;
-    return ans;
-}
 
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
+    int N;
     cin >> N;
-    cout << solve(N) << "\n";
+    vector<int> cache(N + 1);
+    cache[1] = 1;
+    cache[2] = 3;
+    for (int i = 3; i <= N; i++) {
+        cache[i] = (cache[i - 1] + 2 * cache[i - 2]) % MOD;
+    }
+    cout << cache[N] << "\n";
     return 0;
 }
