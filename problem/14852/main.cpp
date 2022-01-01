@@ -12,15 +12,14 @@ int main() {
     int N;
     cin >> N;
     vector<int> cache(N + 1);
-    vector<int> prefix_sum(N + 1);
+    int prefix_sum;
     cache[1] = 2;
     cache[2] = 7;
-    prefix_sum[1] = 2;
-    prefix_sum[2] = 9;
+    prefix_sum = 9;
     for (int i = 3; i <= N; i++) {
-        cache[i] = (2LL * prefix_sum[i - 1] % MOD + cache[i - 2]) % MOD;
+        cache[i] = (2LL * prefix_sum % MOD + cache[i - 2]) % MOD;
         cache[i] = (cache[i] + 2) % MOD;
-        prefix_sum[i] = (prefix_sum[i - 1] + cache[i]) % MOD;
+        prefix_sum = (prefix_sum + cache[i]) % MOD;
     }
     cout << cache[N] << "\n";
     return 0;
