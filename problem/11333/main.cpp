@@ -31,7 +31,7 @@ int main() {
         for (int i = max_idx + 1; i <= N; i++) {
             cache[i] = (3LL * cache[i - 1] + i * 2) % MOD;
             for (int j = 2; j < i; j++) {
-                cache[i] = (cache[i] + 2LL * j * cache[i - j] % MOD) % MOD;
+                cache[i] = (cache[i] + 2LL * j * cache[i - j]) % MOD;
             }
         }
         cout << cache[N] << "\n";
