@@ -17,8 +17,7 @@ int main() {
     cache[2] = 7;
     prefix_sum = 9;
     for (int i = 3; i <= N; i++) {
-        cache[i] = (2LL * prefix_sum % MOD + cache[i - 2]) % MOD;
-        cache[i] = (cache[i] + 2) % MOD;
+        cache[i] = (2LL * prefix_sum + cache[i - 2] + 2) % MOD;
         prefix_sum = (prefix_sum + cache[i]) % MOD;
     }
     cout << cache[N] << "\n";
