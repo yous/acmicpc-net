@@ -5,24 +5,9 @@
 
 using namespace std;
 
-vector<bool> sieve;
-
-void gen_sieve(int limit) {
-    sieve.resize(limit + 1, true);
-    sieve[1] = false;
-    for (int i = 2; i * i <= limit; i++) {
-        if (sieve[i]) {
-            for (int j = i * i; j <= limit; j += i) {
-                sieve[j] = false;
-            }
-        }
-    }
-}
-
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
-    gen_sieve(31623);
     int D, M;
     cin >> D >> M;
     vector<int> d_nums(D);
@@ -47,10 +32,7 @@ int main() {
     if (gcd_num % lcm_num == 0) {
         int num = gcd_num / lcm_num;
         long long ans = 1;
-        for (int i = 2; i <= min(num, 31623); i++) {
-            if (!sieve[i]) {
-                continue;
-            }
+        for (int i = 2; i * i <= num; i++) {
             int cnt = 0;
             while (num % i == 0) {
                 cnt++;
