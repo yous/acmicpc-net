@@ -9,13 +9,12 @@ int main() {
     cin.tie(nullptr);
     int N, M;
     cin >> N >> M;
-    vector<int> grounds;
-    grounds.emplace_back(0);
+    vector<int> grounds(N + 1);
     int prev_num = 0;
-    for (int i = 0; i < N; i++) {
+    for (int i = 1; i <= N; i++) {
         int num;
         cin >> num;
-        grounds.emplace_back(num - prev_num);
+        grounds[i] = num - prev_num;
         prev_num = num;
     }
     for (int i = 0; i < M; i++) {
