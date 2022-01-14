@@ -50,30 +50,10 @@ int main() {
         short x, y;
         cin >> x >> y;
         Point p(x, y);
-        bool inside = true;
-        int sign = 0;
-        for (int j = 0; j < 3; j++) {
-            Point& a = triangle[j];
-            Point& b = triangle[(j + 1) % 3];
-            int res = ccw(a, b, p);
-            if (res == 0) {
-                if ((p < a && p < b) || (a < p && b < p)) {
-                    inside = false;
-                    break;
-                } else {
-                    inside = true;
-                    break;
-                }
-            } else {
-                if (sign == 0) {
-                    sign = res / abs(res);
-                } else if (sign != res / abs(res)) {
-                    inside = false;
-                    break;
-                }
-            }
-        }
-        if (inside) {
+        int ab = ccw(triangle[0], triangle[1], p);
+        int bc = ccw(triangle[1], triangle[2], p);
+        int ca = ccw(triangle[2], triangle[0], p);
+        if ((ab <= 0 && bc <= 0 && ca <= 0) || (ab >= 0 && bc >= 0 && ca >= 0)) {
             ans++;
         }
     }
