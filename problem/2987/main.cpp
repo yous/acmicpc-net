@@ -16,13 +16,6 @@ struct Point {
     int operator*(const Point& rhs) const {
         return x * rhs.y - y * rhs.x;
     }
-
-    int operator<(const Point& rhs) const {
-        if (y != rhs.y) {
-            return y < rhs.y;
-        }
-        return x < rhs.x;
-    }
 };
 
 int ccw(const Point& a, const Point& b, const Point& c) {
