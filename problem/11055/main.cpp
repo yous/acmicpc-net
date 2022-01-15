@@ -6,20 +6,20 @@ using namespace std;
 
 int N;
 vector<short> nums;
-vector<vector<int>> cache;
+vector<int> cache;
 
-int solve(int idx, short num) {
+int solve(int idx) {
     if (idx >= N) {
         return 0;
     }
-    int& ans = cache[idx][num];
+    int& ans = cache[idx];
     if (ans >= 0) {
         return ans;
     }
-    ans = 0;
-    for (int i = idx; i < N; i++) {
-        if (nums[i] > num) {
-            ans = max(ans, nums[i] + solve(i + 1, nums[i]));
+    ans = nums[idx];
+    for (int i = idx + 1; i < N; i++) {
+        if (nums[i] > nums[idx]) {
+            ans = max(ans, nums[idx] + solve(i));
         }
     }
     return ans;
@@ -33,7 +33,11 @@ int main() {
     for (short& num : nums) {
         cin >> num;
     }
-    cache.resize(N, vector<int>(1001, -1));
-    cout << solve(0, 0) << "\n";
+    cache.resize(N, -1);
+    int ans = 0;
+    for (int i = 0; i < N; i++) {
+        ans = max(ans, solve(i));
+    }
+    cout << ans << "\n";
     return 0;
 }
