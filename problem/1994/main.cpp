@@ -37,7 +37,10 @@ int main() {
         cout << "1\n";
         return 0;
     }
-    cache.resize(N, vector<int>(N));
+    cache.resize(N);
+    for (int i = 1; i < N; i++) {
+        cache[i].resize(i);
+    }
     sort(nums.begin(), nums.end());
     int ans = 2;
     for (int i = 0; i < N - 1; i++) {
