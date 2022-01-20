@@ -25,17 +25,17 @@ int main() {
         graph[u - 1].emplace_back(v - 1, w);
         graph[v - 1].emplace_back(u - 1, w);
     }
-    priority_queue<tuple<short, short, short>> pq;
+    priority_queue<pair<short, short>> pq;
     for (int u = 0; u < N; u++) {
         if (visited[u]) {
             for (auto [v, w] : graph[u]) {
-                pq.emplace(-w, u, v);
+                pq.emplace(-w, v);
             }
         }
     }
     int ans = 0;
     while (!pq.empty()) {
-        auto [w, u, v] = pq.top();
+        auto [w, v] = pq.top();
         w = -w;
         pq.pop();
         if (visited[v]) {
@@ -44,7 +44,7 @@ int main() {
         visited[v] = true;
         ans += w;
         for (auto [v2, w2] : graph[v]) {
-            pq.emplace(-w2, v, v2);
+            pq.emplace(-w2, v2);
         }
     }
     cout << ans << "\n";
