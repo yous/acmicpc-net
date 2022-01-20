@@ -44,6 +44,9 @@ int main() {
         visited[v] = true;
         ans += w;
         for (auto [v2, w2] : graph[v]) {
+            if (visited[v2]) {
+                continue;
+            }
             pq.emplace(-w2, v2);
         }
     }
