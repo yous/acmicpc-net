@@ -8,17 +8,14 @@ int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
     vector<bool> nums(1 << 25);
-    bool first = true;
     int num;
+    cin >> num;
+    nums[num] = true;
+    cout << num;
     while (cin >> num) {
         if (!nums[num]) {
             nums[num] = true;
-            if (first) {
-                first = false;
-                cout << num;
-            } else {
-                cout << " " << num;
-            }
+            cout << " " << num;
         }
     }
     cout << "\n";
