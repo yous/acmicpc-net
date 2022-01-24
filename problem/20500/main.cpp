@@ -6,7 +6,7 @@ using namespace std;
 
 const int MOD = static_cast<int>(1e9) + 7;
 short N;
-vector<int> fact(1515);
+int fact;
 vector<int> fact_inv(1515);
 
 int solve(int one_cnt) {
@@ -14,21 +14,19 @@ int solve(int one_cnt) {
     if (num_sum % 3 != 0) {
         return 0;
     }
-    return 1LL * fact[N - 1] * fact_inv[one_cnt] % MOD * fact_inv[N - one_cnt - 1] % MOD;
+    return 1LL * fact * fact_inv[one_cnt] % MOD * fact_inv[N - one_cnt - 1] % MOD;
 }
 
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
     cin >> N;
-    fact[0] = 1;
-    for (int i = 1; i < N; i++) {
-        fact[i] = 1LL * fact[i - 1] * i % MOD;
-    }
+    fact = 1;
     fact_inv[0] = 1;
     for (int i = 1; i < N; i++) {
+        fact = 1LL * fact * i % MOD;
         int num = 1;
-        int mul = fact[i];
+        int mul = fact;
         int pow = MOD - 2;
         while (pow > 0) {
             if (pow % 2 == 1) {
