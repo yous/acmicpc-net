@@ -9,7 +9,7 @@ GEM
       unf (>= 0.0.5, < 1.0.0)
     http-cookie (1.0.4)
       domain_name (~> 0.5)
-    mechanize (2.8.3)
+    mechanize (2.8.4)
       addressable (~> 2.8)
       domain_name (~> 0.5, >= 0.5.20190701)
       http-cookie (~> 1.0, >= 1.0.3)
@@ -39,7 +39,7 @@ GEM
       rspec-mocks (~> 3.10.0)
     rspec-core (3.10.1)
       rspec-support (~> 3.10.0)
-    rspec-expectations (3.10.1)
+    rspec-expectations (3.10.2)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.10.0)
     rspec-mocks (3.10.2)
@@ -62,4 +62,4 @@ DEPENDENCIES
   rspec
 
 BUNDLED WITH
-   2.2.32
+   2.3.3
