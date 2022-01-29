@@ -6,11 +6,14 @@ using namespace std;
 
 int N, M, K;
 vector<int> selected;
-vector<vector<vector<int>>> cache(10, vector<vector<int>>(221, vector<int>(221, -1)));
+vector<vector<int>> cache(10, vector<int>(221, -1));
 
-int solve(int pos, int cur_num, int cur_sum) {
+int solve(int pos, int cur_rem) {
+    if (cur_rem < 0) {
+        return 0;
+    }
     if (pos >= N) {
-        if (cur_sum == M) {
+        if (cur_rem == 0) {
             K--;
             if (K == 0) {
                 cout << selected[0];
@@ -25,18 +28,19 @@ int solve(int pos, int cur_num, int cur_sum) {
         }
         return 0;
     }
-    int& ans = cache[pos][cur_num][cur_sum];
+    int& ans = cache[pos][cur_rem];
     if (ans >= 0 && ans < K) {
         K -= ans;
         return ans;
     }
     ans = 0;
-    for (int i = cur_num; i <= M; i++) {
-        if (cur_sum + i * (N - pos - 1) > M) {
+    int last_num = selected.empty() ? 1 : selected.back();
+    for (int i = 0; i < M; i++) {
+        if (i * (N - pos) > cur_rem) {
             break;
         }
-        selected.emplace_back(i);
-        ans += solve(pos + 1, i, cur_sum + i);
+        selected.emplace_back(last_num + i);
+        ans += solve(pos + 1, cur_rem - i * (N - pos));
         selected.pop_back();
     }
     return ans;
@@ -46,6 +50,6 @@ int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
     cin >> N >> M >> K;
-    solve(0, 1, 0);
+    solve(0, M - N);
     return 0;
 }
