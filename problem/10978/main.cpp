@@ -32,8 +32,8 @@ int main() {
     cin >> T;
     while (T-- > 0) {
         cin >> N;
-        cache.clear();
-        cache.resize(1 << N, -1);
+        cache.resize(1 << N);
+        fill(cache.begin(), cache.end(), -1);
         cout << solve(0, 0) << "\n";
     }
     return 0;
