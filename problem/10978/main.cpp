@@ -5,23 +5,14 @@
 using namespace std;
 
 int N;
-vector<long long> cache;
+vector<long long> cache(21, -1);
 
-long long solve(int pos, int mask) {
-    long long& ans = cache[mask];
+long long solve(int n) {
+    long long& ans = cache[n];
     if (ans >= 0) {
         return ans;
     }
-    if (mask == (1 << N) - 1) {
-        ans = 1;
-        return ans;
-    }
-    ans = 0;
-    for (int i = 0; i < N; i++) {
-        if (i != pos && (mask & (1 << i)) == 0) {
-            ans += solve(pos + 1, mask | (1 << i));
-        }
-    }
+    ans = 1LL * (n - 1) * (solve(n - 1) + solve(n - 2));
     return ans;
 }
 
@@ -30,11 +21,12 @@ int main() {
     cin.tie(nullptr);
     int T;
     cin >> T;
+    cache[0] = 0;
+    cache[1] = 0;
+    cache[2] = 1;
     while (T-- > 0) {
         cin >> N;
-        cache.resize(1 << N);
-        fill(cache.begin(), cache.end(), -1);
-        cout << solve(0, 0) << "\n";
+        cout << solve(N) << "\n";
     }
     return 0;
 }
