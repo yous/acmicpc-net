@@ -7,7 +7,6 @@ using namespace std;
 int N, K;
 vector<double> bulbs;
 vector<double> cache;
-vector<vector<double>> probs;
 
 double solve(int pos, int chunk_cnt) {
     if (pos >= N) {
@@ -21,8 +20,12 @@ double solve(int pos, int chunk_cnt) {
         return ans;
     }
     ans = 0.0;
-    for (int i = pos + 1; i <= N; i++) {
-        ans = max(ans, probs[i - 1][pos] + solve(i, chunk_cnt - 1));
+    double prob = 1.0;
+    double num = 0.0;
+    for (int i = pos; i < N; i++) {
+        prob *= (1.0 - bulbs[i]);
+        num += prob;
+        ans = max(ans, num + solve(i + 1, chunk_cnt - 1));
     }
     return ans;
 }
@@ -36,14 +39,6 @@ int main() {
         cin >> bulb;
     }
     cache.resize(N * 10, -1.0);
-    probs.resize(N, vector<double>(N));
-    for (int i = N - 1; i >= 0; i--) {
-        double prob = 0.0;
-        for (int j = i; j >= 0; j--) {
-            prob = (1.0 - bulbs[j]) * (1.0 + prob);
-            probs[i][j] = prob;
-        }
-    }
     cout.precision(7);
     cout << fixed << solve(0, K - 1) << "\n";
     return 0;
