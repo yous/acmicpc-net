@@ -37,7 +37,13 @@ int solve(int row, int col, int used) {
         ans = min(ans, solve(row, col + 2, used + 1));
         ladders[row][col] = false;
     }
-    ans = min(ans, solve(row, col + 1, used));
+    if (ladders[row][col + 1]) {
+        ans = min(ans, solve(row, col + 3, used));
+    } else if (ladders[row][col]) {
+        ans = min(ans, solve(row, col + 2, used));
+    } else {
+        ans = min(ans, solve(row, col + 1, used));
+    }
     return ans;
 }
 
