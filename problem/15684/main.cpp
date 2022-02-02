@@ -8,24 +8,24 @@ int N, M, H;
 vector<vector<bool>> ladders;
 
 int solve(int row, int col, int used) {
-    if (used > 3) {
-        return 4;
-    }
     if (col >= N) {
         row++;
         col = 1;
     }
-    if (used == 3 || row >= H) {
-        for (int i = 1; i <= N; i++) {
-            int start = i;
-            for (int y = 0; y < H; y++) {
-                if (ladders[y][start - 1]) {
-                    start--;
-                } else if (ladders[y][start]) {
-                    start++;
+    if (row >= H || used == 3) {
+        vector<int> res(N);
+        for (int i = 0; i < N; i++) {
+            res[i] = i;
+        }
+        for (int y = 0; y < H; y++) {
+            for (int x = 1; x <= N - 1; x++) {
+                if (ladders[y][x]) {
+                    swap(res[x - 1], res[x]);
                 }
             }
-            if (start != i) {
+        }
+        for (int i = 0; i < N; i++) {
+            if (res[i] != i) {
                 return 4;
             }
         }
