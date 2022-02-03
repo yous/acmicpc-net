@@ -6,7 +6,7 @@ using namespace std;
 
 string P;
 int P_sz;
-vector<vector<int>> cache(100, vector<int>(100));
+char cache[100][100];
 
 bool check(string& s, int sz, int idx, int p_idx) {
     if (p_idx >= P_sz) {
@@ -18,7 +18,7 @@ bool check(string& s, int sz, int idx, int p_idx) {
         }
         return p_idx >= P_sz;
     }
-    int& ans = cache[idx][p_idx];
+    char& ans = cache[idx][p_idx];
     if (ans >= 0) {
         return ans == 1;
     }
@@ -63,9 +63,7 @@ int main() {
     for (int i = 0; i < N; i++) {
         string filename;
         cin >> filename;
-        for (auto& row : cache) {
-            fill(row.begin(), row.end(), -1);
-        }
+        fill(&cache[0][0], &cache[100][0], -1);
         if (check(filename, filename.size(), 0, 0)) {
             cout << filename << "\n";
         }
