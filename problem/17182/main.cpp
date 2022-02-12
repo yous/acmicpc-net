@@ -36,12 +36,9 @@ int main() {
             cin >> num;
         }
     }
-    for (int i = 0; i < N; i++) {
-        for (int j = 0; j < N; j++) {
-            if (T[i][j] == 0) {
-                continue;
-            }
-            for (int k = 0; k < N; k++) {
+    for (int k = 0; k < N; k++) {
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
                 T[i][j] = min(T[i][j], short(T[i][k] + T[k][j]));
             }
         }
