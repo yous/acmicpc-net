@@ -1,53 +1,46 @@
 #include <algorithm>
-#include <cstring>
 #include <iostream>
 #include <queue>
-#include <tuple>
 #include <vector>
 
 using namespace std;
 
-const int INF = 987654321;
-int V, E;
-int K;
-vector<vector<pair<int, int>>> adj(20001);
-vector<int> dist(20001);
+const int INF = 1e9;
 
-void dijkstra(int n) {
-    fill(dist.begin() + 1, dist.begin() + V + 1, INF);
-    dist[n] = 0;
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int V, E;
+    cin >> V >> E;
+    vector<vector<pair<int, short>>> graph(V);
+    int K;
+    cin >> K;
+    K--;
+    for (int i = 0; i < E; i++) {
+        int u, v;
+        short w;
+        cin >> u >> v >> w;
+        graph[u - 1].emplace_back(v - 1, w);
+    }
+    vector<int> dist(V, INF);
     priority_queue<pair<int, int>> pq;
-    pq.push({0, n});
+    dist[K] = 0;
+    pq.emplace(0, K);
     while (!pq.empty()) {
-        int cost, here;
-        tie(cost, here) = pq.top();
+        auto [cost, here] = pq.top();
         cost = -cost;
         pq.pop();
         if (dist[here] < cost) {
             continue;
         }
-        for (auto& p : adj[here]) {
-            int v, w;
-            tie(v, w) = p;
-            if (cost + w < dist[v]) {
+        for (auto [v, w] : graph[here]) {
+            if (dist[v] > cost + w) {
                 dist[v] = cost + w;
-                pq.push({-(cost + w), v});
+                pq.emplace(-(cost + w), v);
             }
         }
     }
-}
-
-int main() {
-    ios_base::sync_with_stdio(false);
-    cin.tie(nullptr);
-    cin >> V >> E >> K;
-    for (int i = 0; i < E; i++) {
-        int u, v, w;
-        cin >> u >> v >> w;
-        adj[u].push_back({v, w});
-    }
-    dijkstra(K);
-    for (int i = 1; i <= V; i++) {
+    for (int i = 0; i < V; i++) {
         if (dist[i] == INF) {
             cout << "INF\n";
         } else {
