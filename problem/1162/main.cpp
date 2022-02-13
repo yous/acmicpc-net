@@ -12,18 +12,12 @@ int main() {
     cin.tie(nullptr);
     int N, M, K;
     cin >> N >> M >> K;
-    vector<vector<pair<int, int>>> graph(N * (K + 1));
+    vector<vector<pair<int, int>>> graph(N);
     for (int i = 0; i < M; i++) {
         int u, v, w;
         cin >> u >> v >> w;
-        for (int j = 0; j <= K; j++) {
-            graph[N * j + u - 1].emplace_back(N * j + v - 1, w);
-            graph[N * j + v - 1].emplace_back(N * j + u - 1, w);
-            if (j > 0) {
-                graph[N * j + u - 1].emplace_back(N * (j - 1) + v - 1, 0);
-                graph[N * j + v - 1].emplace_back(N * (j - 1) + u - 1, 0);
-            }
-        }
+        graph[u - 1].emplace_back(v - 1, w);
+        graph[v - 1].emplace_back(u - 1, w);
     }
     vector<long long> dist(N * (K + 1), INF);
     priority_queue<pair<long long, int>> pq;
@@ -33,13 +27,19 @@ int main() {
         auto [d, u] = pq.top();
         d = -d;
         pq.pop();
-        if (dist[u] < d) {
+        int k = u / N;
+        u %= N;
+        if (dist[N * k + u] < d) {
             continue;
         }
         for (auto [v, w] : graph[u]) {
-            if (dist[v] > d + w) {
-                dist[v] = d + w;
-                pq.emplace(-(d + w), v);
+            if (dist[N * k + v] > d + w) {
+                dist[N * k + v] = d + w;
+                pq.emplace(-(d + w), N * k + v);
+            }
+            if (k > 0 && dist[N * (k - 1) + v] > d) {
+                dist[N * (k - 1) + v] = d;
+                pq.emplace(-d, N * (k - 1) + v);
             }
         }
     }
