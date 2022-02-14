@@ -33,6 +33,10 @@ int main() {
         pq.pop();
         short g = gu / N + 1;
         short u = gu % N;
+        if (u == N - 1) {
+            cout << dist[gu] << "\n";
+            return 0;
+        }
         if (dist[gu] < d) {
             continue;
         }
@@ -50,10 +54,5 @@ int main() {
             }
         }
     }
-    long long ans = INF;
-    for (int i = 0; i < 2500; i++) {
-        ans = min(ans, dist[N * i + N - 1]);
-    }
-    cout << ans << "\n";
     return 0;
 }
