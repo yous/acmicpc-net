@@ -67,14 +67,18 @@ int main() {
     }
     cout << ans << "\n";
     int tax = 0;
-    for (int i = 0; i < K; i++) {
-        tax += inc[i];
+    int max_i = N - 1;
+    for (int k = 0; k < K; k++) {
+        tax += inc[k];
         ans = INF;
-        for (int j = 1; j < N; j++) {
-            if (dist_d[j - 1] == INF) {
+        for (int i = max_i; i >= 1; i--) {
+            if (dist_d[i - 1] == INF) {
                 continue;
             }
-            ans = min(ans, dist_d[j - 1] + tax * j);
+            if (ans > dist_d[i - 1] + tax * i) {
+                ans = dist_d[i - 1] + tax * i;
+                max_i = i;
+            }
         }
         cout << ans << "\n";
     }
