@@ -35,12 +35,19 @@ int main() {
         auto [d, cnt_u] = pq.top();
         d = -d;
         pq.pop();
-        if (dist[cnt_u] < d) {
-            continue;
-        }
         short cnt = cnt_u / N;
         short u = cnt_u % N;
         if (cnt >= N - 1) {
+            continue;
+        }
+        bool found = false;
+        for (int i = 0; i <= cnt; i++) {
+            if (dist[N * i + u] < d) {
+                found = true;
+                break;
+            }
+        }
+        if (found) {
             continue;
         }
         for (auto [v, w] : graph[u]) {
