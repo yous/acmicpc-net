@@ -5,6 +5,17 @@
 
 using namespace std;
 
+const int BASE = 211;
+const int MOD = int(1e9) + 7;
+
+int hashed(string& s) {
+    int res = 0;
+    for (char ch : s) {
+        res = (1LL * res * BASE + ch) % MOD;
+    }
+    return res;
+}
+
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
@@ -14,21 +25,22 @@ int main() {
     cin >> f1 >> f2 >> f3 >> f4;
     int N;
     cin >> N;
-    map<string, pair<int, short>> ma;
+    map<int, pair<int, short>> ma;
     for (int i = 0; i < N; i++) {
         short A;
         string B;
         cin >> A >> B;
+        int h = hashed(B);
         if (A == 1) {
-            auto it = ma.find(B);
+            auto it = ma.find(h);
             if (it != ma.end()) {
                 it->second.first = i + 1;
                 it->second.second++;
             } else {
-                ma.emplace_hint(it, B, make_pair(i + 1, 1));
+                ma.emplace_hint(it, h, make_pair(i + 1, 1));
             }
         } else {
-            auto it = ma.find(B);
+            auto it = ma.find(h);
             if (it != ma.end()) {
                 auto [r, f] = it->second;
                 r = i + 1 - r;
