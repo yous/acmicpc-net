@@ -47,6 +47,7 @@ task :new do
 
     if id.to_i >= 1000
       a = Mechanize.new
+      a.user_agent_alias = 'Mac Safari'
       page = a.get("https://www.acmicpc.net/problem/#{id}")
 
       i = 1
