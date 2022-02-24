@@ -10,7 +10,7 @@ short N, M, K;
 vector<vector<short>> A;
 vector<tuple<short, short, short>> ops;
 
-int solve(int idx, vector<bool>& selected, vector<vector<short>>& A) {
+int solve(int idx, vector<bool>& selected) {
     if (idx == K) {
         int ans = 0;
         for (int j = 0; j < M; j++) {
@@ -31,22 +31,38 @@ int solve(int idx, vector<bool>& selected, vector<vector<short>>& A) {
             continue;
         }
         selected[k] = true;
-        vector<vector<short>> new_A(A);
         auto [r, c, s] = ops[k];
         for (int sz = 1; sz <= s; sz++) {
             int y = r - sz;
             int x = c - sz;
+            short first_num = A[y][x];
             for (int i = 0; i < 4; i++) {
                 for (int j = 0; j < sz * 2; j++) {
                     short ny = y + dy[i];
                     short nx = x + dx[i];
-                    new_A[y][x] = A[ny][nx];
+                    A[y][x] = A[ny][nx];
                     y = ny;
                     x = nx;
                 }
             }
+            A[r - sz][c - sz + 1] = first_num;
         }
-        ans = min(ans, solve(idx + 1, selected, new_A));
+        ans = min(ans, solve(idx + 1, selected));
+        for (int sz = 1; sz <= s; sz++) {
+            int y = r - sz;
+            int x = c - sz;
+            short first_num = A[y][x];
+            for (int i = 3; i >= 0; i--) {
+                for (int j = 0; j < sz * 2; j++) {
+                    short ny = y - dy[i];
+                    short nx = x - dx[i];
+                    A[y][x] = A[ny][nx];
+                    y = ny;
+                    x = nx;
+                }
+            }
+            A[r - sz + 1][c - sz] = first_num;
+        }
         selected[k] = false;
     }
     return ans;
@@ -69,6 +85,6 @@ int main() {
         c--;
     }
     vector<bool> selected(K);
-    cout << solve(0, selected, A) << "\n";
+    cout << solve(0, selected) << "\n";
     return 0;
 }
