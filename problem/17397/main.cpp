@@ -7,7 +7,7 @@ using namespace std;
 const int INF = 1e9;
 short N, M;
 vector<short> C;
-vector<vector<vector<int>>> cache;
+int cache[1000][200][11];
 
 int solve(short idx, short rem, short cur) {
     if (idx >= N) {
@@ -36,7 +36,7 @@ int main() {
     for (short& num : C) {
         cin >> num;
     }
-    cache.resize(N, vector<vector<int>>(M + 1, vector<int>(11, -1)));
+    fill(&cache[0][0][0], &cache[1000][0][0], -1);
     cout << solve(0, M, 0) << "\n";
     return 0;
 }
