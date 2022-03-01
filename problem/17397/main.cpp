@@ -4,7 +4,6 @@
 
 using namespace std;
 
-const int INF = 1e9;
 short N, M;
 vector<short> C;
 int cache[1000][200][11];
@@ -17,13 +16,13 @@ int solve(short idx, short rem, short cur) {
     if (ans >= 0) {
         return ans;
     }
-    ans = INF;
-    for (int i = 0; i <= rem; i++) {
+    ans = (cur > C[idx] ? (cur - C[idx]) * (cur - C[idx]) : 0) + solve(idx + 1, rem, C[idx]);
+    for (int i = 1; i <= rem; i++) {
         int nxt = C[idx] + i;
-        if (nxt > 10) {
+        if (nxt > cur) {
             break;
         }
-        ans = min(ans, (cur > nxt ? (cur - nxt) * (cur - nxt) : 0) + solve(idx + 1, rem - i, nxt));
+        ans = min(ans, (cur - nxt) * (cur - nxt) + solve(idx + 1, rem - i, nxt));
     }
     return ans;
 }
