@@ -9,15 +9,15 @@ int main() {
     cin.tie(nullptr);
     short N, L;
     cin >> N >> L;
-    vector<pair<short, bool>> sticks(N);
-    for (auto& [l, d] : sticks) {
-        cin >> l >> d;
-    }
-    auto [prev_len, prev_d] = sticks[0];
+    short prev_len;
+    bool prev_d;
+    cin >> prev_len >> prev_d;
     short prev_l = (prev_d ? L - prev_len : 0);
     int time = 0;
     for (int i = 1; i < N; i++) {
-        auto [len, d] = sticks[i];
+        short len;
+        bool d;
+        cin >> len >> d;
         short l = (d ? L - len : 0);
         int rem = (L > len ? time % (2 * (L - len)) : 0);
         if (rem <= L - len) {
