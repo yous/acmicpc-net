@@ -9,52 +9,23 @@ int main() {
     cin.tie(nullptr);
     short N, L;
     cin >> N >> L;
-    short prev_len;
+    short prev_l;
     bool prev_d;
-    cin >> prev_len >> prev_d;
-    short prev_l = (prev_d ? L - prev_len : 0);
-    int time = 0;
+    cin >> prev_l >> prev_d;
+    short max_diff = 0;
     for (int i = 1; i < N; i++) {
-        short len;
+        short l;
         bool d;
-        cin >> len >> d;
-        short l = (d ? L - len : 0);
-        int rem = (L > len ? time % (2 * (L - len)) : 0);
-        if (rem <= L - len) {
-            l += (d ? -rem : rem);
-        } else {
-            rem -= L - len;
-            l = (d ? rem : L - len - rem);
-        }
-        while (prev_l + prev_len < l || l + len < prev_l) {
-            time++;
-            if (prev_d) {
-                prev_l--;
-                if (prev_l == 0) {
-                    prev_d = !prev_d;
-                }
-            } else {
-                prev_l++;
-                if (prev_l == L - prev_len) {
-                    prev_d = !prev_d;
-                }
-            }
-            if (d) {
-                l--;
-                if (l == 0) {
-                    d = !d;
-                }
-            } else {
-                l++;
-                if (l == L - len) {
-                    d = !d;
-                }
+        cin >> l >> d;
+        if (prev_d != d) {
+            short diff = L - (prev_l + l);
+            if (max_diff < diff) {
+                max_diff = diff;
             }
         }
-        prev_len = len;
-        prev_d = d;
         prev_l = l;
+        prev_d = d;
     }
-    cout << time << "\n";
+    cout << max_diff / 2 << "\n";
     return 0;
 }
