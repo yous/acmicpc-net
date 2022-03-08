@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <iostream>
+#include <map>
 #include <vector>
 
 using namespace std;
@@ -13,7 +14,11 @@ int main() {
     cin >> chars;
     string password;
     cin >> password;
+    map<char, int> char_map;
     int sz = chars.size();
+    for (int i = 0; i < sz; i++) {
+        char_map[chars[i]] = i;
+    }
     int pw_sz = password.size();
     vector<int> power(pw_sz);
     int p = 1;
@@ -26,12 +31,7 @@ int main() {
         ans = (ans + power[i + 1]) % MOD;
     }
     for (int i = 0; i < pw_sz; i++) {
-        for (int j = 0; j < sz; j++) {
-            if (password[i] == chars[j]) {
-                break;
-            }
-            ans = (ans + power[pw_sz - i - 1]) % MOD;
-        }
+        ans = (ans + power[pw_sz - i - 1] * char_map[password[i]]) % MOD;
     }
     ans = (ans + 1) % MOD;
     cout << ans << "\n";
