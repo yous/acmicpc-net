@@ -19,19 +19,17 @@ int main() {
         char_map[(unsigned char)chars[i]] = i;
     }
     int pw_sz = password.size();
-    vector<int> power(pw_sz);
     int p = 1;
-    power[0] = p;
     int ans = 0;
     for (int i = 1; i < pw_sz; i++) {
         p = p * sz % MOD;
-        power[i] = p;
-        ans = (ans + power[i]) % MOD;
+        ans = (ans + p) % MOD;
     }
-    for (int i = 0; i < pw_sz; i++) {
-        ans = (ans + power[pw_sz - i - 1] * char_map[(unsigned char)password[i]]) % MOD;
+    int num = 0;
+    for (char ch : password) {
+        num = (num * sz + char_map[(unsigned char)ch]) % MOD;
     }
-    ans = (ans + 1) % MOD;
+    ans = (ans + num + 1) % MOD;
     cout << ans << "\n";
     return 0;
 }
