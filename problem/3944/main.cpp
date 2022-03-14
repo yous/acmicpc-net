@@ -13,7 +13,7 @@ int main() {
         short B;
         cin >> B;
         int sum = 0;
-        char str[4097];
+        char str[8193];
         cin.ignore(1);
         while (true) {
             cin.getline(str, sizeof(str));
