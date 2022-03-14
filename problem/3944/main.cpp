@@ -12,11 +12,23 @@ int main() {
     while (T-- > 0) {
         short B;
         cin >> B;
-        string D;
-        cin >> D;
         int sum = 0;
-        for (char ch : D) {
-            sum += ch - '0';
+        char str[4096];
+        cin.ignore(1);
+        while (true) {
+            cin.getline(str, sizeof(str));
+            for (char ch : str) {
+                if (ch == '\0') {
+                    break;
+                }
+                sum += ch - '0';
+            }
+            str[0] = '\0';
+            if (cin.fail()) {
+                cin.clear();
+            } else {
+                break;
+            }
         }
         cout << sum % (B - 1) << "\n";
     }
