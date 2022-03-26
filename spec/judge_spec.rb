@@ -21,7 +21,8 @@ DELTAS = {
   "15575" => 1e-6,
   "20149" => 1e-9,
   "20938" => 1e-6,
-  "21920" => 1e-6
+  "21920" => 1e-6,
+  "24726" => 1e-6
 }.freeze
 
 RSpec.shared_examples "a problem" do |problem|
