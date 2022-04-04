@@ -32,18 +32,12 @@ int main() {
                         idx += 3;
                         is_escaped = false;
                         continue;
-                    } else {
-                        invalid = true;
-                        break;
                     }
                 } else if (ch == 'a') {
                     if (idx + 3 < sz && doc[idx + 1] == 'm' && doc[idx + 2] == 'p' && doc[idx + 3] == ';') {
                         idx += 4;
                         is_escaped = false;
                         continue;
-                    } else {
-                        invalid = true;
-                        break;
                     }
                 } else if (ch == 'x') {
                     if (idx + 2 < sz && check_hex(doc[idx + 1]) && check_hex(doc[idx + 2])) {
@@ -55,18 +49,11 @@ int main() {
                             idx = nxt_idx + 1;
                             is_escaped = false;
                             continue;
-                        } else {
-                            invalid = true;
-                            break;
                         }
-                    } else {
-                        invalid = true;
-                        break;
                     }
-                } else {
-                    invalid = true;
-                    break;
                 }
+                invalid = true;
+                break;
             } else if (is_tag) {
                 int tag_st = idx;
                 bool is_open = true;
@@ -87,9 +74,6 @@ int main() {
                         idx = nxt_idx + 2;
                         is_tag = false;
                         continue;
-                    } else {
-                        invalid = true;
-                        break;
                     }
                 } else if (doc[nxt_idx] == '>') {
                     string tag = doc.substr(tag_st, nxt_idx - tag_st);
@@ -108,15 +92,11 @@ int main() {
                             idx = nxt_idx + 1;
                             is_tag = false;
                             continue;
-                        } else {
-                            invalid = true;
-                            break;
                         }
                     }
-                } else {
-                    invalid = true;
-                    break;
                 }
+                invalid = true;
+                break;
             }
             if (ch == '&') {
                 is_escaped = true;
