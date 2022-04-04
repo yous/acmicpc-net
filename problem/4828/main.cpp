@@ -40,16 +40,14 @@ int main() {
                         continue;
                     }
                 } else if (ch == 'x') {
-                    if (idx + 2 < sz && check_hex(doc[idx + 1]) && check_hex(doc[idx + 2])) {
-                        int nxt_idx = idx + 3;
-                        while (nxt_idx + 1 < sz && check_hex(doc[nxt_idx]) && check_hex(doc[nxt_idx + 1])) {
-                            nxt_idx += 2;
-                        }
-                        if (nxt_idx < sz && doc[nxt_idx] == ';') {
-                            idx = nxt_idx + 1;
-                            is_escaped = false;
-                            continue;
-                        }
+                    int nxt_idx = idx + 1;
+                    while (nxt_idx + 1 < sz && check_hex(doc[nxt_idx]) && check_hex(doc[nxt_idx + 1])) {
+                        nxt_idx += 2;
+                    }
+                    if (nxt_idx > idx + 1 && nxt_idx < sz && doc[nxt_idx] == ';') {
+                        idx = nxt_idx + 1;
+                        is_escaped = false;
+                        continue;
                     }
                 }
                 invalid = true;
@@ -83,11 +81,7 @@ int main() {
                         is_tag = false;
                         continue;
                     } else {
-                        if (contexts.empty()) {
-                            invalid = true;
-                            break;
-                        }
-                        if (contexts.top() == tag) {
+                        if (!contexts.empty() && contexts.top() == tag) {
                             contexts.pop();
                             idx = nxt_idx + 1;
                             is_tag = false;
