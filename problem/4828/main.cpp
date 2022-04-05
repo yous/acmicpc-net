@@ -67,7 +67,7 @@ int main() {
                     invalid = true;
                     break;
                 }
-                if (doc[nxt_idx] == '/') {
+                if (is_open && doc[nxt_idx] == '/') {
                     if (nxt_idx + 1 < sz && doc[nxt_idx + 1] == '>') {
                         idx = nxt_idx + 2;
                         is_tag = false;
