@@ -1,6 +1,5 @@
 #include <algorithm>
 #include <iostream>
-#include <numeric>
 #include <vector>
 
 using namespace std;
@@ -10,7 +9,9 @@ struct DisjointSet {
     vector<int> cnt;
 
     DisjointSet(int n) : group(n), cnt(n, 1) {
-        iota(group.begin(), group.end(), 0);
+        for (int i = 0; i < n; i++) {
+            group[i] = i;
+        }
     }
 
     int find(int n) {
@@ -52,7 +53,9 @@ int main() {
     DisjointSet ds(N);
     vector<bool> closed(N, true);
     vector<bool> ans(N);
-    for (int i = N - 1; i >= 0; i--) {
+    ans[N - 1] = true;
+    closed[order[N - 1] - 1] = false;
+    for (int i = N - 2; i >= 0; i--) {
         int u = order[i] - 1;
         closed[u] = false;
         for (int v : graph[u]) {
