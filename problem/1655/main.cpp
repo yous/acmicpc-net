@@ -1,6 +1,6 @@
 #include <algorithm>
+#include <cmath>
 #include <iostream>
-#include <set>
 #include <vector>
 
 using namespace std;
@@ -11,39 +11,27 @@ int main() {
     int N;
     cin >> N;
     vector<int> cnt(20001);
-    set<int> nums;
-    int smaller = 0;
-    int larger = 0;
-    short mid;
-    cin >> mid;
-    mid += 10000;
-    cnt[mid]++;
-    auto it = nums.emplace(mid).first;
-    cout << mid - 10000 << "\n";
-    for (int i = 1; i < N; i++) {
+    int sqrt_sz = sqrt(20001);
+    vector<int> chunks(sqrt_sz);
+    for (int i = 0; i < N; i++) {
         short num;
         cin >> num;
         num += 10000;
         cnt[num]++;
-        nums.emplace(num);
-        if (num < mid) {
-            smaller++;
-            if (smaller >= cnt[mid] + larger) {
-                --it;
-                larger += cnt[mid];
-                mid = *it;
-                smaller -= cnt[mid];
-            }
-        } else if (num > mid) {
-            larger++;
-            if (smaller + cnt[mid] < larger) {
-                ++it;
-                smaller += cnt[mid];
-                mid = *it;
-                larger -= cnt[mid];
-            }
+        chunks[num / sqrt_sz]++;
+        int mid = i / 2 + 1;
+        int cur_cnt = 0;
+        int idx = 0;
+        while (idx < sqrt_sz && cur_cnt + chunks[idx] < mid) {
+            cur_cnt += chunks[idx];
+            idx++;
         }
-        cout << mid - 10000 << "\n";
+        idx *= sqrt_sz;
+        while (cur_cnt + cnt[idx] < mid) {
+            cur_cnt += cnt[idx];
+            idx++;
+        }
+        cout << idx - 10000 << "\n";
     }
     return 0;
 }
