@@ -23,40 +23,43 @@ int main() {
     points[0]--;
     points[1]--;
     points[2]--;
-    int min_dist = N * 100;
-    vector<vector<short>> edges(3);
-    for (short mid = 0; mid < N; mid++) {
-        vector<pair<int, short>> dist(N, {N * 100, -1});
+    vector<vector<pair<int, short>>> dist(3, vector<pair<int, short>>(N, {N * 100, -1}));
+    for (int i = 0; i < 3; i++) {
         priority_queue<pair<int, short>> pq;
-        dist[mid] = {0, -1};
-        pq.emplace(0, mid);
+        dist[i][points[i]] = {0, -1};
+        pq.emplace(0, points[i]);
         while (!pq.empty()) {
             auto [d, u] = pq.top();
             d = -d;
             pq.pop();
-            if (dist[u].first < d) {
+            if (dist[i][u].first < d) {
                 continue;
             }
             for (auto [v, w] : graph[u]) {
-                if (dist[v].first > d + w) {
-                    dist[v] = {d + w, u};
+                if (dist[i][v].first > d + w) {
+                    dist[i][v] = {d + w, u};
                     pq.emplace(-(d + w), v);
                 }
             }
         }
-        int res = dist[points[0]].first + dist[points[1]].first + dist[points[2]].first;
+    }
+    int min_dist = N * 100;
+    int min_mid = -1;
+    for (int mid = 0; mid < N; mid++) {
+        int res = dist[0][mid].first + dist[1][mid].first + dist[2][mid].first;
         if (res < min_dist) {
             min_dist = res;
-            for (int i = 0; i < 3; i++) {
-                edges[i].clear();
-                edges[i].emplace_back(points[i]);
-                if (points[i] != mid) {
-                    short u = points[i];
-                    while (u != mid) {
-                        edges[i].emplace_back(dist[u].second);
-                        u = dist[u].second;
-                    }
-                }
+            min_mid = mid;
+        }
+    }
+    vector<vector<short>> edges(3);
+    for (int i = 0; i < 3; i++) {
+        edges[i].emplace_back(min_mid);
+        if (points[i] != min_mid) {
+            short u = min_mid;
+            while (u != points[i]) {
+                edges[i].emplace_back(dist[i][u].second);
+                u = dist[i][u].second;
             }
         }
     }
