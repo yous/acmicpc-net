@@ -16,10 +16,14 @@ unsigned int solve(short idx) {
     if (ans < 0xFFFFFFFF) {
         return ans;
     }
-    int num = cows[idx];
-    ans = A * 2 + solve(idx + 1);
+    int cost = A * 2;
+    ans = cost + solve(idx + 1);
     for (int i = idx + 1; i < N; i++) {
-        ans = min(ans, A * 2 + B * (cows[i] - num) + solve(i + 1));
+        cost += B * (cows[i] - cows[i - 1]);
+        if (cost >= ans) {
+            break;
+        }
+        ans = min(ans, cost + solve(i + 1));
     }
     return ans;
 }
