@@ -6,12 +6,12 @@ using namespace std;
 
 short N, A, B;
 
-long long solve(short idx, vector<int>& cows, vector<long long>& cache) {
+unsigned int solve(short idx, vector<int>& cows, vector<unsigned int>& cache) {
     if (idx >= N) {
         return 0;
     }
-    long long& ans = cache[idx];
-    if (ans >= 0) {
+    unsigned int& ans = cache[idx];
+    if (ans < 0xFFFFFFFF) {
         return ans;
     }
     int num = cows[idx];
@@ -31,8 +31,8 @@ int main() {
         cin >> num;
     }
     sort(cows.begin(), cows.end());
-    vector<long long> cache(N, -1);
-    long long ans = solve(0, cows, cache);
+    vector<unsigned int> cache(N, 0xFFFFFFFF);
+    unsigned int ans = solve(0, cows, cache);
     cout << ans / 2 << (ans % 2 == 1 ? ".5" : "") << "\n";
     return 0;
 }
