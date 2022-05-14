@@ -1,0 +1,12 @@
+2 4 10
+ari betty cugi dori
+1 10:00 ari wrong
+2 10:00 dori wrong
+1 10:15 betty wrong
+2 10:30 dori solve
+1 10:30 betty wrong
+1 11:00 betty solve
+1 12:00 ari solve
+2 13:00 ari wrong
+2 14:00 cugi wrong
+2 15:45 cugi solve
