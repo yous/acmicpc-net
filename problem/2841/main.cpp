@@ -1,6 +1,6 @@
 #include <algorithm>
 #include <iostream>
-#include <queue>
+#include <stack>
 #include <vector>
 
 using namespace std;
@@ -10,26 +10,26 @@ int main() {
     cin.tie(nullptr);
     int N, P;
     cin >> N >> P;
-    vector<priority_queue<int>> lines(6);
+    vector<stack<int>> lines(6);
     int ans = 0;
     for (int i = 0; i < N; i++) {
         short line;
         int fret;
         cin >> line >> fret;
-        auto& pq = lines[line - 1];
-        if (pq.empty()) {
-            pq.emplace(fret);
+        auto& st = lines[line - 1];
+        if (st.empty()) {
+            st.emplace(fret);
             ans++;
         } else {
-            while (!pq.empty() && pq.top() > fret) {
-                pq.pop();
+            while (!st.empty() && st.top() > fret) {
+                st.pop();
                 ans++;
             }
-            if (pq.empty()) {
-                pq.emplace(fret);
+            if (st.empty()) {
+                st.emplace(fret);
                 ans++;
-            } else if (pq.top() < fret) {
-                pq.emplace(fret);
+            } else if (st.top() < fret) {
+                st.emplace(fret);
                 ans++;
             }
         }
