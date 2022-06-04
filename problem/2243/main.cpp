@@ -19,12 +19,11 @@ struct SegTree {
 
     int query(unsigned int cnt) {
         int pos = 1;
-        unsigned int cur = t[pos];
         while (pos < N) {
-            if (cur - t[pos * 2 + 1] >= cnt) {
-                cur -= t[pos * 2 + 1];
+            if (t[pos * 2] >= cnt) {
                 pos *= 2;
             } else {
+                cnt -= t[pos * 2];
                 pos = pos * 2 + 1;
             }
         }
