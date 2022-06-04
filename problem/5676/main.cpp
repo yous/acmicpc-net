@@ -34,16 +34,17 @@ struct SegTree {
                 ans *= t[--r];
             }
         }
-        return ans > 0 ? '+' : (ans < 0 ? '-' : '0');
+        return "-0+"[ans + 1];
     }
 };
 
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
+    SegTree st(100000);
     int N, K;
     while (cin >> N >> K) {
-        SegTree st(N);
+        st.N = N;
         for (int i = 0; i < N; i++) {
             short num;
             cin >> num;
