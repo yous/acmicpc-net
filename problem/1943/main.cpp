@@ -29,6 +29,11 @@ int main() {
             }
             visited[c * price] = true;
         }
+        if (visited[sum / 2]) {
+            cout << "1\n";
+            continue;
+        }
+        bool found = false;
         for (int i = 1; i < N; i++) {
             auto [price, cnt] = coins[i];
             for (int cur_sum = 0; cur_sum <= sum / 2; cur_sum++) {
@@ -38,12 +43,17 @@ int main() {
                             break;
                         }
                         next_visited[cur_sum + c * price] = true;
+                        if (cur_sum + c * price == sum / 2) {
+                            found = true;
+                            goto out;
+                        }
                     }
                 }
             }
             swap(visited, next_visited);
         }
-        cout << (visited[sum / 2] ? "1\n" : "0\n");
+out:
+        cout << (found ? "1\n" : "0\n");
     }
     return 0;
 }
