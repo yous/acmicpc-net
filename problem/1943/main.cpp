@@ -21,7 +21,6 @@ int main() {
             continue;
         }
         vector<bool> visited(100001);
-        vector<bool> next_visited(100001);
         auto [price, cnt] = coins[0];
         for (int c = 0; c <= cnt; c++) {
             if (c * price > sum / 2) {
@@ -36,13 +35,13 @@ int main() {
         bool found = false;
         for (int i = 1; i < N; i++) {
             auto [price, cnt] = coins[i];
-            for (int cur_sum = 0; cur_sum <= sum / 2; cur_sum++) {
+            for (int cur_sum = sum / 2; cur_sum >= 0; cur_sum--) {
                 if (visited[cur_sum]) {
                     for (int c = 0; c <= cnt; c++) {
                         if (cur_sum + c * price > sum / 2) {
                             break;
                         }
-                        next_visited[cur_sum + c * price] = true;
+                        visited[cur_sum + c * price] = true;
                         if (cur_sum + c * price == sum / 2) {
                             found = true;
                             goto out;
@@ -50,7 +49,6 @@ int main() {
                     }
                 }
             }
-            swap(visited, next_visited);
         }
 out:
         cout << (found ? "1\n" : "0\n");
