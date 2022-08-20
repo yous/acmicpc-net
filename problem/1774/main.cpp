@@ -1,7 +1,6 @@
 #include <algorithm>
 #include <cmath>
 #include <iostream>
-#include <queue>
 #include <tuple>
 #include <vector>
 
@@ -51,19 +50,19 @@ int main() {
         cin >> u >> v;
         ds.merge(u - 1, v - 1);
     }
-    priority_queue<tuple<long long, short, short>> pq;
+    vector<tuple<long long, short, short>> distances(N * (N - 1) / 2);
     double ans = 0;
+    int idx = 0;
     for (int i = 0; i < N - 1; i++) {
         for (int j = i + 1; j < N; j++) {
             int dx = gods[j].first - gods[i].first;
             int dy = gods[j].second - gods[i].second;
-            pq.emplace(-(1LL * dx * dx + 1LL * dy * dy), i, j);
+            distances[idx] = {1LL * dx * dx + 1LL * dy * dy, i, j};
+            idx++;
         }
     }
-    while (!pq.empty()) {
-        auto [dist, u, v] = pq.top();
-        dist = -dist;
-        pq.pop();
+    sort(distances.begin(), distances.end());
+    for (auto [dist, u, v] : distances) {
         if (ds.merge(u, v)) {
             ans += sqrt(dist);
         }
