@@ -51,13 +51,13 @@ int main() {
         cin >> u >> v;
         ds.merge(u - 1, v - 1);
     }
-    priority_queue<tuple<double, short, short>> pq;
+    priority_queue<tuple<long long, short, short>> pq;
     double ans = 0;
     for (int i = 0; i < N - 1; i++) {
         for (int j = i + 1; j < N; j++) {
             int dx = gods[j].first - gods[i].first;
             int dy = gods[j].second - gods[i].second;
-            pq.emplace(-sqrt(1LL * dx * dx + 1LL * dy * dy), i, j);
+            pq.emplace(-(1LL * dx * dx + 1LL * dy * dy), i, j);
         }
     }
     while (!pq.empty()) {
@@ -65,7 +65,7 @@ int main() {
         dist = -dist;
         pq.pop();
         if (ds.merge(u, v)) {
-            ans += dist;
+            ans += sqrt(dist);
         }
     }
     cout.precision(2);
