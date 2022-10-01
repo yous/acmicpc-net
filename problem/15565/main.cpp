@@ -15,30 +15,33 @@ int main() {
         cin >> num;
         dolls[i] = (num == 1);
     }
-    int st = 0;
-    int ed = 0;
+    int lo = 0;
+    int hi = 0;
     int cnt = 0;
-    int ans = N + 1;
-    while (st < N) {
-        while (ed < N && cnt < K) {
-            if (dolls[ed]) {
-                cnt++;
-            }
-            ed++;
+    while (hi < N && cnt < K) {
+        if (dolls[hi]) {
+            cnt++;
         }
-        if (cnt < K) {
-            break;
-        }
-        ans = min(ans, ed - st);
-        if (dolls[st]) {
-            cnt--;
-        }
-        st++;
+        hi++;
     }
-    if (ans > N) {
+    if (cnt < K) {
         cout << "-1\n";
-    } else {
-        cout << ans << "\n";
+        return 0;
     }
+    int ans = hi - lo;
+    while (hi < N) {
+        if (dolls[hi]) {
+            cnt++;
+        }
+        hi++;
+        while (lo < hi && cnt >= K) {
+            if (dolls[lo]) {
+                cnt--;
+            }
+            lo++;
+        }
+        ans = min(ans, hi - lo + 1);
+    }
+    cout << ans << "\n";
     return 0;
 }
