@@ -2,22 +2,18 @@ PPPdP+*dIdpIdpIdpIpPPdP+*-PPPdpPrPPPdP+*-PPP
 PPP P              PP P          PPP P     d
                    PP                      p
                                            P
-                                           r
-                                         PPP
-                                         PPP
-                                           d
-                                          PP
-                                           +
-                                           *
-dPPPdpPPrdPPPPdpPr                         -
-O                >                       PPP
-*                D                         d
-+             pp D                         p
-PPP           pPDD                         P
-d                D                         r
-PP               D                        PP
-p                D          PP             d
-D                D          PP             p
-DDPpppppppppp    D          PP             P
-D           PPP  D          PP        PPPPPr
-!pd!d-PO*+PdPPPd+P!P-P+*pd*dPPrPpdPP+*PPPPP
+d*dPPPPPrPpdPP+*PPPPPrPpdPPrPpdPPP-*+PPdPPPr
+d  PPPPP        PPPPP                   PPP
+d
+dp*+P-P!P+dPPPdP+*OP-d!dp!
+        D  PPP           D
+        D    ppppppppppPDD
+        D                D
+        D                p
+        D                PP
+        D pp             d
+        DDPp             PPP
+        D                +
+        D                *
+        >                O
+        rPpdPPPPdrPPpdPPPd
