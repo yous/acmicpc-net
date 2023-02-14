@@ -6,12 +6,15 @@ using namespace std;
 
 int N;
 int M;
-long long times[100000];
+int times[100000];
 
 bool check(long long time) {
     long long passed = 0;
     for (int i = 0; i < N; i++) {
         passed += time / times[i];
+        if (passed >= M) {
+            return true;
+        }
     }
     return passed >= M;
 }
@@ -25,7 +28,7 @@ int main() {
     }
     long long l, r;
     l = 1;
-    r = times[0] * M;
+    r = 1LL * times[0] * M;
     while (l <= r) {
         long long mid = (l + r) / 2;
         if (!check(mid)) {
