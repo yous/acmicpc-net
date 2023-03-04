@@ -23,9 +23,9 @@ int solve(int A_idx, int B_idx, vector<vector<int>>& cache) {
         ans = min(ans, solve(A_idx + 1, B_idx + 1, cache));
     } else {
         ans = min(ans, 1 + solve(A_idx + 1, B_idx + 1, cache));
+        ans = min(ans, 1 + solve(A_idx, B_idx + 1, cache));
+        ans = min(ans, 1 + solve(A_idx + 1, B_idx, cache));
     }
-    ans = min(ans, 1 + solve(A_idx, B_idx + 1, cache));
-    ans = min(ans, 1 + solve(A_idx + 1, B_idx, cache));
     return ans;
 }
 
