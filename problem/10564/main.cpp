@@ -40,7 +40,7 @@ int main() {
             cin >> num;
         }
         sort(scores.begin(), scores.end());
-        vector<vector<short>> cache(N + 1, vector<short>(N + 1, -1));
+        vector<vector<short>> cache(N + 1, vector<short>(441, -1));
         short ans = solve(N, 0, scores, cache);
         if (ans < 0) {
             cout << "-1\n";
