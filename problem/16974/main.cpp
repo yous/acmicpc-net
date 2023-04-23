@@ -6,14 +6,11 @@ using namespace std;
 
 long long solve(short N, long long X, vector<long long>& totals, vector<long long>& patties) {
     long long ans = 0;
-    if (N == 0) {
-        if (X == 1) {
-            return 1;
-        }
+    if (X <= 0) {
         return 0;
     }
-    if (X <= 1) {
-        return 0;
+    if (N == 0) {
+        return 1;
     }
     X--;
     if (totals[N - 1] >= X) {
