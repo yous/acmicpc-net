@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <array>
 #include <iostream>
 #include <vector>
 
@@ -8,11 +9,11 @@ int solve(int y, int x, int sz, vector<vector<int>>& chairs) {
     if (sz == 1) {
         return chairs[y][x];
     }
-    vector<int> ans;
-    ans.emplace_back(solve(y, x, sz / 2, chairs));
-    ans.emplace_back(solve(y, x + sz / 2, sz / 2, chairs));
-    ans.emplace_back(solve(y + sz / 2, x, sz / 2, chairs));
-    ans.emplace_back(solve(y + sz / 2, x + sz / 2, sz / 2, chairs));
+    array<int, 4> ans;
+    ans[0] = solve(y, x, sz / 2, chairs);
+    ans[1] = solve(y, x + sz / 2, sz / 2, chairs);
+    ans[2] = solve(y + sz / 2, x, sz / 2, chairs);
+    ans[3] = solve(y + sz / 2, x + sz / 2, sz / 2, chairs);
     sort(ans.begin(), ans.end());
     return ans[1];
 }
