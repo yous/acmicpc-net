@@ -16,6 +16,10 @@ int main() {
         sum += num;
         num = sum;
     }
+    if (sum % 4 != 0) {
+        cout << "0\n";
+        return 0;
+    }
     int target = sum / 4;
     long long cnt[3] = {0};
     for (int i = 0; i < N - 1; i++) {
