@@ -48,6 +48,7 @@ int main() {
         E.emplace_back(c, a - 1, b - 1);
     }
     sort(E.begin(), E.end());
+    E.pop_back();
     int sum = 0;
     int cnt = 0;
     for (auto& e : E) {
