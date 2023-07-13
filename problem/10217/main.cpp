@@ -58,6 +58,26 @@ int main() {
             cout << "Poor KCM\n";
             continue;
         }
+        for (int u = 0; u < N; u++) {
+            vector<tuple<int, int, int>> tmp;
+            sort(adj[u].begin(), adj[u].end());
+            auto sz = adj[u].size();
+            if (sz > 0) {
+                auto [v, c, d] = adj[u][0];
+                tmp.emplace_back(v, c, d);
+                for (int i = 1; i < sz; i++) {
+                    auto [ov, oc, od] = adj[u][i];
+                    if (v == ov && c == oc) {
+                        continue;
+                    }
+                    tmp.emplace_back(ov, oc, od);
+                    v = ov;
+                    c = oc;
+                    d = od;
+                }
+            }
+            swap(adj[u], tmp);
+        }
         dist[0][0] = 0;
         priority_queue<tuple<int, int, int>> pq;
         pq.emplace(0, 0, 0);
