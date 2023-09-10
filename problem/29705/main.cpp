@@ -64,14 +64,25 @@ int main() {
     Matrix vec(9, 1);
     vec.mat[0][0] = 1;
     int ans = 0;
-    Matrix g = solve.pow(A + 8) * vec;
+    Matrix g_mat = solve.pow(A + 8) * vec;
+    vector<int> g(9);
+    vector<int> g_next(9);
+    for (int i = 0; i < 9; i++) {
+        g[i] = g_mat.mat[i][0];
+    }
     Matrix solve_9 = solve.pow(9);
     int cnt = int(B - A + 1);
     while (cnt > 0) {
         for (int i = 0; i < min(9, cnt); i++) {
-            ans = (ans + g.mat[8 - i][0]) % MOD;
+            ans = (ans + g[8 - i]) % MOD;
         }
-        g = solve_9 * g;
+        for (int i = 0; i < 9; i++) {
+            g_next[i] = 0;
+            for (int j = 0; j < 9; j++) {
+                g_next[i] = (g_next[i] + 1LL * solve_9.mat[i][j] * g[j] % MOD) % MOD;
+            }
+        }
+        swap(g, g_next);
         cnt -= 9;
     }
     cout << ans << "\n";
