@@ -4,5 +4,6 @@
 source "https://rubygems.org"
 
 gem "mechanize"
+gem "prime"
 gem "rake"
 gem "rspec", :group => :test
