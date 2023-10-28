@@ -1,66 +1,51 @@
 #include <algorithm>
 #include <iostream>
+#include <stack>
 #include <vector>
 
 using namespace std;
 
-int N;
-
-long long solve(int idx, bool is_left, vector<int>& poles, vector<vector<long long>>& cache) {
-    if (idx < 0 || idx >= N) {
-        return 0;
-    }
-    auto& ans = cache[idx][is_left ? 0 : 1];
-    if (ans != -1) {
-        return ans;
-    }
-    ans = 0;
-    int cur_idx = idx;
-    int cur_h = poles[cur_idx];
-    if (is_left) {
-        for (int i = idx - 1; i >= 0; i--) {
-            int h = poles[i];
-            if (h >= cur_h) {
-                ans = 1LL * (h - cur_h) * (h - cur_h) + 1LL * (cur_idx - i) * (cur_idx - i) + solve(i, is_left, poles, cache);
-                return ans;
-            }
-        }
-    } else {
-        for (int i = idx + 1; i < N; i++) {
-            int h = poles[i];
-            if (h >= cur_h) {
-                ans = 1LL * (h - cur_h) * (h - cur_h) + 1LL * (i - cur_idx) * (i - cur_idx) + solve(i, is_left, poles, cache);
-                return ans;
-            }
-        }
-    }
-    return ans;
-}
-
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
+    int N;
     cin >> N;
     vector<int> poles(N);
     for (auto& num : poles) {
         cin >> num;
     }
-    vector<vector<long long>> cache(N, vector<long long>(2, -1));
-    cache[0][0] = 0;
-    for (int i = 1; i < N; i++) {
-        if (poles[i] > poles[i - 1]) {
-            cache[i][0] = 0;
-        } else {
-            break;
+    vector<long long> dist_left(N);
+    vector<long long> dist_right(N);
+    stack<pair<int, int>> st;
+    for (int i = 0; i < N; i++) {
+        while (!st.empty()) {
+            auto [h, idx] = st.top();
+            if (h < poles[i]) {
+                st.pop();
+            } else {
+                dist_left[i] = dist_left[idx] + 1LL * (h - poles[i]) * (h - poles[i]) + 1LL * (i - idx) * (i - idx);
+                break;
+            }
         }
+        st.emplace(poles[i], i);
     }
-    cache[N - 1][1] = 0;
+    while (!st.empty()) {
+        st.pop();
+    }
     for (int i = N - 1; i >= 0; i--) {
-        if (poles[i] > poles[i + 1]) {
-            cache[i][1] = 0;
-        } else {
-            break;
+        while (!st.empty()) {
+            auto [h, idx] = st.top();
+            if (h < poles[i]) {
+                st.pop();
+            } else {
+                dist_right[i] = dist_right[idx] + 1LL * (h - poles[i]) * (h - poles[i]) + 1LL * (idx - i) * (idx - i);
+                break;
+            }
         }
+        st.emplace(poles[i], i);
+    }
+    while (!st.empty()) {
+        st.pop();
     }
     int Q;
     cin >> Q;
@@ -68,7 +53,7 @@ int main() {
         int P;
         cin >> P;
         P--;
-        cout << solve(P, true, poles, cache) + solve(P, false, poles, cache) << "\n";
+        cout << dist_left[P] + dist_right[P] << "\n";
     }
     return 0;
 }
