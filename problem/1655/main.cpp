@@ -1,6 +1,6 @@
 #include <algorithm>
-#include <cmath>
 #include <iostream>
+#include <queue>
 #include <vector>
 
 using namespace std;
@@ -10,28 +10,50 @@ int main() {
     cin.tie(nullptr);
     int N;
     cin >> N;
-    vector<int> cnt(20001);
-    int sqrt_sz = sqrt(20001);
-    vector<int> chunks(sqrt_sz);
+    priority_queue<short> pq_lower;
+    priority_queue<short> pq_upper;
+    int lower_cnt = 0;
+    int upper_cnt = 0;
     for (int i = 0; i < N; i++) {
         short num;
         cin >> num;
-        num += 10000;
-        cnt[num]++;
-        chunks[num / sqrt_sz]++;
-        int mid = i / 2 + 1;
-        int cur_cnt = 0;
-        int idx = 0;
-        while (idx < sqrt_sz && cur_cnt + chunks[idx] < mid) {
-            cur_cnt += chunks[idx];
-            idx++;
+        if (lower_cnt == 0) {
+            pq_lower.emplace(num);
+            lower_cnt++;
+        } else if (upper_cnt == 0) {
+            short lower = pq_lower.top();
+            if (num >= lower) {
+                pq_upper.emplace(-num);
+            } else {
+                pq_lower.pop();
+                pq_upper.emplace(-lower);
+                pq_lower.emplace(num);
+            }
+            upper_cnt++;
+        } else {
+            short lower = pq_lower.top();
+            short upper = -pq_upper.top();
+            if (lower_cnt == upper_cnt) {
+                if (num <= upper) {
+                    pq_lower.emplace(num);
+                } else {
+                    pq_upper.pop();
+                    pq_lower.emplace(upper);
+                    pq_upper.emplace(-num);
+                }
+                lower_cnt++;
+            } else {
+                if (num >= lower) {
+                    pq_upper.emplace(-num);
+                } else {
+                    pq_lower.pop();
+                    pq_upper.emplace(-lower);
+                    pq_lower.emplace(num);
+                }
+                upper_cnt++;
+            }
         }
-        idx *= sqrt_sz;
-        while (cur_cnt + cnt[idx] < mid) {
-            cur_cnt += cnt[idx];
-            idx++;
-        }
-        cout << idx - 10000 << "\n";
+        cout << pq_lower.top() << "\n";
     }
     return 0;
 }
