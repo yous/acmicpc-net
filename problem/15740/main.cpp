@@ -67,8 +67,8 @@ class BigInt {
         int carry = 0;
         for (int i = 0; i < sz; i++) {
             for (int j = 0; j < rsz; j++) {
-                long long mul = 1LL * nums[i] * rhs.nums[j] + carry;
-                res.nums[i + j] += mul % MOD;
+                long long mul = res.nums[i + j] + 1LL * nums[i] * rhs.nums[j] + carry;
+                res.nums[i + j] = mul % MOD;
                 carry = mul / MOD;
             }
             int offset = rsz;
