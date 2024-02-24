@@ -61,7 +61,7 @@ class BigInt {
     BigInt(vector<int>::const_iterator begin, vector<int>::const_iterator end, int sign = 1) : nums(begin, end), sign(sign) {}
 
     static BigInt karatsuba(const BigInt& lhs, const BigInt& rhs) {
-        if (lhs.nums.size() <= 100 || rhs.nums.size() <= 100) {
+        if (lhs.nums.size() <= 300 || rhs.nums.size() <= 300) {
             return lhs * rhs;
         }
         int m = min(lhs.nums.size(), rhs.nums.size()) / 2;
