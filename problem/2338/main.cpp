@@ -4,6 +4,9 @@
 
 using namespace std;
 
+const int ELEM_SIZE = 8;
+const int MOD = 1e8;
+
 class BigInt {
     vector<int> nums;
     int sign = 1;
@@ -22,23 +25,6 @@ class BigInt {
     }
 
     void normalize() {
-        int carry = 0;
-        auto sz = nums.size();
-        for (int i = 0; i < sz; i++) {
-            nums[i] += carry;
-            if (nums[i] < 0) {
-                carry = -1;
-                nums[i] += 10;
-            } else if (nums[i] >= 10) {
-                carry = nums[i] / 10;
-                nums[i] %= 10;
-            } else {
-                carry = 0;
-            }
-        }
-        if (carry > 0) {
-            nums.emplace_back(carry);
-        }
         while (nums.size() > 1 && nums.back() == 0) {
             nums.pop_back();
         }
@@ -52,15 +38,24 @@ class BigInt {
         nums.resize(1);
     }
 
-    BigInt(const string& s) : nums(s.size()) {
-        auto sz = s.size();
-        for (int i = 0; i < sz; i++) {
-            nums[sz - i - 1] = s[i] - '0';
-        }
+    BigInt(const string& s) {
+        int start = 0;
         if (s[0] == '-') {
             sign = -1;
-            nums.pop_back();
+            start++;
         }
+        auto sz = s.size();
+        int cnt = (sz - start + ELEM_SIZE - 1) / ELEM_SIZE;
+        nums.resize(cnt);
+        int idx = 0;
+        for (int i = sz - 1; i >= start; i -= ELEM_SIZE) {
+            int num = 0;
+            for (int j = min(ELEM_SIZE - 1, i - start); j >= 0; j--) {
+                num = num * 10 + s[i - j] - '0';
+            }
+            nums[idx++] = num;
+        }
+        normalize();
     }
 
     BigInt operator *(const BigInt& rhs) const {
@@ -69,9 +64,19 @@ class BigInt {
         auto rsz = rhs.nums.size();
         res.nums.resize(sz + rsz);
         res.sign = (sign == rhs.sign) ? 1 : -1;
+        int carry = 0;
         for (int i = 0; i < sz; i++) {
             for (int j = 0; j < rsz; j++) {
-                res.nums[i + j] += nums[i] * rhs.nums[j];
+                long long mul = res.nums[i + j] + 1LL * nums[i] * rhs.nums[j] + carry;
+                res.nums[i + j] = mul % MOD;
+                carry = mul / MOD;
+            }
+            int offset = rsz;
+            while (carry > 0) {
+                int add = res.nums[i + offset] + carry;
+                res.nums[i + offset] = add % MOD;
+                carry = add / MOD;
+                offset++;
             }
         }
         res.normalize();
@@ -88,13 +93,27 @@ class BigInt {
             res = *this;
             adder = &rhs;
         }
+        res.nums.resize(res.nums.size() + 1);
         auto sz = adder->nums.size();
+        int carry = 0;
         for (int i = 0; i < sz; i++) {
-            if (res.sign == adder->sign) {
-                res.nums[i] = res.nums[i] + adder->nums[i];
+            int add = (res.sign == adder->sign)
+                ? res.nums[i] + adder->nums[i] + carry
+                : res.nums[i] - adder->nums[i] + carry;
+            if (add < 0) {
+                res.nums[i] = add + MOD;
+                carry = -1;
             } else {
-                res.nums[i] = res.nums[i] - adder->nums[i];
+                res.nums[i] = add % MOD;
+                carry = add / MOD;
             }
+        }
+        int offset = sz;
+        while (carry != 0) {
+            int add = res.nums[offset] + carry;
+            res.nums[offset] = add % MOD;
+            carry = add / MOD;
+            offset++;
         }
         res.normalize();
         return res;
@@ -112,8 +131,11 @@ class BigInt {
             res += '-';
         }
         auto sz = nums.size();
-        for (int i = sz - 1; i >= 0; i--) {
-            res += nums[i] + '0';
+        res += std::to_string(nums.back());
+        for (int i = sz - 2; i >= 0; i--) {
+            for (int j = MOD / 10; j >= 1; j /= 10) {
+                res += nums[i] / j % 10 + '0';
+            }
         }
         return res;
     }
