@@ -17,26 +17,35 @@ int main() {
             cout << "1\n";
             continue;
         }
-        vector<bool> visited(N);
-        queue<pair<string, int>> qu;
-        visited[1] = true;
-        qu.emplace("1", 1);
+        vector<pair<char, int>> visited(N, {0, -2});
+        queue<int> qu;
+        visited[1] = {'1', -1};
+        qu.emplace(1);
         bool found = false;
         while (!qu.empty()) {
-            auto [str, rem] = qu.front();
+            auto rem = qu.front();
             qu.pop();
             for (int i = 0; i < 2; i++) {
                 int new_rem = (rem * 10 + i) % N;
                 if (new_rem == 0) {
                     found = true;
-                    cout << str + to_string(i) << "\n";
+                    vector<char> ans;
+                    ans.emplace_back('0' + i);
+                    auto prev_idx = rem;
+                    while (visited[prev_idx].second >= 0) {
+                        ans.emplace_back(visited[prev_idx].first);
+                        prev_idx = visited[prev_idx].second;
+                    }
+                    ans.emplace_back(visited[prev_idx].first);
+                    reverse(ans.begin(), ans.end());
+                    cout << string(ans.begin(), ans.end()) << "\n";
                     break;
                 }
-                if (visited[new_rem]) {
+                if (visited[new_rem].second != -2) {
                     continue;
                 }
-                visited[new_rem] = true;
-                qu.emplace(str + to_string(i), new_rem);
+                visited[new_rem] = {'0' + i, rem};
+                qu.emplace(new_rem);
             }
             if (found) {
                 break;
