@@ -40,7 +40,7 @@ struct DisjointSet {
     }
 };
 
-void dfs(short idx, DisjointSet& ds, vector<vector<bool>>& visited, vector<pair<short, short>>& cows, vector<vector<short>>& cow_num, vector<vector<short>>& graph) {
+void bfs(short idx, DisjointSet& ds, vector<vector<bool>>& visited, vector<pair<short, short>>& cows, vector<vector<short>>& cow_num, vector<vector<short>>& graph) {
     queue<pair<short, short>> qu;
     qu.emplace(cows[idx]);
     while (!qu.empty()) {
@@ -110,7 +110,7 @@ int main() {
             continue;
         }
         visited[cow.first][cow.second] = true;
-        dfs(i, ds, visited, cows, cow_num, graph);
+        bfs(i, ds, visited, cows, cow_num, graph);
     }
     int ans = K * (K - 1) / 2;
     vector<bool> group_visited(N);
