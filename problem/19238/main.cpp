@@ -5,92 +5,107 @@
 
 using namespace std;
 
-const short dy[] = {-1, 0, 0, 1};
-const short dx[] = {0, -1, 1, 0};
-short N;
+const short dy[] = {-1, 1, 0, 0};
+const short dx[] = {0, 0, -1, 1};
+short N, M;
 
-short bfs(short& sy, short& sx, int& fuel, short dest, vector<vector<short>>& field) {
-    if (fuel == 0) {
-        return -1;
-    }
-    vector<vector<bool>> visited(N, vector<bool>(N));
-    queue<short> qu;
-    visited[sy][sx] = true;
-    qu.emplace(sy * N + sx);
-    int step = 0;
-    vector<pair<short, short>> ans;
-    while (!qu.empty()) {
-        int sz = qu.size();
-        while (sz-- > 0) {
-            short yx = qu.front();
-            qu.pop();
-            short y = yx / N;
-            short x = yx % N;
-            if ((dest < 0 && field[y][x] >= 0) || (dest >= 0 && dest == y * N + x)) {
-                ans.emplace_back(y, x);
-                continue;
-            }
-            for (int i = 0; i < 4; i++) {
-                short ny = y + dy[i];
-                short nx = x + dx[i];
-                if (ny < 0 || ny >= N || nx < 0 || nx >= N || field[ny][nx] == -2 || visited[ny][nx]) {
-                    continue;
-                }
-                visited[ny][nx] = true;
-                qu.emplace(ny * N + nx);
-            }
+short find_next(short y, short x, vector<vector<vector<short>>>& customers_dist, vector<bool>& visited) {
+    short min_dist = N * N;
+    short ans = -1;
+    for (int i = 0; i < M; i++) {
+        if (visited[i] || customers_dist[i][y][x] == -1) {
+            continue;
         }
-        if (!ans.empty()) {
-            sort(ans.begin(), ans.end());
-            sy = ans[0].first;
-            sx = ans[0].second;
-            fuel -= step;
-            return step;
-        }
-        step++;
-        if (fuel < step) {
-            return -1;
+        if (customers_dist[i][y][x] < min_dist) {
+            min_dist = customers_dist[i][y][x];
+            ans = i;
         }
     }
-    return -1;
+    return ans;
 }
 
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
-    short M;
     int fuel;
     cin >> N >> M >> fuel;
-    vector<vector<short>> field(N, vector<short>(N, -1));
+    vector<vector<bool>> field(N, vector<bool>(N));
     for (auto& row : field) {
-        for (auto& num : row) {
+        for (int i = 0; i < N; i++) {
+            short num;
             cin >> num;
-            num = -num - 1;
+            row[i] = num == 1;
         }
     }
     short sy, sx;
     cin >> sy >> sx;
     sy--;
     sx--;
-    for (int i = 0; i < M; i++) {
-        short y1, x1, y2, x2;
-        cin >> y1 >> x1 >> y2 >> x2;
-        field[y1 - 1][x1 - 1] = (y2 - 1) * N + x2 - 1;
+    vector<tuple<short, short, short, short>> customers(M);
+    for (auto& [src_y, src_x, dst_y, dst_x] : customers) {
+        cin >> src_y >> src_x >> dst_y >> dst_x;
+        src_y--;
+        src_x--;
+        dst_y--;
+        dst_x--;
     }
+    sort(customers.begin(), customers.end());
+    vector<vector<vector<short>>> customers_dist(M, vector<vector<short>>(N, vector<short>(N, -1)));
+    for (int c = 0; c < M; c++) {
+        auto& [src_y, src_x, dst_y, dst_x] = customers[c];
+        auto& dist = customers_dist[c];
+        vector<vector<bool>> visited(N, vector<bool>(N));
+        queue<pair<short, short>> qu;
+        visited[src_y][src_x] = true;
+        dist[src_y][src_x] = 0;
+        qu.emplace(src_y, src_x);
+        short step = 1;
+        while (!qu.empty()) {
+            auto sz = qu.size();
+            while (sz-- > 0) {
+                auto [y, x] = qu.front();
+                qu.pop();
+                for (int i = 0; i < 4; i++) {
+                    short ny = y + dy[i];
+                    short nx = x + dx[i];
+                    if (ny < 0 || ny >= N || nx < 0 || nx >= N || field[ny][nx] || visited[ny][nx]) {
+                        continue;
+                    }
+                    visited[ny][nx] = true;
+                    dist[ny][nx] = step;
+                    qu.emplace(ny, nx);
+                }
+            }
+            step++;
+        }
+    }
+    vector<bool> visited(M);
     for (int i = 0; i < M; i++) {
-        short ret = bfs(sy, sx, fuel, -1, field);
-        if (ret < 0) {
+        short c = find_next(sy, sx, customers_dist, visited);
+        if (c < 0) {
             cout << "-1\n";
             return 0;
         }
-        short dest = field[sy][sx];
-        field[sy][sx] = -1;
-        ret = bfs(sy, sx, fuel, dest, field);
-        if (ret < 0) {
+        visited[c] = true;
+        fuel -= customers_dist[c][sy][sx];
+        if (fuel < 0) {
             cout << "-1\n";
             return 0;
         }
-        fuel += ret * 2;
+        auto& [src_y, src_x, dst_y, dst_x] = customers[c];
+        short cost = customers_dist[c][dst_y][dst_x];
+        if (cost < 0) {
+            cout << "-1\n";
+            return 0;
+        }
+        fuel -= cost;
+        if (fuel < 0) {
+            cout << "-1\n";
+            return 0;
+        }
+        fuel += cost * 2;
+        sy = dst_y;
+        sx = dst_x;
     }
     cout << fuel << "\n";
     return 0;
