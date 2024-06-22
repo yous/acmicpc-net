@@ -20,17 +20,11 @@ int main() {
         }
     }
     long long ans = 0;
-    for (auto num : people) {
-        int pow = 1;
-        for (int i = 0; i < 20; i++) {
-            if ((num & pow) != 0) {
-                ans += 1LL * pow * (N - digit_nums[i]);
-            } else {
-                ans += 1LL * pow * digit_nums[i];
-            }
-            pow <<= 1;
-        }
+    int pow = 1;
+    for (int i = 0; i < 20; i++) {
+        ans += 1LL * pow * (N - digit_nums[i]) * digit_nums[i];
+        pow <<= 1;
     }
-    cout << ans / 2 << "\n";
+    cout << ans << "\n";
     return 0;
 }
