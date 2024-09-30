@@ -56,7 +56,7 @@ GEM
     rubyntlm (0.6.5)
       base64
     singleton (0.2.0)
-    webrick (1.8.1)
+    webrick (1.8.2)
     webrobots (0.1.2)
 
 PLATFORMS
