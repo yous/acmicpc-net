@@ -6,9 +6,9 @@
 
 using namespace std;
 
-const short itod[] = { 0, 2, 1, 3 };
-const short dy[] = { 0, 1, 0, -1 };
-const short dx[] = { 1, 0, -1, 0 };
+const short itod[] = {0, 2, 1, 3};
+const short dy[] = {0, 1, 0, -1};
+const short dx[] = {1, 0, -1, 0};
 
 int main() {
     ios_base::sync_with_stdio(false);
