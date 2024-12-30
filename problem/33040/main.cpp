@@ -21,7 +21,7 @@ int main() {
         return 0;
     }
     int D_rem = D;
-    for (int y = 0; y < H - 1; y++) {
+    for (int y = 0; y < H; y++) {
         int offset = (D_rem - min_sum) / (H - y);
         bool first = true;
         for (int x = 0; x < W - (offset + y); x++) {
@@ -44,23 +44,5 @@ int main() {
         min_sum -= y;
         cout << "\n";
     }
-    bool first = true;
-    for (int x = 0; x < W - D_rem; x++) {
-        if (first) {
-            first = false;
-        } else {
-            cout << " ";
-        }
-        cout << "1";
-    }
-    for (int x = 0; x < D_rem; x++) {
-        if (first) {
-            first = false;
-        } else {
-            cout << " ";
-        }
-        cout << "9";
-    }
-    cout << "\n";
     return 0;
 }
